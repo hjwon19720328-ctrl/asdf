@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SECURE DATABASE // TERMINAL</title>
     <style>
-        /* === CSS (디자인 및 테마) === */
+        /* === CSS (공통 디자인 및 테마) === */
         * {
             margin: 0;
             padding: 0;
@@ -13,9 +13,9 @@
         }
 
         body {
-            background-color: #050505; /* 아주 어두운 배경 */
+            background-color: #050505;
             color: #e0e0e0;
-            font-family: 'Courier New', Courier, monospace; /* 타자기/터미널 폰트 */
+            font-family: 'Courier New', Courier, monospace;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -23,7 +23,7 @@
             overflow: hidden;
         }
 
-        /* 터미널 전체 틀 */
+        /* 터미널 전체 틀 (PC 기본) */
         .terminal-wrapper {
             width: 95%;
             max-width: 1400px;
@@ -36,7 +36,7 @@
             position: relative;
         }
 
-        /* 브라운관(CRT) 모니터 스캔라인 효과 (옵션) */
+        /* 브라운관 스캔라인 효과 */
         .terminal-wrapper::after {
             content: " ";
             display: block;
@@ -57,25 +57,19 @@
         }
 
         .terminal-header h1 {
-            color: #00ffcc; /* 사이버틱한 형광 포인트 */
+            color: #00ffcc;
             font-size: 1.5rem;
             margin-bottom: 5px;
             letter-spacing: 1px;
         }
 
-        .terminal-header h1 span {
-            font-size: 0.8rem;
-            color: #888;
-        }
+        .terminal-header h1 span { font-size: 0.8rem; color: #888; }
+        .terminal-header p { color: #888; font-size: 0.9rem; }
 
-        .terminal-header p {
-            color: #888;
-            font-size: 0.9rem;
-        }
-
-        /* 본문 영역 (사이드바 + 내용) */
+        /* 본문 영역 */
         .terminal-body {
             display: flex;
+            flex-direction: row; /* PC에서는 가로 배치 */
             flex: 1;
             overflow: hidden;
             z-index: 3;
@@ -98,10 +92,8 @@
             padding-bottom: 10px;
         }
 
-        .folder-list {
-            list-style: none;
-        }
-
+        .folder-list { list-style: none; }
+        
         .folder-list li {
             padding: 12px;
             cursor: pointer;
@@ -134,67 +126,39 @@
             position: relative;
         }
 
-        /* 문서 페이지 공통 */
-        .doc-page {
-            display: none;
-        }
+        .doc-page { display: none; }
+        .doc-page.active { display: block; animation: glitchFade 0.4s ease-in-out; }
 
-        .doc-page.active {
-            display: block;
-            animation: glitchFade 0.4s ease-in-out;
-        }
-
-        .doc-title {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .doc-meta {
-            color: #777;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-        }
+        .doc-title { font-size: 2rem; margin-bottom: 10px; letter-spacing: 2px; text-transform: uppercase; }
+        .doc-meta { color: #777; margin-bottom: 20px; font-size: 0.9rem; }
 
         #hero-doc .doc-title { color: #4db8ff; }
         #villain-doc .doc-title { color: #ff4d4d; }
-        #world-doc .doc-title { color: #d4af37; } /* 세계관은 금색 */
+        #world-doc .doc-title { color: #d4af37; }
 
-        hr {
-            border: none;
-            border-top: 1px dashed #444;
-            margin-bottom: 30px;
-        }
+        hr { border: none; border-top: 1px dashed #444; margin-bottom: 30px; }
 
-        /* 캐릭터 기록부 (기밀문서 디자인) */
+        /* 캐릭터 기록부 */
         .character-record {
             border: 1px solid #333;
             padding: 25px;
             margin-bottom: 30px;
             background-color: #121212;
             position: relative;
+            overflow: hidden;
         }
 
-        /* 기밀 마크 (워터마크) */
         .character-record::before {
             content: "CONFIDENTIAL";
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%) rotate(-30deg);
             font-size: 4rem;
             color: rgba(255, 255, 255, 0.03);
-            pointer-events: none;
-            font-weight: bold;
-            letter-spacing: 5px;
-            z-index: 0;
+            pointer-events: none; font-weight: bold; letter-spacing: 5px; z-index: 0;
         }
 
-        .villain-alert {
-            border-color: #501515;
-            background-color: #1a0808;
-        }
+        .villain-alert { border-color: #501515; background-color: #1a0808; }
 
         .record-header {
             display: flex;
@@ -202,67 +166,29 @@
             margin-bottom: 25px;
             border-bottom: 1px dashed #444;
             padding-bottom: 25px;
-            position: relative;
-            z-index: 1;
+            position: relative; z-index: 1;
         }
 
         .photo-placeholder {
-            width: 130px;
-            height: 150px;
+            width: 130px; height: 150px;
             background-color: #1a1a1a;
             border: 1px solid #444;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: #555;
-            font-size: 0.9rem;
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; color: #555; font-size: 0.9rem;
+            flex-shrink: 0;
         }
 
-        .record-info {
-            flex: 1;
-        }
+        .record-info { flex: 1; }
+        .record-info h3 { font-size: 1.6rem; margin-bottom: 15px; color: #fff; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        .record-info p { margin-bottom: 8px; color: #ccc; }
 
-        .record-info h3 {
-            font-size: 1.6rem;
-            margin-bottom: 15px;
-            color: #fff;
-            border-bottom: 1px solid #333;
-            padding-bottom: 5px;
-        }
-
-        .record-info p {
-            margin-bottom: 8px;
-            color: #ccc;
-        }
-
-        .redacted {
-            background-color: #e0e0e0;
-            color: #e0e0e0;
-            padding: 0 5px;
-            user-select: none; /* 드래그 방지 */
-        }
-
-        .record-body {
-            position: relative;
-            z-index: 1;
-        }
-
-        .record-body p {
-            margin-bottom: 15px;
-            line-height: 1.7;
-            color: #bbb;
-        }
+        .redacted { background-color: #e0e0e0; color: #e0e0e0; padding: 0 5px; user-select: none; }
         
-        .record-body strong {
-            color: #ddd;
-        }
+        .record-body { position: relative; z-index: 1; }
+        .record-body p { margin-bottom: 15px; line-height: 1.7; color: #bbb; }
+        .record-body strong { color: #ddd; }
 
-        /* 깜빡이는 커서 및 애니메이션 */
-        .blinking-cursor {
-            animation: blink 1s step-end infinite;
-            color: #00ffcc;
-        }
+        .blinking-cursor { animation: blink 1s step-end infinite; color: #00ffcc; }
 
         @keyframes blink { 50% { opacity: 0; } }
         @keyframes glitchFade { 
@@ -271,6 +197,93 @@
             100% { opacity: 1; transform: translateX(0); } 
         }
 
+        /* =========================================
+           모바일 반응형 UI (화면 너비 768px 이하)
+           ========================================= */
+        @media screen and (max-width: 768px) {
+            body {
+                height: auto; /* 모바일에서는 스크롤 허용 */
+                align-items: flex-start; /* 상단 정렬 */
+                background-color: #111; /* 터미널 배경색과 통일 */
+            }
+
+            .terminal-wrapper {
+                width: 100%;
+                height: 100vh;
+                border: none;
+                box-shadow: none;
+            }
+
+            .terminal-header h1 { font-size: 1.2rem; }
+            .terminal-header p { font-size: 0.75rem; }
+
+            .terminal-body {
+                flex-direction: column; /* 세로 배치로 변경 */
+            }
+
+            /* 사이드바를 상단 가로 탭 형식으로 변경 */
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 2px solid #333;
+                padding: 10px 15px;
+                background-color: #1a1a1a;
+            }
+
+            .sidebar h2 {
+                display: none; /* 모바일에서는 공간 절약을 위해 제목 숨김 */
+            }
+
+            .folder-list {
+                display: flex;
+                overflow-x: auto; /* 가로 스크롤 허용 */
+                gap: 10px;
+                padding-bottom: 5px;
+                /* 스크롤바 숨기기 (선택사항) */
+                scrollbar-width: none; 
+            }
+            .folder-list::-webkit-scrollbar { display: none; }
+
+            .folder-list li {
+                white-space: nowrap; /* 글씨가 줄바꿈되지 않도록 설정 */
+                margin-bottom: 0;
+                padding: 10px 15px;
+                font-size: 0.85rem;
+                border-left: 1px solid #333;
+                border-bottom: 4px solid #555;
+            }
+
+            /* 모바일 탭 활성화 디자인 */
+            .folder-list li:hover, .folder-list li.active-tab {
+                border-left: 1px solid #777;
+                border-bottom: 4px solid #00ffcc;
+            }
+
+            .folder-list li.villain-tab:hover, .folder-list li.villain-tab.active-tab {
+                border-bottom: 4px solid #ff4d4d;
+            }
+
+            /* 모바일 문서 뷰어 여백 줄이기 */
+            .document-viewer {
+                padding: 20px 15px;
+            }
+
+            .doc-title { font-size: 1.5rem; }
+            .character-record { padding: 15px; }
+
+            /* 캐릭터 기록부 정보 상하 배치 */
+            .record-header {
+                flex-direction: column; /* 사진과 텍스트를 위아래로 */
+                align-items: center;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .record-info h3 {
+                font-size: 1.3rem;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -279,22 +292,22 @@
         <!-- 상단 헤더 -->
         <header class="terminal-header">
             <h1>[시스템 접근 권한 확인됨] <span>v.3.0.1</span></h1>
-            <p>보안 등급: Level 4 | 열람자 ID: RP_MASTER | 현재 위치: 중앙 데이터베이스 서버</p>
+            <p>보안 등급: Level 4 | 현재 위치: 중앙 DB</p>
         </header>
 
         <div class="terminal-body">
-            <!-- 좌측 폴더 목록 -->
+            <!-- 좌측 사이드바 (모바일에서는 상단 탭) -->
             <aside class="sidebar">
                 <h2>📁 디렉토리 탐색기</h2>
                 <ul class="folder-list">
                     <li onclick="openDocument('default', this)" class="active-tab">C:\> 초기 화면</li>
-                    <li onclick="openDocument('world', this)">📄 [기밀] 세계관_설정.txt</li>
-                    <li onclick="openDocument('hero', this)">📄 [열람] 특수격리부대_명단.doc</li>
-                    <li onclick="openDocument('villain', this)" class="villain-tab">⚠️ [경고] 이능력_범죄자_수배.doc</li>
+                    <li onclick="openDocument('world', this)">📄 세계관_설정.txt</li>
+                    <li onclick="openDocument('hero', this)">📄 특수격리_명단.doc</li>
+                    <li onclick="openDocument('villain', this)" class="villain-tab">⚠️ 수배자_감시.doc</li>
                 </ul>
             </aside>
 
-            <!-- 우측 서류 열람 영역 -->
+            <!-- 우측 서류 열람 영역 (모바일에서는 하단) -->
             <main class="document-viewer">
                 
                 <!-- 1. 기본 대기 화면 -->
@@ -302,29 +315,29 @@
                     <p style="color: #666; margin-bottom: 10px;">> System initialized...</p>
                     <p style="color: #666; margin-bottom: 10px;">> Decrypting files...</p>
                     <p style="color: #666; margin-bottom: 30px;">> Access Granted.</p>
-                    <p class="blinking-cursor">> 좌측 디렉토리에서 열람할 문서를 선택해 주십시오_</p>
+                    <p class="blinking-cursor">> 디렉토리에서 열람할 문서를 선택해 주십시오_</p>
                 </div>
 
                 <!-- 2. 세계관 서류 -->
                 <div id="world-doc" class="doc-page">
                     <h2 class="doc-title">PROJECT : 아카이브</h2>
-                    <p class="doc-meta">작성일: 2026-08-17 | 분류: 1급 기밀 | 상태: [수정 가능]</p>
+                    <p class="doc-meta">작성일: 2026-08-17 | 분류: 1급 기밀</p>
                     <hr>
                     <div class="character-record">
                         <div class="record-body">
                             <h3 style="color: #fff; margin-bottom:10px;">[ 개요 ]</h3>
-                            <p>이곳에 세계관의 핵심 배경을 서술합니다. 왜 이 세상에 이능력이나 특이 현상이 발생했는지, 일반인들은 이 사실을 알고 있는지 등을 기록할 수 있습니다.</p>
+                            <p>이곳에 세계관의 핵심 배경을 서술합니다. 왜 이 세상에 이능력이나 특이 현상이 발생했는지 기록할 수 있습니다.</p>
                             <br>
                             <h3 style="color: #fff; margin-bottom:10px;">[ 주요 세력 ]</h3>
                             <p><strong>- 중앙 관리국:</strong> 이상 현상을 은폐하고 관리하는 정부 산하 비밀 조직.</p>
-                            <p><strong>- 언더그라운드:</strong> 법의 테두리를 벗어나 이능력을 남용하는 범죄자 및 빌런 연합.</p>
+                            <p><strong>- 언더그라운드:</strong> 법의 테두리를 벗어나 이능력을 남용하는 범죄자 연합.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- 3. 히어로 서류 -->
                 <div id="hero-doc" class="doc-page">
-                    <h2 class="doc-title">CLASSIFIED: 특수 격리 부대 명단</h2>
+                    <h2 class="doc-title">CLASSIFIED: 특수 요원 명단</h2>
                     <p class="doc-meta">보안 등급 충족됨. 요원 데이터를 불러옵니다.</p>
                     <hr>
                     
@@ -334,68 +347,63 @@
                             <div class="photo-placeholder">IMAGE<br>UNAVAILABLE</div>
                             <div class="record-info">
                                 <h3>코드네임: 에이펙스 (Apex)</h3>
-                                <p><strong>본명:</strong> <span class="redacted">김은폐</span> (데이터 말소)</p>
+                                <p><strong>본명:</strong> <span class="redacted">김은폐</span></p>
                                 <p><strong>소속:</strong> 제3기동대대 팀장</p>
-                                <p><strong>위험도/등급:</strong> A-Class 요원</p>
+                                <p><strong>등급:</strong> A-Class 요원</p>
                             </div>
                         </div>
                         <div class="record-body">
-                            <p><strong>특이사항:</strong> 뛰어난 신체 능력과 전술적 판단력 보유. 감정 기복이 적고 임무 완수를 최우선으로 함. 평소에는 기지 내 훈련장에 주로 머무름.</p>
-                            <p><strong>능력 요약 [신체 가속]:</strong> 최대 3분간 자신의 생체 시간을 가속하여 외부보다 빠르게 움직일 수 있음. 사용 후 심각한 근육 피로도 누적.</p>
+                            <p><strong>특이사항:</strong> 뛰어난 신체 능력과 전술적 판단력 보유. 평소에는 기지 내 훈련장에 주로 머무름.</p>
+                            <p><strong>능력 요약 [신체 가속]:</strong> 최대 3분간 생체 시간을 가속하여 외부보다 빠르게 움직일 수 있음.</p>
                         </div>
                     </div>
-                    
                 </div>
 
                 <!-- 4. 빌런 서류 -->
                 <div id="villain-doc" class="doc-page">
-                    <h2 class="doc-title">WARNING: 특수 수배자 감시망</h2>
-                    <p class="doc-meta" style="color: #ff4d4d;">주의: 아래 인물들과 조우 시 교전을 피하고 즉각 본부에 보고할 것.</p>
+                    <h2 class="doc-title">WARNING: 특수 수배자</h2>
+                    <p class="doc-meta" style="color: #ff4d4d;">주의: 조우 시 교전을 피하고 즉각 보고할 것.</p>
                     <hr>
                     
                     <!-- 빌런 1 -->
                     <div class="character-record villain-alert">
                         <div class="record-header">
-                            <div class="photo-placeholder" style="color:#ff4d4d; border-color:#ff4d4d;">WANTED<br>DEAD OR ALIVE</div>
+                            <div class="photo-placeholder" style="color:#ff4d4d; border-color:#ff4d4d;">WANTED</div>
                             <div class="record-info">
                                 <h3 style="color: #ff6b6b;">코드네임: 노이즈 (Noise)</h3>
                                 <p><strong>본명:</strong> 불명</p>
                                 <p><strong>소속:</strong> 언더그라운드</p>
-                                <p><strong>위험도/등급:</strong> S-Class (발견 시 즉시 사살 허가)</p>
+                                <p><strong>등급:</strong> S-Class (즉시 사살 허가)</p>
                             </div>
                         </div>
                         <div class="record-body">
-                            <p><strong>특이사항:</strong> 과거 중앙 관리국의 연구원이었으나 모종의 이유로 탈주. 전자 기기에 간섭하여 통신망을 마비시키는 능력을 사용함. 성격이 매우 쾌락주의적이며 파괴 행위 자체를 즐김.</p>
-                            <p><strong>능력 요약 [전파 교란 및 조작]:</strong> 반경 2km 내의 모든 통신 기기를 해킹하거나 폭주시킬 수 있음. 인간의 생체 전류에 간섭하여 환각을 유발하기도 함.</p>
+                            <p><strong>특이사항:</strong> 과거 중앙 관리국의 연구원이었으나 모종의 이유로 탈주. 전자 기기에 간섭하여 통신망을 마비시킴.</p>
+                            <p><strong>능력 요약 [전파 교란]:</strong> 반경 2km 내의 통신 기기를 해킹하거나 폭주시킬 수 있음.</p>
                         </div>
                     </div>
-
                 </div>
+
             </main>
         </div>
     </div>
 
-    <!-- === JavaScript (동작 스크립트) === -->
+    <!-- === JavaScript === -->
     <script>
         function openDocument(docId, element) {
-            // 1. 모든 문서 숨기기
             const pages = document.querySelectorAll('.doc-page');
             pages.forEach(page => {
                 page.classList.remove('active');
             });
 
-            // 2. 선택한 문서 표시하기
             const targetDoc = document.getElementById(docId + '-doc');
             if (targetDoc) {
                 targetDoc.classList.add('active');
             }
 
-            // 3. 사이드바 메뉴 클릭 상태(색상) 변경하기
             const listItems = document.querySelectorAll('.folder-list li');
             listItems.forEach(item => {
                 item.classList.remove('active-tab');
             });
-            // 방금 클릭한 메뉴(element)에만 active-tab 클래스 추가
             if(element) {
                 element.classList.add('active-tab');
             }
