@@ -32,7 +32,7 @@
             overflow: hidden; font-size: 15px; line-height: 1.5;
             opacity: 0.85; color: #00ff00; padding: 20px;
             z-index: 1; pointer-events: none;
-            text-align: left; /* 좌측 정렬로 터미널 느낌 강조 */
+            text-align: left; 
             white-space: pre-wrap;
         }
 
@@ -182,7 +182,6 @@
             <aside class="sidebar">
                 <h2>📁 디렉토리 탐색기</h2>
                 <ul class="folder-list">
-                    <!-- 초기 화면 탭 삭제됨. 세계관 설정이 기본 탭(active-tab) -->
                     <li onclick="openDocument('world', this)" class="active-tab">📄 세계관_설정.txt</li>
                     <li onclick="openDocument('hero', this)">📄 특수격리_명단.doc</li>
                     <li onclick="openDocument('villain', this)" class="villain-tab">⚠️ 수배자_감시.doc</li>
@@ -190,8 +189,6 @@
             </aside>
 
             <main class="document-viewer">
-                <!-- 초기 화면 컨텐츠 삭제됨. 세계관 문서가 기본 화면(active) -->
-                
                 <div id="world-doc" class="doc-page active">
                     <h2 class="doc-title">PROJECT : 아카이브</h2>
                     <p class="doc-meta">작성일: 2026-08-17 | 분류: 1급 기밀</p>
@@ -203,7 +200,7 @@
                             <br>
                             <h3 style="color: #fff; margin-bottom:10px;">[ 주요 세력 ]</h3>
                             <p><strong>- 중앙 관리국:</strong> 이상 현상을 은폐하고 관리하는 정부 산하 비밀 조직.</p>
-                            <p><strong>- 언더그라운드:</strong> 범죄자 연합.</p>
+                            <p><strong>- 언더그라운드:</strong> "능력자들을 위한 세상"을 건설한다는 명분 아래 결성된 반정부 세력. 그러나 그 목적을 달성하는 과정에서 민간인 희생과 무자비한 살인을 서슴지 않아 관리국 제1의 위협으로 분류됨.</p>
                         </div>
                     </div>
                 </div>
@@ -260,7 +257,6 @@
         const viewBtn = document.getElementById('view-btn');
         const mainTerminal = document.getElementById('main-terminal');
 
-        // 의미 있는 부팅 시퀀스 문구들
         const bootSequence = [
             "BOOT_SEQ: INITIALIZING KERNEL... [OK]",
             "SYSTEM_CHECK: MOUNTING SECURE FILE SYSTEMS... [OK]",
@@ -281,35 +277,30 @@
 
         let lineIndex = 0;
         
-        // 0.1초마다 문구를 한 줄씩 출력
         let bootInterval = setInterval(() => {
             if (lineIndex < bootSequence.length) {
                 codeContainer.innerHTML += bootSequence[lineIndex] + "<br>";
                 lineIndex++;
             } else {
-                // 준비된 문구가 끝나면 무작위 헥스(Hex) 코드 출력으로 데이터 로딩 연출
                 let randomHex = "0x" + Math.floor(Math.random()*16777215).toString(16).toUpperCase() + " : ENCRYPTED_BLOCK_RECOVERED";
                 codeContainer.innerHTML += randomHex + "<br>";
             }
-            // 텍스트가 추가될 때마다 자동으로 스크롤을 맨 아래로 내림
             codeContainer.scrollTop = codeContainer.scrollHeight;
         }, 100);
 
-        // 2.2초 뒤 코드 생성을 멈추고 경고창 띄우기
         setTimeout(() => {
             clearInterval(bootInterval);
-            codeContainer.style.opacity = '0.2'; // 로그 배경을 희미하게
+            codeContainer.style.opacity = '0.2'; 
             warningBox.style.display = 'block';
         }, 2200);
 
         // --- 2. [열람하기] 버튼 클릭 이벤트 ---
         viewBtn.addEventListener('click', () => {
-            introContainer.style.opacity = '0'; // 페이드 아웃
+            introContainer.style.opacity = '0'; 
             
             setTimeout(() => {
-                introContainer.style.display = 'none'; // 인트로 완전히 제거
-                mainTerminal.style.display = 'flex'; // 메인 터미널 화면 표시
-                // 모바일 환경일 경우 스크롤 허용
+                introContainer.style.display = 'none'; 
+                mainTerminal.style.display = 'flex'; 
                 if(window.innerWidth <= 768) {
                     document.body.style.overflow = 'auto';
                 }
