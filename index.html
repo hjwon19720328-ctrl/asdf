@@ -1,730 +1,878 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CENTRAL SYSTEM - COMPLETE ARCHIVE</title>
-  <style>
-    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SECURE DATABASE // TERMINAL</title>
+    <style>
+        /* =========================================
+           1. 공통 디자인 및 리셋 (UI 대폭 개편)
+           ========================================= */
+        :root {
+            --cyan: #00ffcc;
+            --cyan-glow: rgba(0, 255, 204, 0.4);
+            --red: #ff3333;
+            --red-glow: rgba(255, 51, 51, 0.4);
+            --orange: #ff9900;
+            --blue: #4db8ff;
+            --bg-dark: #070709;
+            --bg-panel: #111116;
+            --bg-card: #181820;
+            --border-color: #2a2a35;
+            --text-main: #e0e0e0;
+            --text-muted: #888899;
+        }
 
-    :root {
-      --bg: #05070c;
-      --panel-bg: rgba(13, 17, 26, 0.85);
-      --panel-border: rgba(0, 240, 255, 0.18);
-      --accent-cyan: #00f0ff;
-      --accent-purple: #a855f7;
-      --accent-red: #ff2a5f;
-      --accent-gold: #eab308;
-      --text-main: #f1f5f9;
-      --text-sub: #94a3b8;
-      --font-mono: 'Courier New', Courier, monospace;
-    }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background-color: var(--bg-dark); color: var(--text-main);
+            font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, monospace;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; overflow: hidden; position: relative;
+        }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Pretendard', sans-serif;
-    }
+        /* 스크롤바 커스텀 */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
 
-    body {
-      background-color: var(--bg);
-      color: var(--text-main);
-      min-height: 100vh;
-      padding: 2.5rem 1rem;
-      background-image: 
-        radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.1) 0%, transparent 60%),
-        linear-gradient(180deg, #030407 0%, #080c16 100%);
-      background-attachment: fixed;
-    }
+        /* CRT 화면 스캔라인 효과 */
+        body::before {
+            content: ""; display: block; position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px; z-index: 5000; pointer-events: none; opacity: 0.6;
+        }
 
-    /* 사이버네틱 스캔라인 효과 */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-      background-size: 100% 4px;
-      z-index: 999;
-      pointer-events: none;
-      opacity: 0.5;
-    }
+        /* =========================================
+           2. 인트로 (보안 경고) 화면
+           ========================================= */
+        #intro-container {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #000; z-index: 9999; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.5s ease;
+        }
 
-    .wrapper {
-      max-width: 960px;
-      margin: 0 auto;
-    }
+        #strange-code {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden; font-size: 13px; line-height: 1.4;
+            opacity: 0.5; color: var(--cyan); padding: 15px;
+            z-index: 1; pointer-events: none; font-family: monospace;
+        }
 
-    /* 헤더 */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--panel-bg);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--panel-border);
-      box-shadow: 0 0 25px rgba(0, 240, 255, 0.08);
-      padding: 1.5rem 2rem;
-      border-radius: 12px;
-      margin-bottom: 1.5rem;
-      position: relative;
-    }
+        #warning-box {
+            display: none; z-index: 10; background: rgba(10, 0, 0, 0.85);
+            border: 1px solid var(--red); padding: 35px 25px; width: 90%; max-width: 450px;
+            color: var(--red); text-align: center; border-radius: 4px;
+            box-shadow: 0 0 40px var(--red-glow), inset 0 0 20px rgba(255,0,0,0.2);
+            backdrop-filter: blur(5px);
+        }
 
-    header::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 4px; height: 100%;
-      background: var(--accent-cyan);
-      box-shadow: 0 0 12px var(--accent-cyan);
-    }
+        .omega-symbol {
+            font-size: 4rem; display: block; margin-bottom: 10px;
+            text-shadow: 0 0 15px var(--red); animation: glitch 2s infinite; font-family: serif;
+        }
 
-    .sys-id {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
+        #warning-box h1 { font-size: 1.5rem; margin-bottom: 15px; letter-spacing: 2px; text-transform: uppercase; }
+        #warning-box p { font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px; color: #d0d0d0; }
 
-    .sys-tag {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--accent-cyan);
-      letter-spacing: 2px;
-    }
+        #view-btn {
+            width: 100%; padding: 14px; background: transparent; color: var(--red);
+            border: 1px solid var(--red); border-radius: 2px; font-size: 1.1rem;
+            font-weight: bold; cursor: pointer; transition: all 0.3s; font-family: monospace;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        #view-btn:hover { background: var(--red); color: #000; box-shadow: 0 0 20px var(--red-glow); }
 
-    .sys-title {
-      font-size: 1.35rem;
-      font-weight: 800;
-      letter-spacing: 1px;
-      color: #fff;
-    }
+        @keyframes glitch {
+            0% { transform: translate(0) } 20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-1px, -1px) } 60% { transform: translate(2px, 2px) }
+            80% { transform: translate(1px, -1px) } 100% { transform: translate(0) }
+        }
 
-    /* BGM 컨트롤 버튼 */
-    .audio-btn {
-      background: rgba(0, 240, 255, 0.05);
-      border: 1px solid var(--panel-border);
-      color: var(--accent-cyan);
-      padding: 0.65rem 1.25rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+        /* =========================================
+           3. 메인 터미널 UI & 레이아웃
+           ========================================= */
+        .terminal-wrapper {
+            width: 100%; max-width: 1100px; height: 100vh;
+            background-color: var(--bg-panel); display: flex; flex-direction: column;
+            position: relative; z-index: 10;
+        }
 
-    .audio-btn:hover {
-      background: rgba(0, 240, 255, 0.15);
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
-    }
+        .terminal-header {
+            background-color: #0c0c10; padding: 12px 20px; border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.5);
+        }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .terminal-header h1 { color: var(--cyan); font-size: 1.2rem; font-family: monospace; letter-spacing: 1px; text-shadow: 0 0 8px var(--cyan-glow); }
+        .badge-sec { font-size: 0.75rem; background: rgba(0, 255, 204, 0.1); color: var(--cyan); padding: 4px 8px; border-radius: 2px; border: 1px solid var(--cyan); font-family: monospace; }
+        
+        /* BGM 토글 버튼 */
+        .bgm-toggle-btn {
+            background: transparent; color: var(--cyan); border: 1px solid var(--cyan);
+            padding: 6px 12px; font-size: 0.8rem; font-family: monospace; cursor: pointer;
+            border-radius: 4px; transition: all 0.3s; display: flex; align-items: center; gap: 6px;
+        }
+        .bgm-toggle-btn:hover { background: rgba(0, 255, 204, 0.2); box-shadow: 0 0 10px var(--cyan-glow); }
+        .bgm-toggle-btn.off { color: var(--text-muted); border-color: var(--text-muted); }
+        .bgm-toggle-btn.off:hover { background: rgba(255,255,255,0.1); box-shadow: none; }
 
-    .audio-btn.playing {
-      background: var(--accent-cyan);
-      color: #000;
-      box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
-    }
+        .terminal-body { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
 
-    .audio-wave {
-      display: inline-flex;
-      align-items: flex-end;
-      gap: 2px;
-      height: 12px;
-    }
+        /* 네비게이션 탭 */
+        .sidebar-nav {
+            background-color: #0a0a0d; border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch;
+        }
+        .folder-list { display: flex; list-style: none; padding: 10px 15px; gap: 10px; }
+        .folder-list li {
+            padding: 10px 18px; font-size: 0.9rem; color: var(--text-muted);
+            background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 4px;
+            cursor: pointer; transition: all 0.3s; font-family: monospace; letter-spacing: 0.5px;
+        }
+        .folder-list li:hover { border-color: #555; color: #fff; }
+        
+        .folder-list li.active-tab { color: #000; background: var(--cyan); border-color: var(--cyan); font-weight: bold; box-shadow: 0 0 15px var(--cyan-glow); }
+        .folder-list li.hero-tab.active-tab { background: var(--blue); border-color: var(--blue); color: #000; box-shadow: 0 0 15px rgba(77, 184, 255, 0.4); }
+        .folder-list li.detained-tab.active-tab { background: var(--orange); border-color: var(--orange); color: #000; box-shadow: 0 0 15px rgba(255, 153, 0, 0.4); }
+        .folder-list li.villain-tab.active-tab { background: var(--red); border-color: var(--red); color: #000; box-shadow: 0 0 15px var(--red-glow); }
 
-    .audio-wave span {
-      width: 2px;
-      height: 100%;
-      background-color: currentColor;
-      animation: wave 1.2s infinite ease-in-out paused;
-    }
+        /* 문서 본문 영역 */
+        .document-viewer { flex: 1; padding: 20px; overflow-y: auto; background-color: var(--bg-dark); }
+        .doc-page { display: none; animation: fadeInRight 0.4s ease forwards; opacity: 0; transform: translateX(10px); }
+        .doc-page.active { display: block; }
 
-    .audio-btn.playing .audio-wave span {
-      animation-play-state: running;
-    }
+        .doc-title { font-size: 1.6rem; margin-bottom: 6px; color: #fff; font-weight: 800; letter-spacing: 1px; }
+        .doc-meta { color: #666; font-size: 0.85rem; margin-bottom: 25px; font-family: monospace; border-bottom: 1px dashed #333; padding-bottom: 10px; }
+        
+        /* 세계관 디자인 컨테이너 */
+        .cyber-box {
+            background: var(--bg-card); padding: 20px; border-radius: 6px; 
+            border: 1px solid var(--border-color); border-left: 3px solid var(--cyan);
+            margin-bottom: 20px; position: relative; overflow: hidden;
+        }
+        .cyber-box::before { content: ""; position: absolute; top: 0; right: 0; width: 30px; height: 30px; background: linear-gradient(225deg, var(--bg-dark) 50%, transparent 50%); }
+        .cyber-box h3 { color: var(--cyan); margin-bottom: 10px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; font-family: monospace; }
+        .cyber-box p { color: #b0b0c0; margin-bottom: 12px; font-size: 0.9rem; line-height: 1.6; }
+        .cyber-box ul { padding-left: 20px; color: #9090a0; font-size: 0.85rem; line-height: 1.7; }
+        .cyber-box ul strong { color: #d0d0e0; }
 
-    .audio-wave span:nth-child(2) { animation-delay: 0.2s; }
-    .audio-wave span:nth-child(3) { animation-delay: 0.4s; }
+        .rank-grid { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+        .rank-item { background: rgba(0,0,0,0.3); padding: 12px; border-radius: 4px; border: 1px solid #222; font-size: 0.85rem; line-height: 1.5; }
+        .rank-item strong { display: inline-block; width: 140px; font-family: monospace; font-size: 0.9rem; }
 
-    @keyframes wave {
-      0%, 100% { height: 3px; }
-      50% { height: 12px; }
-    }
+        /* =========================================
+           4. 접이식 프로필 (캐릭터 카드)
+           ========================================= */
+        .character-card {
+            background: var(--bg-card); border: 1px solid var(--border-color);
+            border-radius: 6px; margin-bottom: 15px; overflow: hidden;
+            transition: all 0.3s; position: relative;
+        }
+        .character-card:hover { border-color: #444; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .character-card.villain-style { border-left: 4px solid var(--red); }
+        .character-card.detained-style { border-left: 4px solid var(--orange); }
+        .character-card.hero-style { border-left: 4px solid var(--blue); }
 
-    /* 탭 메뉴 UI */
-    .tab-nav {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-bottom: 1.5rem;
-    }
+        .mini-profile {
+            display: flex; align-items: center; padding: 15px; cursor: pointer; gap: 15px;
+            background: rgba(255,255,255,0.01); transition: background 0.2s;
+        }
+        .mini-profile:hover { background: rgba(255,255,255,0.04); }
+        
+        .thumb-wrapper { position: relative; width: 60px; height: 60px; flex-shrink: 0; }
+        .mini-thumb {
+            width: 100%; height: 100%; border-radius: 4px; object-fit: cover;
+            border: 1px solid #444; filter: grayscale(20%) contrast(110%);
+        }
 
-    .tab-btn {
-      background: var(--panel-bg);
-      border: 1px solid var(--panel-border);
-      color: var(--text-sub);
-      padding: 0.9rem;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.88rem;
-      transition: all 0.3s ease;
-      text-align: center;
-    }
+        .mini-info { flex: 1; min-width: 0; }
+        .mini-name-group { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+        .mini-name { font-size: 1.1rem; font-weight: bold; color: #fff; letter-spacing: 0.5px; }
+        .mini-jp { font-size: 0.8rem; color: #666; font-weight: normal; }
+        .mini-codename { font-size: 0.85rem; color: var(--cyan); font-family: monospace; }
+        
+        .mini-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+        .tag-badge {
+            display: inline-block; padding: 3px 8px; font-size: 0.7rem; letter-spacing: 0.5px;
+            border-radius: 2px; font-weight: bold; font-family: monospace; text-transform: uppercase;
+        }
+        .badge-red { background: rgba(255, 51, 51, 0.15); color: var(--red); border: 1px solid rgba(255, 51, 51, 0.5); }
+        .badge-orange { background: rgba(255, 153, 0, 0.15); color: var(--orange); border: 1px solid rgba(255, 153, 0, 0.5); }
+        .badge-blue { background: rgba(77, 184, 255, 0.15); color: var(--blue); border: 1px solid rgba(77, 184, 255, 0.5); }
+        .badge-gray { background: rgba(255, 255, 255, 0.08); color: #ccc; border: 1px solid #555; }
+        .badge-green { background: rgba(0, 255, 204, 0.15); color: var(--cyan); border: 1px solid var(--cyan-glow); }
 
-    .tab-btn:hover {
-      color: #fff;
-      border-color: rgba(0, 240, 255, 0.4);
-    }
+        .expand-btn {
+            font-size: 0.75rem; color: var(--text-muted); font-family: monospace;
+            padding: 6px 10px; background: rgba(255, 255, 255, 0.05); border-radius: 4px;
+            transition: all 0.3s;
+        }
+        .character-card.expanded .expand-btn { background: var(--cyan); color: #000; box-shadow: 0 0 10px var(--cyan-glow); }
 
-    .tab-btn.active {
-      background: rgba(0, 240, 255, 0.1);
-      color: var(--accent-cyan);
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
-    }
+        /* 상세 프로필 */
+        .detail-profile {
+            display: none; padding: 20px; border-top: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.2); font-size: 0.9rem; line-height: 1.6;
+        }
+        .character-card.expanded .detail-profile { display: block; animation: fadeInDown 0.3s ease forwards; }
 
-    /* 컨텐츠 카드 공통 */
-    .tab-content {
-      display: none;
-    }
+        .detail-header-box {
+            display: flex; gap: 15px; margin-bottom: 20px; align-items: center;
+            background: rgba(0,0,0,0.3); padding: 15px; border-radius: 4px; border: 1px solid #222;
+        }
+        .detail-large-img {
+            width: 100px; height: 100px; border-radius: 4px; object-fit: cover;
+            border: 1px solid var(--cyan); cursor: zoom-in; flex-shrink: 0;
+            box-shadow: 0 0 15px var(--cyan-glow); transition: transform 0.2s;
+        }
+        .detail-large-img:hover { transform: scale(1.05); }
+        
+        .detail-header-info { flex: 1; }
+        .detail-header-title { font-size: 1.2rem; font-weight: bold; color: #fff; letter-spacing: 1px; }
+        .detail-header-sub { font-size: 0.9rem; color: var(--cyan); font-family: monospace; margin-top: 4px; }
 
-    .tab-content.active {
-      display: block;
-    }
+        .detail-grid { 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; 
+            background: #0d0d12; padding: 15px; border-radius: 4px; border: 1px solid #1a1a24; 
+        }
+        .detail-item { font-size: 0.85rem; color: #bbb; display: flex; flex-direction: column; }
+        .detail-item strong { color: #778; font-size: 0.75rem; text-transform: uppercase; font-family: monospace; margin-bottom: 2px; }
 
-    .card {
-      background: var(--panel-bg);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--panel-border);
-      border-radius: 12px;
-      padding: 2rem;
-      margin-bottom: 1.5rem;
-    }
+        .detail-section { margin-bottom: 15px; }
+        .detail-section-title { font-size: 0.85rem; color: var(--cyan); font-weight: bold; margin-bottom: 6px; font-family: monospace; display: flex; align-items: center; }
+        .detail-section-title::before { content: "▶"; font-size: 0.6rem; margin-right: 6px; }
+        .detail-section p { color: #ccc; }
 
-    .card-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding-bottom: 0.8rem;
-    }
+        .speech-quote {
+            background: linear-gradient(90deg, rgba(0, 255, 204, 0.1) 0%, transparent 100%);
+            border-left: 3px solid var(--cyan); padding: 10px 15px; font-style: italic; 
+            color: #fff; font-size: 0.9rem; margin-top: 6px; border-radius: 0 4px 4px 0;
+        }
 
-    .card-title::before {
-      content: '//';
-      font-family: var(--font-mono);
-      color: var(--accent-cyan);
-    }
+        .secret-btn {
+            width: 100%; margin-top: 15px; padding: 12px; background: rgba(255, 51, 51, 0.1);
+            color: var(--red); border: 1px dashed var(--red); border-radius: 4px;
+            font-size: 0.9rem; font-weight: bold; cursor: pointer; font-family: monospace;
+            transition: all 0.3s;
+        }
+        .secret-btn:hover { background: var(--red); color: #000; box-shadow: 0 0 15px var(--red-glow); }
 
-    /* 정보 블록 */
-    .info-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
+        /* =========================================
+           5. 이미지 모달 & 애니메이션
+           ========================================= */
+        #image-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.92); backdrop-filter: blur(10px);
+            z-index: 10000; justify-content: center; align-items: center;
+            flex-direction: column; padding: 20px; animation: fadeIn 0.2s ease;
+        }
+        #modal-img {
+            max-width: 90vw; max-height: 70vh; border-radius: 4px;
+            border: 2px solid var(--cyan); box-shadow: 0 0 40px var(--cyan-glow);
+            object-fit: contain;
+        }
+        #modal-caption { margin-top: 20px; color: #fff; font-size: 1.3rem; font-weight: bold; font-family: monospace; letter-spacing: 1px; }
+        #modal-subcaption { color: var(--cyan); font-size: 0.9rem; margin-top: 6px; font-family: monospace; }
+        .modal-close-hint { margin-top: 20px; font-size: 0.8rem; color: #666; font-family: monospace; border: 1px solid #333; padding: 5px 15px; border-radius: 20px; }
 
-    .info-block {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-left: 4px solid var(--accent-cyan);
-      padding: 1.4rem;
-      border-radius: 0 8px 8px 0;
-    }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInRight { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-    .info-block.danger {
-      border-left-color: var(--accent-red);
-      background: rgba(255, 42, 95, 0.02);
-    }
-
-    .info-block.purple {
-      border-left-color: var(--accent-purple);
-    }
-
-    .info-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.6rem;
-    }
-
-    .info-header h3 {
-      font-size: 1.05rem;
-      color: #fff;
-      font-weight: 700;
-    }
-
-    .tag {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      padding: 3px 8px;
-      border-radius: 4px;
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--text-sub);
-    }
-
-    .info-desc {
-      color: var(--text-sub);
-      font-size: 0.93rem;
-      line-height: 1.7;
-      word-break: keep-all;
-    }
-
-    .info-desc p {
-      margin-bottom: 0.6rem;
-    }
-
-    .info-desc p:last-child {
-      margin-bottom: 0;
-    }
-
-    /* 등급 카드 스타일 (S~E) */
-    .rank-container {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .rank-card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--panel-border);
-      padding: 1.2rem 1.5rem;
-      border-radius: 8px;
-      display: grid;
-      grid-template-columns: 60px 1fr;
-      gap: 1.2rem;
-      align-items: center;
-      transition: all 0.2s ease;
-    }
-
-    .rank-card:hover {
-      background: rgba(255, 255, 255, 0.04);
-      border-color: rgba(255, 255, 255, 0.3);
-    }
-
-    .rank-badge {
-      font-family: var(--font-mono);
-      font-weight: 900;
-      font-size: 1.5rem;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 8px;
-    }
-
-    .rank-info h4 {
-      font-size: 1rem;
-      color: #fff;
-      margin-bottom: 0.3rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .rank-info h4 span {
-      font-size: 0.75rem;
-      font-family: var(--font-mono);
-      color: var(--text-sub);
-      font-weight: normal;
-    }
-
-    .rank-info p {
-      font-size: 0.9rem;
-      color: var(--text-sub);
-      line-height: 1.6;
-      word-break: keep-all;
-    }
-
-    .r-s .rank-badge { background: rgba(255, 42, 95, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); box-shadow: 0 0 12px rgba(255,42,95,0.3); }
-    .r-a .rank-badge { background: rgba(234, 179, 8, 0.2); color: var(--accent-gold); border: 1px solid var(--accent-gold); }
-    .r-b .rank-badge { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); border: 1px solid var(--accent-purple); }
-    .r-c .rank-badge { background: rgba(0, 240, 255, 0.2); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
-    .r-d .rank-badge { background: rgba(34, 197, 94, 0.2); color: #22c55e; border: 1px solid #22c55e; }
-    .r-e .rank-badge { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid #64748b; }
-
-    /* 캐릭터 프로필 그리드 및 스펙 표 */
-    .char-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .char-card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--panel-border);
-      border-radius: 10px;
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-      transition: all 0.3s ease;
-    }
-
-    .char-card:hover {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 5px 20px rgba(0, 240, 255, 0.08);
-    }
-
-    .char-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding-bottom: 1rem;
-    }
-
-    .char-name-group h3 {
-      font-size: 1.25rem;
-      color: #fff;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .char-code {
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-      color: var(--accent-cyan);
-    }
-
-    .char-rank {
-      font-family: var(--font-mono);
-      font-weight: 900;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-    }
-
-    .rank-s { background: rgba(255, 42, 95, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
-    .rank-a { background: rgba(234, 179, 8, 0.2); color: var(--accent-gold); border: 1px solid var(--accent-gold); }
-    .rank-b { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); border: 1px solid var(--accent-purple); }
-    .rank-e { background: rgba(148, 163, 184, 0.2); color: #94a3b8; border: 1px solid #64748b; }
-
-    .char-body {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.2rem;
-    }
-
-    .char-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      font-size: 0.88rem;
-    }
-
-    .meta-row {
-      display: flex;
-      gap: 10px;
-    }
-
-    .meta-label {
-      color: var(--text-sub);
-      width: 70px;
-      flex-shrink: 0;
-    }
-
-    .meta-value {
-      color: var(--text-main);
-      font-weight: 600;
-    }
-
-    .char-story {
-      font-size: 0.9rem;
-      color: var(--text-sub);
-      line-height: 1.65;
-      background: rgba(0, 0, 0, 0.25);
-      padding: 1rem;
-      border-radius: 8px;
-      word-break: keep-all;
-    }
-
-    .highlight {
-      color: #fff;
-      font-weight: 600;
-    }
-
-    @media (max-width: 768px) {
-      .tab-nav {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .rank-card {
-        grid-template-columns: 1fr;
-        gap: 0.8rem;
-      }
-      .char-body {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+        /* Desktop Responsiveness */
+        @media screen and (min-width: 769px) {
+            .terminal-wrapper { height: 92vh; border-radius: 8px; border: 1px solid var(--border-color); box-shadow: 0 10px 50px rgba(0,0,0,0.8); }
+            .terminal-body { flex-direction: row; }
+            .sidebar-nav { width: 240px; border-bottom: none; border-right: 1px solid var(--border-color); overflow-x: visible; }
+            .folder-list { flex-direction: column; padding: 20px 15px; }
+            .document-viewer { padding: 30px 40px; }
+        }
+    </style>
 </head>
 <body>
 
-<div class="wrapper">
-  <!-- BGM 연결용 -->
-  <audio id="bgmAudio" loop src="audio.mp3"></audio>
+    <!-- 오디오 태그 (BGM) -->
+    <audio id="bgm" src="CM.mp3" loop preload="auto"></audio>
 
-  <!-- 메인 헤더 -->
-  <header>
-    <div class="sys-id">
-      <span class="sys-tag">CLASSIFIED // FULL RECOVERY ARCHIVE</span>
-      <span class="sys-title">CENTRAL REGISTRY DATABASE</span>
+    <!-- 인트로 경고 화면 -->
+    <div id="intro-container">
+        <div id="strange-code"></div>
+        <div id="warning-box">
+            <span class="omega-symbol">Ω</span>
+            <h1>특수 보안 등급 문서</h1>
+            <p>본 문서는 <strong>[ Ω등급 ]</strong> 인가가 필요합니다.<br>터미널 접속 시 발생하는 모든 데이터 로그는<br>중앙 관리국에 실시간 전송됩니다.</p>
+            <button id="view-btn">보안 해제 및 열람</button>
+        </div>
     </div>
-    <button class="audio-btn" id="audioToggleBtn" onclick="toggleBGM()">
-      <div class="audio-wave">
-        <span></span><span></span><span></span>
-      </div>
-      <span id="audioStatusText">BGM OFF</span>
-    </button>
-  </header>
 
-  <!-- 탭 네비게이션 -->
-  <div class="tab-nav">
-    <button class="tab-btn active" onclick="switchTab(this, 'world')">세계관 & 역사</button>
-    <button class="tab-btn" onclick="switchTab(this, 'ranks')">등급 체계 (S~E)</button>
-    <button class="tab-btn" onclick="switchTab(this, 'chars')">캐릭터 데이터</button>
-    <button class="tab-btn" onclick="switchTab(this, 'factions')">언더그라운드 규율</button>
-  </div>
-
-  <!-- TAB 1: 세계관 & 대테러 사건 -->
-  <div id="tab-world" class="tab-content active">
-    <div class="card">
-      <div class="card-title">주요 연대기 및 격리 구역</div>
-      <div class="info-list">
-        
-        <div class="info-block danger">
-          <div class="info-header">
-            <h3>23년 전, '대테러 참사' (The Great Blackout)</h3>
-            <span class="tag" style="color: var(--accent-red); border: 1px solid var(--accent-red);">HISTORICAL INCIDENT</span>
-          </div>
-          <div class="info-desc">
-            <p>23년 전, 급진파 각성자 단체 **'원시 이사회(Primordial Synod)'**가 중앙 도심의 핵심 에너지 원자로 [아크 코어]를 폭파시킨 초대형 도심 테러 사건.</p>
-            <p>이 사고로 도심 중앙 구역의 45%가 회복 불능 상태로 함몰되었으며, 고농도 파장 물질 유출로 수만 명의 민간인 피해가 발생했다. 정부는 이를 계기로 국가 비상사태를 선포하고, **[전 주민 능력 등급 측정 및 강제 이식제]**를 전면 시술화하였으며 파괴된 구역을 고전압 격리 방벽으로 차단했다.</p>
-          </div>
-        </div>
-
-        <div class="info-block purple">
-          <div class="info-header">
-            <h3>언더그라운드 (The Underground)</h3>
-            <span class="tag" style="color: var(--accent-purple); border: 1px solid var(--accent-purple);">RESTRICTED ZONE</span>
-          </div>
-          <div class="info-desc">
-            <p>23년 전 참사 이후 격리 봉쇄된 폐허 위에 형성된 지하 슬럼 도시.</p>
-            <p>중앙 정부의 통제 감시망 '더 그리드(The Grid)'의 신호가 닿지 않는 유일한 무법지대다. 미등록 각성자, 정권 수배자, 신분 박탈자들이 모여 자생적인 사회를 이루었으며, 공권력 대신 암시장 브로커들과 강력한 이능력자 조직들이 구역을 지배하고 있다.</p>
-          </div>
-        </div>
-
-      </div>
+    <!-- 이미지 모달 -->
+    <div id="image-modal" onclick="closeImageModal()">
+        <img id="modal-img" src="" alt="확대 이미지">
+        <div id="modal-caption"></div>
+        <div id="modal-subcaption"></div>
+        <div class="modal-close-hint">화면을 터치하여 닫기</div>
     </div>
-  </div>
 
-  <!-- TAB 2: 등급 체계 (S ~ E) -->
-  <div id="tab-ranks" class="tab-content">
-    <div class="card">
-      <div class="card-title">개체 능력 및 신분 분류 (S ~ E Class)</div>
-      <div class="rank-container">
+    <!-- 메인 터미널 -->
+    <div class="terminal-wrapper" id="main-terminal" style="display: none;">
+        <header class="terminal-header">
+            <div class="header-left">
+                <h1>SYS // ARCHIVE</h1>
+                <span class="badge-sec">LV.4 CLEARANCE</span>
+            </div>
+            <!-- 음악 ON/OFF 버튼 추가 -->
+            <button id="bgm-toggle" class="bgm-toggle-btn">
+                <span id="bgm-icon">🔊</span> BGM ON
+            </button>
+        </header>
 
-        <div class="rank-card r-s">
-          <div class="rank-badge">S</div>
-          <div class="rank-info">
-            <h4>CATACLYSM CLASS <span>[국가 재앙급]</span></h4>
-            <p>단신으로 광역 도시 하나를 괴멸시킬 수 있는 규격 외의 전력. 존재 자체가 전략 병기로 분류되어 국가 차원의 감시를 받는다.</p>
-          </div>
+        <div class="terminal-body">
+            <!-- 사이드바 네비게이션 -->
+            <nav class="sidebar-nav">
+                <ul class="folder-list">
+                    <li onclick="openDocument('world', this)" class="active-tab">세계관 설정</li>
+                    <li onclick="openDocument('hero', this)" class="hero-tab">특수 요원 (히어로)</li>
+                    <li onclick="openDocument('detained', this)" class="detained-tab">특수 수감자</li>
+                    <li onclick="openDocument('villain', this)" class="villain-tab">수배자 (빌런)</li>
+                </ul>
+            </nav>
+
+            <!-- 본문 영역 -->
+            <main class="document-viewer">
+
+                <!-- 1. 세계관 문서 -->
+                <div id="world-doc" class="doc-page active">
+                    <h2 class="doc-title">PROJECT : ARCHIVE // WORLDVIEW</h2>
+                    <p class="doc-meta">SYS.LOG - CLASSIFIED INTEL / UPDATED 2026-08-19</p>
+                    
+                    <div class="cyber-box">
+                        <h3>[ 1. 중앙 관리국 개요 ]</h3>
+                        <p>이상 초능력 발현자들을 통제하고, 사회적 혼란을 야기하는 테러 집단을 은밀히 격리·마크하기 위해 설립된 국가 산하 최고 기밀 기관입니다.</p>
+                    </div>
+
+                    <div class="cyber-box">
+                        <h3>[ 2. 초능력 발현 원인 : 기밀 연구 중 ]</h3>
+                        <p>초능력(이능)의 정확한 발현 기전은 중앙 연구소에서 <strong>1급 기밀로 연구 중</strong>에 있습니다. 주요 가설은 다음과 같습니다.</p>
+                        <ul>
+                            <li><strong>유전자 돌연변이 가설:</strong> 극심한 트라우마나 육체적 임계점에 달했을 때 뇌의 특정 부위가 활성화되며 잠재 능력이 각성함.</li>
+                            <li><strong>미지의 입자 정착설:</strong> 약 30년 전부터 지구상에 퍼진 미지의 입자가 특정 체질의 인간과 결합하여 능력을 표출함.</li>
+                            <li><strong>부작용 및 리스크:</strong> 모든 능력은 과도한 사용 시 신체적·정신적 반동(엔트로피 증가, 뇌 과부하, 장기 손상 등)을 반드시 동반합니다.</li>
+                        </ul>
+                    </div>
+
+                    <!-- E등급 추가 반영 -->
+                    <div class="cyber-box">
+                        <h3>[ 3. 능력자 위험 등급 체계 ]</h3>
+                        <div class="rank-grid">
+                            <div class="rank-item"><strong style="color: var(--red);">[SS-Class] 규격 외</strong> 혼자서 국가 단위 전력을 붕괴시키거나, 규범을 무시하는 재생/조작 능력을 지닌 최고 위험 대상.</div>
+                            <div class="rank-item"><strong style="color: var(--orange);">[S-Class] 대재앙급</strong> 단신으로 대규모 특수 부대를 전멸시킬 수 있는 일인군단급 무력 및 특수 능력을 지닌 자.</div>
+                            <div class="rank-item"><strong style="color: var(--blue);">[A-Class] 전술급</strong> 특정 분야(해킹, 신체 가속, 광역 치료 등)에서 뛰어난 전투력이나 전문성을 지닌 핵심 전력.</div>
+                            <div class="rank-item"><strong style="color: #aaa;">[B-Class] 국소급</strong> 조건부 능력이나 특정 매개체가 필요한 전투원 및 지원 인력.</div>
+                            <div class="rank-item"><strong style="color: #666;">[E-Class] 일반인</strong> 초능력이 전혀 발현되지 않은 평범한 민간인. 철저한 보호의 대상이나, 극단적 계기 부여 시 잠재적 각성 가능성을 배제할 수 없음.</div>
+                        </div>
+                    </div>
+
+                    <!-- 언더그라운드 추가 내용 반영 -->
+                    <div class="cyber-box">
+                        <h3>[ 4. 히어로 vs 언더그라운드 구도 ]</h3>
+                        <p><strong>• 중앙 정부 & 히어로:</strong> 규칙과 질서를 강박적으로 강조하며, 초능력의 위험성을 통제하고 사회의 표면적 안위를 지키는 것을 최우선 과제로 삼음.</p>
+                        <p><strong>• 언더그라운드 (빌런):</strong> 보스 '아게하 시오리'를 중심으로 뭉친 반정부 테러 집단. "능력자들만의 억압 없는 새로운 세상" 건설이 목표.<br>
+                        <span style="color: var(--orange); font-size: 0.85rem;">[!] 최근 점조직 형태의 비밀 지하 기지를 대폭 확장하며, 사회에 불만을 품은 능력자들을 포섭 중. 비윤리적 생체 실험 및 불법 무기 밀매를 병행한다는 첩보가 접수되어 위험도가 급증하고 있음.</span></p>
+                    </div>
+
+                    <!-- 23년전 대테러 사건 추가 -->
+                    <div class="cyber-box" style="border-left-color: var(--red);">
+                        <h3 style="color: var(--red);">[ 5. [기록 말살] : 23년 전 대테러 사건 ]</h3>
+                        <p>과거 도심 한복판에서 발생한 사상 최악의 능력자 연쇄 폭주 테러 사건. '발현' 초창기, 부작용을 통제하지 못한 무허가 능력자 집단에 의해 수도권 인프라 일부가 궤멸되었습니다.</p>
+                        <p>이 참사로 수많은 민간인 사상자가 발생했으며, 중앙 관리국이 현재의 비인도적이고 강경한 무력 통제 시스템을 갖추게 된 결정적 계기가 되었습니다. 현재 활동 중인 최고 등급 히어로 및 언더그라운드 간부 다수가 당시 사건의 생존자이거나 직접적인 피해자(신체 결손 등)인 것으로 파악됩니다.</p>
+                    </div>
+                </div>
+
+                <!-- 2. 히어로 문서 -->
+                <div id="hero-doc" class="doc-page">
+                    <h2 class="doc-title" style="color: var(--blue);">특수 요원 명단</h2>
+                    <p class="doc-meta">GOVERNMENT HERO AGENTS FILE</p>
+
+                    <!-- 사라유키 시로바 -->
+                    <div class="character-card hero-style">
+                        <div class="mini-profile" onclick="toggleCard(this)">
+                            <div class="thumb-wrapper"><img src="https://igx.kr/u/Ncc/n/1" alt="사라유키 시로바" class="mini-thumb" onerror="this.src='https://via.placeholder.com/150?text=SHIROBA';"></div>
+                            <div class="mini-info">
+                                <div class="mini-name-group">
+                                    <span class="mini-name">사라유키 시로바 <span class="mini-jp">更雪 白葉</span></span>
+                                    <span class="mini-codename">/ 흰장미</span>
+                                </div>
+                                <div class="mini-tags"><span class="tag-badge badge-red">SS-Class</span><span class="tag-badge badge-blue">고문(顧問)</span></div>
+                            </div>
+                            <div class="expand-btn">상세열람 ▼</div>
+                        </div>
+                        <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="https://igx.kr/u/Ncc/n/1" class="detail-large-img" onerror="this.src='https://via.placeholder.com/150?text=SHIROBA';" onclick="openImageModal(event, this.src, '사라유키 시로바', '更雪 白葉 / 흰장미 (白バラ)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">사라유키 시로바</div>
+                                    <div class="detail-header-sub">CODE: 흰장미 (白バラ)</div>
+                                    <div style="font-size: 0.8rem; color: #888; margin-top: 6px;">직급: 고문 | 등급: SS-Class</div>
+                                </div>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>更雪 白葉</div>
+                                <div class="detail-item"><strong>나이 / 신체</strong>37세 / 160cm</div>
+                                <div class="detail-item"><strong>주요 무장</strong>호신용 단검</div>
+                                <div class="detail-item"><strong>현재 상태</strong>작전 투입 대기</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">음성 로그 (말투)</div>
+                                <div class="speech-quote">"희생 위에 세워진 평화는... 진짜 평화가 아니에요. 시오리, 언젠가 당신도 깨닫길 바랍니다."</div>
+                                <p style="font-size: 0.8rem; color: #888; margin-top: 8px;">차분하고 씁쓸함이 묻어나는 다정한 존댓말. 상처와 죄책감을 안고 살아가는 조용한 어조.</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">능력 및 약점</div>
+                                <p><strong style="color:var(--cyan)">[능력]</strong> 생명 조작</p>
+                                <p><strong style="color:var(--orange)">[리스크]</strong> 평소에도 몸이 매우 허약하며 능력을 공격 용도로 사용하는 것을 극도로 꺼림.</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">부속 인텔</div>
+                                <p>언더그라운드 보스 시오리의 전 연인. 23년 전 테러에서 두 눈을 잃었지만 시오리에게 한쪽 눈을 기증받으며 연인이 됨. 그러나 사상 차이(규칙과 희생에 대한 관점)로 결별. 현재 정부 고문으로 다친 히어로를 치료하고 정부가 폐기한 시체를 몰래 뒷산에 묻어줌.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 아마미아 루시아 -->
+                    <div class="character-card hero-style">
+                        <div class="mini-profile" onclick="toggleCard(this)">
+                            <div class="thumb-wrapper"><img src="https://igx.kr/u/Ncc/q/1" class="mini-thumb" onerror="this.src='https://via.placeholder.com/150?text=LUCIA';"></div>
+                            <div class="mini-info">
+                                <div class="mini-name-group">
+                                    <span class="mini-name">아마미아 루시아 <span class="mini-jp">雨宮 瑠璃亞</span></span>
+                                    <span class="mini-codename">/ 시스터</span>
+                                </div>
+                                <div class="mini-tags"><span class="tag-badge badge-blue">A-Class</span><span class="tag-badge badge-gray">팀장</span></div>
+                            </div>
+                            <div class="expand-btn">상세열람 ▼</div>
+                        </div>
+                        <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="https://igx.kr/u/Ncc/q/1" class="detail-large-img" onerror="this.src='https://via.placeholder.com/150?text=LUCIA';" onclick="openImageModal(event, this.src, '아마미아 루시아', '雨宮 瑠璃亞 / 시스터 (シスター)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">아마미아 루시아</div>
+                                    <div class="detail-header-sub">CODE: 시스터 (シスター)</div>
+                                    <div style="font-size: 0.8rem; color: #888; margin-top: 6px;">직급: 팀장 | 등급: A-Class</div>
+                                </div>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>雨宮 瑠璃亞</div>
+                                <div class="detail-item"><strong>나이 / 신체</strong>30세 / 162cm</div>
+                                <div class="detail-item"><strong>주요 무장</strong>비무장</div>
+                                <div class="detail-item"><strong>현재 상태</strong>정상 활동</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">음성 로그</div>
+                                <div class="speech-quote">"주님의 이름으로 구원을... 아왓?! 방금 힐 방향을 삐끗한 것 같기도... 하지만 진심이었어요!"</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">능력 및 약점</div>
+                                <p><strong style="color:var(--cyan)">[능력]</strong> 광역 힐 및 업보 비례 데미지</p>
+                                <p><strong style="color:var(--orange)">[조건]</strong> 악인에게는 힐 불가, 죄가 없는 자에게는 데미지 불가.</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">부속 인텔</div>
+                                <p>수련수녀 신분. 교황의 특별 허가로 현역 활동 중. 덜렁거리지만 전투 시에는 굳은 신념을 보인다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 사쿠라기 루리 -->
+                    <div class="character-card hero-style">
+                        <div class="mini-profile" onclick="toggleCard(this)">
+                            <div class="thumb-wrapper"><img src="https://igx.kr/u/Ncc/r/1" class="mini-thumb" onerror="this.src='https://via.placeholder.com/150?text=RURI';"></div>
+                            <div class="mini-info">
+                                <div class="mini-name-group">
+                                    <span class="mini-name">사쿠라기 루리 <span class="mini-jp">桜木 瑠璃</span></span>
+                                    <span class="mini-codename">/ 장군</span>
+                                </div>
+                                <div class="mini-tags"><span class="tag-badge badge-red">S-Class</span><span class="tag-badge badge-blue">장(將)</span></div>
+                            </div>
+                            <div class="expand-btn">상세열람 ▼</div>
+                        </div>
+                        <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="https://igx.kr/u/Ncc/r/1" class="detail-large-img" onerror="this.src='https://via.placeholder.com/150?text=RURI';" onclick="openImageModal(event, this.src, '사쿠라기 루리', '桜木 瑠璃 / 장군 (将軍)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">사쿠라기 루리</div>
+                                    <div class="detail-header-sub">CODE: 장군 (将軍)</div>
+                                    <div style="font-size: 0.8rem; color: #888; margin-top: 6px;">직급: 장(將) | 등급: S-Class</div>
+                                </div>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>桜木 瑠璃</div>
+                                <div class="detail-item"><strong>나이 / 신체</strong>40세 / 175cm</div>
+                                <div class="detail-item"><strong>주요 무장</strong>전술 화기 전반</div>
+                                <div class="detail-item"><strong>현재 상태</strong>정상 활동</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">음성 로그</div>
+                                <div class="speech-quote">"흥, 초능력 따위 없어도 내 총알은 정확하다! ...히익?! 나방 날아간 거 아니지?!"</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">능력 및 약점</div>
+                                <p><strong style="color:var(--cyan)">[능력]</strong> 무능력자 (순수 화기 숙련도 1위)</p>
+                                <p><strong style="color:var(--orange)">[약점]</strong> 벌레를 극도로 무서워함.</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">부속 인텔</div>
+                                <p>초능력 없이 훈련과 실력만으로 히어로 무력 2위를 달성. 츤데레 성향이며 의외로 작전 융통성이 뛰어나다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 아야세 카에데 -->
+                    <div class="character-card hero-style">
+                        <div class="mini-profile" onclick="toggleCard(this)">
+                            <div class="thumb-wrapper"><img src="https://igx.kr/u/Ncc/p/1" class="mini-thumb" onerror="this.src='https://via.placeholder.com/150?text=KAEDE';"></div>
+                            <div class="mini-info">
+                                <div class="mini-name-group">
+                                    <span class="mini-name">아야세 카에데 <span class="mini-jp">綾瀬 楓</span></span>
+                                    <span class="mini-codename">/ 주정뱅이</span>
+                                </div>
+                                <div class="mini-tags"><span class="tag-badge badge-red">S-Class</span><span class="tag-badge badge-gray">팀장</span></div>
+                            </div>
+                            <div class="expand-btn">상세열람 ▼</div>
+                        </div>
+                        <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="https://igx.kr/u/Ncc/p/1" class="detail-large-img" onerror="this.src='https://via.placeholder.com/150?text=KAEDE';" onclick="openImageModal(event, this.src, '아야세 카에데', '綾瀬 楓 / 주정뱅이 (酔っ払い)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">아야세 카에데</div>
+                                    <div class="detail-header-sub">CODE: 주정뱅이 (酔っ払い)</div>
+                                    <div style="font-size: 0.8rem; color: #888; margin-top: 6px;">직급: 팀장 | 등급: S-Class</div>
+                                </div>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>綾瀬 楓</div>
+                                <div class="detail-item"><strong>나이 / 신체</strong>35세 / 180cm</div>
+                                <div class="detail-item"><strong>주요 무장</strong>카타나</div>
+                                <div class="detail-item"><strong>현재 상태</strong>음주 중(추정)</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">음성 로그</div>
+                                <div class="speech-quote">"크으~ 다 베었지? 보고서는 나중에~ 나 술 마시러 간다, 말리지 마라~"</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">능력 및 약점</div>
+                                <p><strong style="color:var(--cyan)">[능력]</strong> 검 파지 시 신체 능력 10배 폭증</p>
+                                <p><strong style="color:var(--orange)">[리스크]</strong> 전투 종료 시 숙취가 비례하여 증폭됨.</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">부속 인텔</div>
+                                <p>만성 주정뱅이. 임무 달성률은 높으나 보고 체계를 무시하고 이탈하여 조직 내 골칫거리.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. 수감자 문서 -->
+                <div id="detained-doc" class="doc-page">
+                    <h2 class="doc-title" style="color: var(--orange);">특수 수감자 명단</h2>
+                    <p class="doc-meta">MAXIMUM SECURITY WARD FILE</p>
+
+                    <div class="character-card detained-style">
+                        <div class="mini-profile" onclick="toggleCard(this)">
+                            <div class="thumb-wrapper"><img src="https://igx.kr/u/Ncc/m/1" class="mini-thumb" onerror="this.src='https://via.placeholder.com/150?text=MEGUMI';"></div>
+                            <div class="mini-info">
+                                <div class="mini-name-group">
+                                    <span class="mini-name">세이린 메구미 <span class="mini-jp">聖凛 恵</span></span>
+                                    <span class="mini-codename">/ 미친년</span>
+                                </div>
+                                <div class="mini-tags"><span class="tag-badge badge-red">SS-Class</span><span class="tag-badge badge-orange">무조건 사살</span></div>
+                            </div>
+                            <div class="expand-btn">상세열람 ▼</div>
+                        </div>
+                        <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="https://igx.kr/u/Ncc/m/1" class="detail-large-img" onerror="this.src='https://via.placeholder.com/150?text=MEGUMI';" onclick="openImageModal(event, this.src, '세이린 메구미', '聖凛 恵 / 미친년 (狂い女)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">세이린 메구미</div>
+                                    <div class="detail-header-sub">CODE: 미친년 (狂い女)</div>
+                                    <div style="font-size: 0.8rem; color: var(--orange); margin-top: 6px;">직급: 특수 수감자 | 등급: SS-Class</div>
+                                </div>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>聖凛 恵</div>
+                                <div class="detail-item"><strong>나이 / 신체</strong>138세 / 190cm</div>
+                                <div class="detail-item"><strong>주요 무장</strong>맨몸 (압도적 무력)</div>
+                                <div class="detail-item"><strong style="color:var(--red)">상태</strong>발견 즉시 사살 권고</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">음성 로그</div>
+                                <div class="speech-quote">"아하하하!! 더 세게 찢어봐!! 3초면 다시 붙으니까! 그 구속구로 날 더 기분 좋게 해보라고!!"</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">능력 및 약점</div>
+                                <p><strong style="color:var(--cyan)">[능력]</strong> 초고속 힐링팩터 (세포핵 기준 3초 재생), 압도적 괴력</p>
+                                <p><strong style="color:var(--orange)">[약점]</strong> 재생 시 죽음 이상의 극통 수반 (단, 마조히스트라 무의미함)</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">부속 인텔</div>
+                                <p>100년간 무소속으로 학살을 일삼은 최악의 나르시스트·마조히스트 연쇄 살인마. 현재 지하 107층에 능력 제한 구속구를 채워 수감 중이나, 화기마저 찢어버리는 완력과 재생력 탓에 처형 불가 상태.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. 수배자 (빌런) 문서 -->
+                <div id="villain-doc" class="doc-page">
+                    <h2 class="doc-title" style="color: var(--red);">언더그라운드 수배자</h2>
+                    <p class="doc-meta">WANTED TERRORIST TARGETS FILE</p>
+
+                    <!-- 아게하 시오리 -->
+                    <div class="character-card villain-style">
+                        <div class="mini-profile" onclick="toggleCard(this)">
+                            <div class="thumb-wrapper"><img src="https://igx.kr/u/Ncc/c/1" class="mini-thumb" onerror="this.src='https://via.placeholder.com/150?text=SHIORI';"></div>
+                            <div class="mini-info">
+                                <div class="mini-name-group">
+                                    <span class="mini-name">아게하 시오리 <span class="mini-jp">揚羽 詩織</span></span>
+                                    <span class="mini-codename">/ 붉은 나비</span>
+                                </div>
+                                <div class="mini-tags"><span class="tag-badge badge-red">SS-Class</span><span class="tag-badge badge-orange">보스</span></div>
+                            </div>
+                            <div class="expand-btn">상세열람 ▼</div>
+                        </div>
+                        <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="https://igx.kr/u/Ncc/c/1" class="detail-large-img" onerror="this.src='https://via.placeholder.com/150?text=SHIORI';" onclick="openImageModal(event, this.src, '아게하 시오리', '揚羽 詩織 / 붉은 나비 (赤チョウ)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">아게하 시오리</div>
+                                    <div class="detail-header-sub">CODE: 붉은 나비 (赤チョウ)</div>
+                                    <div style="font-size: 0.8rem; color: var(--red); margin-top: 6px;">직급: 보스 | 등급: SS-Class</div>
+                                </div>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>揚羽 詩織</div>
+                                <div class="detail-item"><strong>나이 / 신체</strong>38세 / 170cm</div>
+                                <div class="detail-item"><strong>상태</strong>생포 지양 (단, 시로바 요청 예외)</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">음성 로그</div>
+                                <div class="speech-quote">"썩어빠진 정부의 질서는 끝났다. 나와 뜻을 함께하는 자들에게 오직 자유를 선사하겠다."</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">능력 및 약점</div>
+                                <p><strong style="color:var(--cyan)">[능력]</strong> 붉은 나비 시야 공유, 계약자 능력 부작용 없이 차용</p>
+                                <p><strong style="color:var(--orange)">[약점]</strong> 동시 발현 가능한 차용 능력은 1개로 제한됨</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 사토 아카리 -->
+                    <div class="character-card villain-style">
+                        <div class="mini-profile" onclick="toggleCard(this)">
+                            <div class="thumb-wrapper"><img src="https://igx.kr/u/Ncc/d/1" class="mini-thumb" onerror="this.src='https://via.placeholder.com/150?text=AKARI';"></div>
+                            <div class="mini-info">
+                                <div class="mini-name-group">
+                                    <span class="mini-name">사토 아카리 <span class="mini-jp">佐藤 燈</span></span>
+                                    <span class="mini-codename">/ 카와이이 메</span>
+                                </div>
+                                <div class="mini-tags"><span class="tag-badge badge-blue">B-Class</span><span class="tag-badge badge-red">사살 불가</span></div>
+                            </div>
+                            <div class="expand-btn">상세열람 ▼</div>
+                        </div>
+                        <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="https://igx.kr/u/Ncc/d/1" class="detail-large-img" onerror="this.src='https://via.placeholder.com/150?text=AKARI';" onclick="openImageModal(event, this.src, '사토 아카리', '佐藤 燈 / 카와이이 메 (可愛い目)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">사토 아카리</div>
+                                    <div class="detail-header-sub">CODE: 카와이이 메 (可愛い目)</div>
+                                </div>
+                            </div>
+                            <div class="detail-section">
+                                <p style="color:#aaa; font-size: 0.85rem;">시로바와 시오리의 수양딸. 말이 적고 예의 바르며, 옥상에서 하늘을 보며 시로바를 늘 그리워한다. 손에 닿은 대상에게 자력을 부여하는 능력을 지님.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 마요이 츠바키 (시크릿 요소) -->
+                    <div class="character-card villain-style" id="tsubaki-card">
+                        <div class="mini-profile" onclick="toggleCard(this)">
+                            <div class="thumb-wrapper"><img src="https://igx.kr/u/Ncc/l/1" class="mini-thumb" onerror="this.src='https://via.placeholder.com/150?text=TSUBAKI';"></div>
+                            <div class="mini-info">
+                                <div class="mini-name-group">
+                                    <span class="mini-name">마요이 츠바키 <span class="mini-jp">舞世 椿</span></span>
+                                    <span class="mini-codename">/ 코드M</span>
+                                </div>
+                                <div class="mini-tags">
+                                    <span class="tag-badge badge-blue" id="tsubaki-rank-badge">A-Class</span>
+                                    <span class="tag-badge badge-gray" id="tsubaki-role-badge">요원</span>
+                                </div>
+                            </div>
+                            <div class="expand-btn">상세열람 ▼</div>
+                        </div>
+                        <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="https://igx.kr/u/Ncc/l/1" class="detail-large-img" onerror="this.src='https://via.placeholder.com/150?text=TSUBAKI';" onclick="openImageModal(event, this.src, '마요이 츠바키', '舞世 椿 / 코드M')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">마요이 츠바키</div>
+                                    <div class="detail-header-sub">CODE: 코드M</div>
+                                    <div style="font-size: 0.8rem; color: var(--red); margin-top: 6px;">
+                                        직급: <span id="tsubaki-detail-role">요원</span> | 등급: <span id="tsubaki-detail-rank">A-Class</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item"><strong>능력</strong>텔레파시, 전자기장 조종</div>
+                                <div class="detail-item"><strong>상태</strong>사살 불가</div>
+                            </div>
+                            <div class="detail-section">
+                                <p>활발하고 장난기 있지만 어딘가 속을 알 수 없는 미스테리한 인물.</p>
+                                <p id="tsubaki-secret-note" style="display: none; color: #ff3333; margin-top: 15px; font-weight: bold; background: rgba(255,0,0,0.1); padding: 12px; border-radius: 4px; border: 1px dashed var(--red);">
+                                    ⚠️ [기밀 해제] 현재 히어로 측 내부로 잠입하여 기밀을 빼돌리고 있는 '이중 스파이'임이 발각되었습니다.
+                                </p>
+                            </div>
+                            <button class="secret-btn" onclick="toggleSecretProtocol(event)">🔓 [ 보안 프로토콜 강제 해제 ]</button>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
         </div>
-
-        <div class="rank-card r-a">
-          <div class="rank-badge">A</div>
-          <div class="rank-info">
-            <h4>STRATEGIC CLASS <span>[전략 핵심급]</span></h4>
-            <p>중대급 이상 군사 전력에 맞먹는 상위 각성자. 단독 작전 수행권과 고위급 관리 승인 권한을 가진다.</p>
-          </div>
-        </div>
-
-        <div class="rank-card r-b">
-          <div class="rank-badge">B</div>
-          <div class="rank-info">
-            <h4>TACTICAL CLASS <span>[전술 숙련급]</span></h4>
-            <p>검증된 실전 전투력을 입증한 베테랑 능력자. 특수 에이전트나 현장 타격대의 핵심이다.</p>
-          </div>
-        </div>
-
-        <div class="rank-card r-c">
-          <div class="rank-badge">C</div>
-          <div class="rank-info">
-            <h4>REGULAR CLASS <span>[일반 능력자]</span></h4>
-            <p>표준적인 초감각 및 소규모 능력을 보유한 단계. 주로 일반 치안 보조 및 지원 임무를 수행한다.</p>
-          </div>
-        </div>
-
-        <div class="rank-card r-d">
-          <div class="rank-badge">D</div>
-          <div class="rank-info">
-            <h4>MINOR CLASS <span>[미약 각성자]</span></h4>
-            <p>신체 능력의 미세한 강화나 일상적 수준의 특수 반응만 나타나는 미각성 단계.</p>
-          </div>
-        </div>
-
-        <!-- E등급(일반인) 설명 -->
-        <div class="rank-card r-e">
-          <div class="rank-badge">E</div>
-          <div class="rank-info">
-            <h4>CIVILIAN / NON-AWAKENED <span>[일반인 / 비능력자]</span></h4>
-            <p><span class="highlight">특수 능력이나 각성 잠재력이 전혀 없는 순수 비능력자 계층.</span> 사회 인구의 대다수(약 80%)를 구성한다.</p>
-            <p style="margin-top: 0.4rem; font-size: 0.85rem; opacity: 0.8;">지상 사회에서는 시스템의 보호 아래 살아가는 일반 시민들이지만, 언더그라운드에서는 약육강식의 최하위 피식자로 전락한다. 이 때문에 지하의 E등급은 생존을 위해 위험한 불법 사이버네틱 의체 개조나 약물에 의존하는 경우가 많다.</p>
-          </div>
-        </div>
-
-      </div>
     </div>
-  </div>
 
-  <!-- TAB 3: 캐릭터 복구 데이터 -->
-  <div id="tab-chars" class="tab-content">
-    <div class="card">
-      <div class="card-title">주요 캐릭터 DB 프로필</div>
-      <div class="char-grid">
+    <!-- 스크립트 복구 및 로직 추가 -->
+    <script>
+        // DOM Elements
+        const introContainer = document.getElementById('intro-container');
+        const codeContainer = document.getElementById('strange-code');
+        const warningBox = document.getElementById('warning-box');
+        const viewBtn = document.getElementById('view-btn');
+        const mainTerminal = document.getElementById('main-terminal');
+        const bgm = document.getElementById('bgm');
+        const bgmToggle = document.getElementById('bgm-toggle');
+        const bgmIcon = document.getElementById('bgm-icon');
 
-        <!-- 캐릭터 1 -->
-        <div class="char-card">
-          <div class="char-header">
-            <div class="char-name-group">
-              <h3>제이슨 (JASON)</h3>
-              <span class="char-code">#VOID-01</span>
-            </div>
-            <span class="char-rank rank-s">S RANK</span>
-          </div>
-          <div class="char-body">
-            <div class="char-meta">
-              <div class="meta-row"><span class="meta-label">소 속</span><span class="meta-value">무소속 (전 중앙 특수작전팀)</span></div>
-              <div class="meta-row"><span class="meta-label">이능력</span><span class="meta-value">공간 왜곡 & 중력 파형 제어</span></div>
-              <div class="meta-row"><span class="meta-label">연 령</span><span class="meta-value">38세</span></div>
-              <div class="meta-row"><span class="meta-label">위험도</span><span class="meta-value" style="color:var(--accent-red)">최고 위험 (SPECIAL)</span></div>
-            </div>
-            <div class="char-story">
-              23년 전 대테러 참사 당시 현장에서 생존한 전설적인 각성자. 정부의 강제 이식 통제를 거부하고 언더그라운드로 잠적했다. 압도적인 무력을 지녔으나 지하의 파벌 싸움에는 개입하지 않고 독자적인 목적을 위해 움직이고 있다.
-            </div>
-          </div>
-        </div>
+        // 1. 인트로 터미널 텍스트 애니메이션
+        const logs = [
+            "SYS.BOOT // KERNEL LOADED...",
+            "ESTABLISHING SECURE CONNECTION...",
+            "DECRYPTING OMEGA-LEVEL ARCHIVES...",
+            "WARNING: UNAUTHORIZED ACCESS DETECTED.",
+            "BYPASSING SECURITY PROTOCOLS... [OK]"
+        ];
+        let idx = 0;
+        let timer = setInterval(() => {
+            if(idx < logs.length) {
+                codeContainer.innerHTML += logs[idx] + "<br><br>";
+                idx++;
+            }
+        }, 200);
 
-        <!-- 캐릭터 2 -->
-        <div class="char-card">
-          <div class="char-header">
-            <div class="char-name-group">
-              <h3>아리아 (ARIA)</h3>
-              <span class="char-code">#CYPHER-99</span>
-            </div>
-            <div class="char-body">
-              <div class="char-meta">
-                <div class="meta-row"><span class="meta-label">소 속</span><span class="meta-value">언더그라운드 '블랙 마켓'</span></div>
-                <div class="meta-row"><span class="meta-label">이능력</span><span class="meta-value">전자기기 직접 링크 & 정보 감각</span></div>
-                <div class="meta-row"><span class="meta-label">연 령</span><span class="meta-value">24세</span></div>
-                <div class="meta-row"><span class="meta-label">위험도</span><span class="meta-value" style="color:var(--accent-purple)">주의 (MODERATE)</span></div>
-              </div>
-              <div class="char-story">
-                지하 암시장을 주무르는 최고의 정보 브로커. 신경 단말기를 기계에 직접 연결하여 지상 중앙 정부의 통제 망 '그리드'를 해킹한다. 지상과 지하의 고급 기밀을 거래하며 막대한 영향력을 행사한다.
-              </div>
-            </div>
-          </div>
+        setTimeout(() => {
+            clearInterval(timer);
+            codeContainer.style.opacity = '0.1';
+            warningBox.style.display = 'block';
+        }, 1200);
 
-        <!-- 캐릭터 3 -->
-        <div class="char-card">
-          <div class="char-header">
-            <div class="char-name-group">
-              <h3>카일 (KYLE)</h3>
-              <span class="char-code">#IRON-HAND</span>
-            </div>
-            <span class="char-rank rank-e">E RANK</span>
-          </div>
-          <div class="char-body">
-            <div class="char-meta">
-              <div class="meta-row"><span class="meta-label">소 속</span><span class="meta-value">지하 정비소 '고철상'</span></div>
-              <div class="meta-row"><span class="meta-label">이능력</span><span class="meta-value">없음 (전신 70% 사이버네틱 개조)</span></div>
-              <div class="meta-row"><span class="meta-label">연 령</span><span class="meta-value">29세</span></div>
-              <div class="meta-row"><span class="meta-label">위험도</span><span class="meta-value" style="color:var(--text-sub)">보통 (LOW)</span></div>
-            </div>
-            <div class="char-story">
-              각성 능력이 전무한 순수 비능력자(E등급) 출신. 능력자들이 판치는 언더그라운드에서 살아남기 위해 온몸을 불법 전투용 의체로 개조했다. 기계적인 물리력과 내구성만으로 하급 각성자들을 압도한다.
-            </div>
-          </div>
-        </div>
+        // 2. 진입 버튼 (BGM 재생 + 메인 UI 전환)
+        viewBtn.addEventListener('click', () => {
+            // 오디오 재생 시도
+            bgm.volume = 0.5;
+            bgm.play().then(() => {
+                bgmToggle.classList.remove('off');
+                bgmIcon.innerText = "🔊";
+                bgmToggle.innerHTML = '<span id="bgm-icon">🔊</span> BGM ON';
+            }).catch(e => console.log("BGM 자동재생이 브라우저에 의해 막혔습니다."));
 
-      </div>
-    </div>
-  </div>
+            introContainer.style.opacity = '0';
+            setTimeout(() => {
+                introContainer.style.display = 'none';
+                mainTerminal.style.display = 'flex';
+            }, 500);
+        });
 
-  <!-- TAB 4: 언더그라운드 생존 수칙 -->
-  <div id="tab-factions" class="tab-content">
-    <div class="card">
-      <div class="card-title">언더그라운드 생존 수칙</div>
-      <div class="info-list">
-        
-        <div class="info-block">
-          <div class="info-header">
-            <h3>RULE 1. 지상 ID 코드를 절대 입에 담지 말 것</h3>
-            <span class="tag">SURVIVAL PROTOCOL</span>
-          </div>
-          <div class="info-desc">
-            언더그라운드에서 중앙 정부의 등록 ID를 노출하는 순간 신분 해킹 표적이 된다. 납치당해 신원 데이터나 장기를 추출당할 위험이 매우 높다.
-          </div>
-        </div>
+        // 3. BGM ON/OFF 토글 로직
+        bgmToggle.addEventListener('click', () => {
+            if (bgm.paused) {
+                bgm.play();
+                bgmToggle.classList.remove('off');
+                bgmToggle.innerHTML = '<span id="bgm-icon">🔊</span> BGM ON';
+            } else {
+                bgm.pause();
+                bgmToggle.classList.add('off');
+                bgmToggle.innerHTML = '<span id="bgm-icon">🔈</span> BGM OFF';
+            }
+        });
 
-        <div class="info-block">
-          <div class="info-header">
-            <h3>RULE 2. E등급의 기계 의체는 노려진다</h3>
-            <span class="tag">SURVIVAL PROTOCOL</span>
-          </div>
-          <div class="info-desc">
-            이능력이 없어 사이버네틱 강화를 거친 E등급은 지하 부품 상인들의 좋은 표적이다. 확실한 무장이나 보증인이 없다면 혼자 외진 골목을 다니지 마라.
-          </div>
-        </div>
+        // 4. 네비게이션 탭 전환
+        function openDocument(docId, element) {
+            document.querySelectorAll('.doc-page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(docId + '-doc').classList.add('active');
 
-      </div>
-    </div>
-  </div>
+            document.querySelectorAll('.folder-list li').forEach(item => {
+                item.classList.remove('active-tab');
+            });
+            element.classList.add('active-tab');
+        }
 
-</div>
+        // 5. 캐릭터 카드 확장 (아코디언)
+        function toggleCard(miniProfileEl) {
+            const card = miniProfileEl.parentElement;
+            card.classList.toggle('expanded');
+        }
 
-<script>
-  // 탭 전환 함수
-  function switchTab(btnElement, tabId) {
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        // 6. 이미지 모달 제어
+        function openImageModal(event, src, name, jpName) {
+            event.stopPropagation();
+            const modal = document.getElementById('image-modal');
+            document.getElementById('modal-img').src = src;
+            document.getElementById('modal-caption').innerText = name;
+            document.getElementById('modal-subcaption').innerText = jpName || '';
+            modal.style.display = 'flex';
+        }
+        function closeImageModal() {
+            document.getElementById('image-modal').style.display = 'none';
+        }
 
-    btnElement.classList.add('active');
-    document.getElementById('tab-' + tabId).classList.add('active');
-  }
-
-  // BGM 토글 함수
-  function toggleBGM() {
-    const audio = document.getElementById('bgmAudio');
-    const btn = document.getElementById('audioToggleBtn');
-    const text = document.getElementById('audioStatusText');
-
-    if (audio.paused) {
-      audio.play().then(() => {
-        btn.classList.add('playing');
-        text.textContent = 'BGM ON';
-      }).catch(() => {
-        btn.classList.toggle('playing');
-        const isPlaying = btn.classList.contains('playing');
-        text.textContent = isPlaying ? 'BGM ON' : 'BGM OFF';
-      });
-    } else {
-      audio.pause();
-      btn.classList.remove('playing');
-      text.textContent = 'BGM OFF';
-    }
-  }
-</script>
-
+        // 7. 마요이 츠바키 시크릿 프로토콜 (잘렸던 JS 복구 파트)
+        function toggleSecretProtocol(event) {
+            event.stopPropagation();
+            const card = document.getElementById('tsubaki-card');
+            
+            // 시각적 글리치 이펙트 주입
+            card.style.animation = "glitch 0.2s 3";
+            setTimeout(() => { card.style.animation = ""; }, 600);
+            
+            // 배지 변경
+            const roleBadge = document.getElementById('tsubaki-role-badge');
+            const rankBadge = document.getElementById('tsubaki-rank-badge');
+            const detailRole = document.getElementById('tsubaki-detail-role');
+            const detailRank = document.getElementById('tsubaki-detail-rank');
+            
+            // 클래스 교체 (회색 -> 빨간색, 파란색 -> 빨간색)
+            roleBadge.className = "tag-badge badge-red";
+            roleBadge.innerText = "이중 스파이";
+            detailRole.innerText = "이중 스파이 (침투조)";
+            
+            rankBadge.className = "tag-badge badge-red";
+            rankBadge.innerText = "S-Class";
+            detailRank.innerText = "S-Class (위험도 격상)";
+            
+            // 기밀 노트 표시
+            document.getElementById('tsubaki-secret-note').style.display = 'block';
+            
+            // 버튼 비활성화
+            const btn = event.target;
+            btn.innerText = "[ 보안 프로토콜 해제 완료 ]";
+            btn.style.background = "var(--red)";
+            btn.style.color = "#000";
+            btn.style.cursor = "default";
+            btn.onclick = null;
+        }
+    </script>
 </body>
 </html>
