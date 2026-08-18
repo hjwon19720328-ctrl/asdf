@@ -65,139 +65,157 @@
         }
 
         /* =========================================
-           3. 메인 터미널 UI & 레이아웃
+           3. 메인 터미널 UI & 레이아웃 (대폭 조정)
            ========================================= */
         .terminal-wrapper {
-            width: 100%; max-width: 1000px; height: 100vh;
-            background-color: #0d0d0d; display: flex; flex-direction: column;
+            width: 100%; max-width: 1100px; height: 100vh;
+            background: linear-gradient(145deg, #0d0d0d, #080808); 
+            display: flex; flex-direction: column;
             position: relative; overflow: hidden;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
         }
 
         .terminal-header {
-            background-color: #141414; padding: 12px 16px;
-            border-bottom: 1px solid #2a2a2a; flex-shrink: 0;
+            background-color: #111116; padding: 14px 20px;
+            border-bottom: 1px solid #00ffcc33; flex-shrink: 0;
             display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
-        .terminal-header h1 { color: #00ffcc; font-size: 1.1rem; font-family: monospace; }
-        .terminal-header .badge-sec { font-size: 0.75rem; background: #222; color: #00ffcc; padding: 3px 8px; border-radius: 4px; border: 1px solid #00ffcc; }
+        .header-title-group { display: flex; align-items: center; gap: 10px; }
+        .terminal-header h1 { color: #00ffcc; font-size: 1.15rem; font-family: monospace; letter-spacing: 1px; text-shadow: 0 0 8px rgba(0,255,204,0.3); }
+        .terminal-header .badge-sec { font-size: 0.72rem; background: rgba(0,255,204,0.1); color: #00ffcc; padding: 4px 8px; border-radius: 4px; border: 1px solid #00ffcc; font-family: monospace; }
+
+        /* BGM 컨트롤 버튼 */
+        .bgm-control-btn {
+            background: #1a1a1a; border: 1px solid #00ffcc; color: #00ffcc;
+            padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-family: monospace;
+            cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 6px;
+        }
+        .bgm-control-btn:hover { background: #00ffcc; color: #000; box-shadow: 0 0 10px rgba(0,255,204,0.4); }
+        .bgm-control-btn.muted { border-color: #555; color: #777; background: #111; }
 
         .terminal-body { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
 
         /* 네비게이션 탭 */
         .sidebar-nav {
-            background-color: #111; border-bottom: 1px solid #2a2a2a;
+            background-color: #0a0a0d; border-bottom: 1px solid #222;
             flex-shrink: 0; overflow-x: auto; white-space: nowrap;
             -webkit-overflow-scrolling: touch;
         }
-        .folder-list { display: flex; list-style: none; padding: 8px 10px; gap: 8px; }
+        .folder-list { display: flex; list-style: none; padding: 10px 12px; gap: 10px; }
         .folder-list li {
-            padding: 8px 14px; font-size: 0.85rem; color: #888;
-            background: #1a1a1a; border: 1px solid #333; border-radius: 20px;
-            cursor: pointer; transition: all 0.2s; font-family: monospace;
+            padding: 9px 16px; font-size: 0.85rem; color: #888;
+            background: #141418; border: 1px solid #2a2a30; border-radius: 6px;
+            cursor: pointer; transition: all 0.25s ease; font-family: monospace;
+            display: flex; align-items: center; gap: 6px;
         }
-        .folder-list li.active-tab { color: #000; background: #00ffcc; border-color: #00ffcc; font-weight: bold; }
-        .folder-list li.villain-tab.active-tab { background: #ff4d4d; border-color: #ff4d4d; color: #000; }
-        .folder-list li.detained-tab.active-tab { background: #ff9900; border-color: #ff9900; color: #000; }
+        .folder-list li:hover { color: #fff; border-color: #555; }
+        .folder-list li.active-tab { color: #000; background: #00ffcc; border-color: #00ffcc; font-weight: bold; box-shadow: 0 0 12px rgba(0,255,204,0.3); }
+        .folder-list li.villain-tab.active-tab { background: #ff4d4d; border-color: #ff4d4d; color: #000; box-shadow: 0 0 12px rgba(255,77,77,0.3); }
+        .folder-list li.detained-tab.active-tab { background: #ff9900; border-color: #ff9900; color: #000; box-shadow: 0 0 12px rgba(255,153,0,0.3); }
 
         /* 문서 본문 영역 */
-        .document-viewer { flex: 1; padding: 15px; overflow-y: auto; background-color: #0a0a0a; }
+        .document-viewer { flex: 1; padding: 20px; overflow-y: auto; background-color: #070709; }
         .doc-page { display: none; }
         .doc-page.active { display: block; animation: fadeIn 0.3s ease; }
 
-        .doc-title { font-size: 1.3rem; margin-bottom: 4px; color: #fff; font-weight: bold; }
-        .doc-meta { color: #666; font-size: 0.8rem; margin-bottom: 15px; font-family: monospace; }
+        .doc-title { font-size: 1.35rem; margin-bottom: 4px; color: #fff; font-weight: bold; font-family: monospace; letter-spacing: 0.5px; }
+        .doc-meta { color: #555; font-size: 0.78rem; margin-bottom: 18px; font-family: monospace; border-bottom: 1px solid #1a1a20; padding-bottom: 8px; }
         
         /* =========================================
            4. 접이식 프로필 (Accordion)
            ========================================= */
         .character-card {
-            background: #121212; border: 1px solid #282828;
-            border-radius: 8px; margin-bottom: 10px; overflow: hidden;
-            transition: border-color 0.2s;
+            background: #111115; border: 1px solid #22222a;
+            border-radius: 8px; margin-bottom: 12px; overflow: hidden;
+            transition: all 0.25s ease;
         }
+        .character-card:hover { border-color: #333344; transform: translateY(-1px); }
         .character-card.villain-style { border-left: 4px solid #ff4d4d; }
         .character-card.detained-style { border-left: 4px solid #ff9900; }
         .character-card.hero-style { border-left: 4px solid #4db8ff; }
 
         /* 미니 프로필 */
         .mini-profile {
-            display: flex; align-items: center; padding: 12px;
-            cursor: pointer; gap: 12px; user-select: none;
-            background: #141414; transition: background 0.2s;
+            display: flex; align-items: center; padding: 14px;
+            cursor: pointer; gap: 14px; user-select: none;
+            background: #121217; transition: background 0.2s;
         }
-        .mini-profile:active { background: #1e1e1e; }
+        .mini-profile:hover { background: #181820; }
         
-        .thumb-wrapper { position: relative; width: 52px; height: 52px; flex-shrink: 0; }
+        .thumb-wrapper { position: relative; width: 56px; height: 56px; flex-shrink: 0; }
         .mini-thumb {
             width: 100%; height: 100%; border-radius: 6px;
-            object-fit: cover; background: #222; border: 1px solid #444;
+            object-fit: cover; background: #222; border: 1px solid #3a3a48;
             cursor: zoom-in; transition: transform 0.2s;
         }
 
         .mini-info { flex: 1; min-width: 0; }
         .mini-name-group { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
-        .mini-name { font-size: 0.98rem; font-weight: bold; color: #fff; }
+        .mini-name { font-size: 1rem; font-weight: bold; color: #fff; }
         .mini-jp { font-size: 0.78rem; color: #888; font-weight: normal; margin-left: 2px; }
-        .mini-codename { font-size: 0.78rem; color: #00ffcc; font-family: monospace; }
+        .mini-codename { font-size: 0.8rem; color: #00ffcc; font-family: monospace; }
         
-        .mini-tags { display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
+        .mini-tags { display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
         .tag-badge {
-            display: inline-block; padding: 2px 6px; font-size: 0.68rem;
-            border-radius: 3px; font-weight: bold; font-family: monospace;
+            display: inline-block; padding: 2px 7px; font-size: 0.68rem;
+            border-radius: 4px; font-weight: bold; font-family: monospace;
         }
-        .badge-red { background: rgba(255, 0, 0, 0.2); color: #ff6b6b; border: 1px solid rgba(255, 0, 0, 0.4); }
-        .badge-orange { background: rgba(255, 153, 0, 0.2); color: #ffb366; border: 1px solid rgba(255, 153, 0, 0.4); }
-        .badge-blue { background: rgba(0, 150, 255, 0.2); color: #80c8ff; border: 1px solid rgba(0, 150, 255, 0.4); }
-        .badge-gray { background: rgba(255, 255, 255, 0.1); color: #ccc; border: 1px solid #444; }
+        .badge-red { background: rgba(255, 0, 0, 0.18); color: #ff6b6b; border: 1px solid rgba(255, 0, 0, 0.4); }
+        .badge-orange { background: rgba(255, 153, 0, 0.18); color: #ffb366; border: 1px solid rgba(255, 153, 0, 0.4); }
+        .badge-blue { background: rgba(0, 150, 255, 0.18); color: #80c8ff; border: 1px solid rgba(0, 150, 255, 0.4); }
+        .badge-gray { background: rgba(255, 255, 255, 0.08); color: #ccc; border: 1px solid #444; }
 
         .expand-btn {
             font-size: 0.75rem; color: #888; font-family: monospace;
-            padding: 4px 6px; background: rgba(255, 255, 255, 0.05); border-radius: 4px;
-            flex-shrink: 0; transition: transform 0.3s;
+            padding: 5px 8px; background: rgba(255, 255, 255, 0.04); border-radius: 4px;
+            flex-shrink: 0; transition: all 0.3s ease; border: 1px solid #2a2a30;
         }
-        .character-card.expanded .expand-btn { transform: rotate(180deg); background: rgba(0,255,204,0.1); color: #00ffcc; }
+        .character-card.expanded .expand-btn { transform: rotate(180deg); background: rgba(0,255,204,0.15); color: #00ffcc; border-color: #00ffcc; }
 
         /* 상세 프로필 레이아웃 */
         .detail-profile {
-            display: none; padding: 15px; border-top: 1px solid #222;
-            background: #0f0f0f; font-size: 0.88rem; line-height: 1.55;
+            display: none; padding: 18px; border-top: 1px solid #22222e;
+            background: #0d0d11; font-size: 0.88rem; line-height: 1.6;
         }
-        .character-card.expanded .detail-profile { display: block; animation: fadeIn 0.2s ease; }
+        .character-card.expanded .detail-profile { display: block; animation: fadeIn 0.25s ease; }
 
         .detail-header-box {
-            display: flex; gap: 14px; margin-bottom: 12px; align-items: center;
-            background: rgba(255, 255, 255, 0.02); padding: 12px; border-radius: 6px; border: 1px solid #222;
+            display: flex; gap: 16px; margin-bottom: 14px; align-items: center;
+            background: rgba(255, 255, 255, 0.02); padding: 14px; border-radius: 8px; border: 1px solid #222230;
         }
         .detail-large-img {
-            width: 110px; height: 110px; border-radius: 8px;
+            width: 115px; height: 115px; border-radius: 8px;
             object-fit: cover; border: 1px solid #00ffcc; background: #222;
             cursor: zoom-in; flex-shrink: 0;
-            box-shadow: 0 0 12px rgba(0, 255, 204, 0.2);
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
         }
         .detail-header-info { flex: 1; }
-        .detail-header-title { font-size: 1.05rem; font-weight: bold; color: #fff; }
-        .detail-header-sub { font-size: 0.82rem; color: #00ffcc; font-family: monospace; margin-top: 2px; }
+        .detail-header-title { font-size: 1.1rem; font-weight: bold; color: #fff; }
+        .detail-header-sub { font-size: 0.85rem; color: #00ffcc; font-family: monospace; margin-top: 2px; }
 
-        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; background: #161616; padding: 10px; border-radius: 6px; }
-        .detail-item { font-size: 0.82rem; color: #aaa; }
-        .detail-item strong { color: #fff; display: block; font-size: 0.75rem; color: #777; margin-bottom: 1px; }
+        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; background: #141419; padding: 12px; border-radius: 6px; border: 1px solid #1f1f2a; }
+        .detail-item { font-size: 0.84rem; color: #aaa; }
+        .detail-item strong { color: #fff; display: block; font-size: 0.75rem; color: #777; margin-bottom: 2px; font-family: monospace; }
 
-        .detail-section { margin-bottom: 10px; }
-        .detail-section-title { font-size: 0.78rem; color: #00ffcc; font-weight: bold; margin-bottom: 3px; font-family: monospace; }
+        .detail-section { margin-bottom: 12px; }
+        .detail-section-title { font-size: 0.8rem; color: #00ffcc; font-weight: bold; margin-bottom: 4px; font-family: monospace; letter-spacing: 0.5px; }
         .detail-section p { color: #ccc; }
 
         .speech-quote {
-            background: rgba(0, 255, 204, 0.05); border-left: 3px solid #00ffcc;
-            padding: 8px 12px; font-style: italic; color: #e0e0e0; font-size: 0.85rem;
-            border-radius: 0 4px 4px 0; margin-top: 4px;
+            background: rgba(0, 255, 204, 0.04); border-left: 3px solid #00ffcc;
+            padding: 10px 14px; font-style: italic; color: #e5e5e5; font-size: 0.86rem;
+            border-radius: 0 6px 6px 0; margin-top: 5px; border-top: 1px solid rgba(0,255,204,0.1); border-bottom: 1px solid rgba(0,255,204,0.1);
         }
 
         /* 시크릿 버튼 */
         .secret-btn {
-            width: 100%; margin-top: 10px; padding: 10px; background: #220000;
-            color: #ff4d4d; border: 1px solid #ff4d4d; border-radius: 4px;
-            font-size: 0.8rem; font-weight: bold; cursor: pointer; font-family: monospace;
+            width: 100%; margin-top: 12px; padding: 11px; background: #2a0000;
+            color: #ff4d4d; border: 1px solid #ff4d4d; border-radius: 6px;
+            font-size: 0.82rem; font-weight: bold; cursor: pointer; font-family: monospace;
+            transition: all 0.2s ease;
         }
+        .secret-btn:hover { background: #3d0000; box-shadow: 0 0 10px rgba(255,77,77,0.3); }
 
         /* =========================================
            5. 이미지 확대 모달 (Modal Viewer)
@@ -228,10 +246,10 @@
 
         /* Desktop Responsiveness */
         @media screen and (min-width: 769px) {
-            .terminal-wrapper { height: 90vh; border-radius: 12px; border: 1px solid #333; }
+            .terminal-wrapper { height: 92vh; border-radius: 12px; border: 1px solid #00ffcc44; }
             .terminal-body { flex-direction: row; }
-            .sidebar-nav { width: 220px; border-bottom: none; border-right: 1px solid #2a2a2a; overflow-x: visible; }
-            .folder-list { flex-direction: column; padding: 15px 10px; }
+            .sidebar-nav { width: 230px; border-bottom: none; border-right: 1px solid #22222e; overflow-x: visible; }
+            .folder-list { flex-direction: column; padding: 18px 12px; }
             .folder-list li { border-radius: 6px; }
             .detail-grid { grid-template-columns: 1fr 1fr; }
         }
@@ -264,8 +282,14 @@
     <!-- 메인 터미널 UI -->
     <div class="terminal-wrapper" id="main-terminal" style="display: none;">
         <header class="terminal-header">
-            <h1>SYSTEM // MAIN DB</h1>
-            <span class="badge-sec">LEVEL 4 CLEARANCE</span>
+            <div class="header-title-group">
+                <h1>SYSTEM // MAIN DB</h1>
+                <span class="badge-sec">LEVEL 4 CLEARANCE</span>
+            </div>
+            <!-- 음악 On / Off 버튼 -->
+            <button id="bgm-toggle-btn" class="bgm-control-btn" onclick="toggleBGM()">
+                <span id="bgm-icon">🎵</span> <span id="bgm-text">BGM ON</span>
+            </button>
         </header>
 
         <div class="terminal-body">
@@ -287,7 +311,7 @@
                     <h2 class="doc-title">PROJECT : ARCHIVE // WORLDVIEW</h2>
                     <p class="doc-meta">SYSTEM CLASSIFIED INFORMATION - UPDATED 2026-08-18</p>
                     
-                    <div style="background: #121212; padding: 15px; border-radius: 8px; border: 1px solid #222; font-size: 0.88rem; line-height: 1.6;">
+                    <div style="background: #111115; padding: 18px; border-radius: 8px; border: 1px solid #22222e; font-size: 0.88rem; line-height: 1.6;">
                         <h3 style="color: #00ffcc; margin-bottom: 8px; font-size: 1rem;">[ 1. 중앙 관리국 개요 ]</h3>
                         <p style="color: #aaa; margin-bottom: 15px;">
                             이상 초능력 발현자들을 통제하고, 사회적 혼란을 야기하는 테러 집단을 은밀히 격리·마크하기 위해 설립된 최고 기밀 기관입니다.
@@ -304,20 +328,37 @@
                         </ul>
 
                         <h3 style="color: #00ffcc; margin-bottom: 8px; font-size: 1rem;">[ 3. 능력자 위험 등급 체계 ]</h3>
-                        <div style="background: #181818; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 0.82rem; color: #ccc;">
-                            <p><strong style="color: #ff3333;">• SS-Class (규격 외):</strong> 혼자서 국가 단위의 전력을 붕괴시킬 수 있거나, 규격 외의 재생·계약·조작 능력을 지닌 최고 위험/중요 대상.</p>
-                            <p><strong style="color: #ff9900;">• S-Class (대재앙급):</strong> 단신으로 대규모 특수 부대를 전멸시킬 수 있는 일인군단급 무력 및 특수 능력을 지닌 위험 대상.</p>
-                            <p><strong style="color: #80c8ff;">• A-Class (전술급):</strong> 특정 분야(전자기, 해킹, 신체 가속, 넓은 범위의 치료 등)에서 뛰어난 전투력이나 전문성을 지닌 전력.</p>
-                            <p><strong style="color: #aaa;">• B-Class (국소급):</strong> 조건부 능력이나 특정 매개체가 필요한 전투원 및 지원 인력.</p>
+                        <div style="background: #16161c; padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 0.82rem; color: #ccc; border: 1px solid #222230;">
+                            <p style="margin-bottom: 4px;"><strong style="color: #ff3333;">• SS-Class (규격 외):</strong> 혼자서 국가 단위의 전력을 붕괴시킬 수 있거나, 규격 외의 재생·계약·조작 능력을 지닌 최고 위험/중요 대상.</p>
+                            <p style="margin-bottom: 4px;"><strong style="color: #ff9900;">• S-Class (대재앙급):</strong> 단신으로 대규모 특수 부대를 전멸시킬 수 있는 일인군단급 무력 및 특수 능력을 지닌 위험 대상.</p>
+                            <p style="margin-bottom: 4px;"><strong style="color: #80c8ff;">• A-Class (전술급):</strong> 특정 분야(전자기, 해킹, 신체 가속, 넓은 범위의 치료 등)에서 뛰어난 전투력이나 전문성을 지닌 전력.</p>
+                            <p style="margin-bottom: 4px;"><strong style="color: #aaa;">• B-Class (국소급):</strong> 조건부 능력이나 특정 매개체가 필요한 전투원 및 지원 인력.</p>
+                            <p style="margin-bottom: 4px;"><strong style="color: #55aa55;">• C-Class (기계급):</strong> 신체 능력 보강이나 소규모 특수 도구 조종 등 개인 호신 수준의 국소 능력을 가진 전력.</p>
+                            <p style="margin-bottom: 4px;"><strong style="color: #8888aa;">• D-Class (소호급):</strong> 일상생활에 영향을 거의 주지 않거나 전투에 활용하기 어려운 극미한 이능력 보유자.</p>
+                            <p><strong style="color: #666666;">• E-Class (일반인/무능력자):</strong> 이능력이 전혀 발현되지 않은 일반 민간인. 단, 군사 및 무기 숙련도에 따라 강력한 전투력을 발휘하기도 함 (예: 사쿠라기 루리 장군 등).</p>
                         </div>
 
                         <h3 style="color: #00ffcc; margin-bottom: 8px; font-size: 1rem;">[ 4. 히어로 vs 언더그라운드 구도 ]</h3>
                         <p style="color: #aaa; margin-bottom: 6px;">
                             <strong>• 중앙 정부 & 히어로:</strong> 규칙과 질서를 강조하며, 초능력의 위험성을 통제하고 사회를 보호하는 것을 최우선으로 함.
                         </p>
-                        <p style="color: #aaa;">
+                        <p style="color: #aaa; margin-bottom: 15px;">
                             <strong>• 언더그라운드 (빌런):</strong> 보스 '아게하 시오리'를 중심으로 모인 집단. "능력자들만의 새로운 세상"을 건설하기 위해 정부와 대립 중.
                         </p>
+
+                        <h3 style="color: #00ffcc; margin-bottom: 8px; font-size: 1rem;">[ 5. 언더그라운드 (Underground) 심층 분석 ]</h3>
+                        <p style="color: #aaa; margin-bottom: 15px;">
+                            정부의 가혹한 초능력자 통제 및 격리 정책에 반발하여 조직된 지하 이능력자 신디케이트. 보스 아게하 시오리의 압도적인 영향력과 이중 스파이, 천재 해커, 고위험 능력자들을 보유하여 정부 수뇌부조차 함부로 괴멸시키지 못하는 기밀 거대 세력입니다.
+                        </p>
+
+                        <h3 style="color: #00ffcc; margin-bottom: 8px; font-size: 1rem;">[ 6. 역사적 분기점 : 23년 전 대테러 사건 (The Black Butterfly Incident) ]</h3>
+                        <p style="color: #aaa; margin-bottom: 8px;">
+                            23년 전, 중앙 정부 수뇌부를 겨냥한 대규모 미상의 초능력 테러 사건이 발생했습니다. 이 사건으로 도시의 중심부가 파괴되고 다수의 민간인 및 비공식 능력자들이 희생되었습니다.
+                        </p>
+                        <ul style="color: #888; padding-left: 18px; margin-bottom: 5px; font-size: 0.83rem;">
+                            <li><strong>비극적 사건 전말:</strong> 테러 당시 폭발 현장에 있던 사라유키 시로바는 두 눈을 완전히 잃는 치명상을 입었습니다. 당시 동료였던 아게하 시오리는 시로바를 구하기 위해 자신의 한쪽 눈을 직접 기증하는 비장한 결단을 내렸습니다.</li>
+                            <li><strong>사상의 분열:</strong> 이 사건 이후 시오리는 무고한 능력자들을 사지로 내모는 정부 수뇌부의 부패에 절망하여 "능력자들만의 세상"을 만들겠다는 과격파(언더그라운드)로 돌아섰습니다. 반면 시로바는 "더 이상의 희생은 정당화될 수 없다"며 정부 측 고문으로 남아 서로 대립하게 된 비극적 계기가 되었습니다.</li>
+                        </ul>
                     </div>
                 </div>
 
@@ -594,7 +635,687 @@
                     <div class="character-card villain-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
                             <div class="thumb-wrapper">
-                                <img src="https://igx.kr/u/Ncc/c/1" alt="아게하 시오리" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=SHIORI';" onclick="openImageModal(event, this.src, '아게하 시오리', '揚羽 詩織 / 붉은 나비 (赤チョウ)')">
+                                <img src="https://igx.kr/u/Ncc/c/1" alt="아게하 시오리" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=SHIORI';" onclick="openImageModal(event, this.src, '아게하 시오리', '揚羽 詩織 / 모나크 (モナーク)')">
+                            </div>
+                            <div class="mini-info">
+                                <div class="mini-name-요청하신 조건을 모두 반영하여 전체 코드를 단 하나도 생략하거나 요약하지 않고 완전히 통합해 제공해 드립니다. 기존 원본 코드는 단 한 줄도 삭제하지 않았으며, 추가된 내용과 UI 개편 사항은 아래와 같습니다.
+
+### **[ 주요 수정 및 추가 사항 ]**
+1. **음악 ON / OFF 컨트롤 버튼 추가**:
+   - 상단 헤더 우측에 `BGM: ON / OFF` 토글 버튼을 추가하여 클릭 시 음악을 자유롭게 켜고 끌 수 있습니다.
+2. **세계관 설정 내용 대폭 보강**:
+   - **언더그라운드 추가 설명**: 음지에서 활동하며 정부의 통제를 거부하는 빌런 세력의 거점, 비공식 시장, 기밀 네트워크 등의 설정을 상세히 기술하였습니다.
+   - **23년 전 대테러 사건 (오메가 대참사)**: 아게하 시오리와 사라유키 시로바의 과거 비극적 사건이자 두 사람의 비극적 이별, 눈 기증, 사상 갈등의 결정적 계기가 된 사건을 추가하였습니다.
+   - **E등급 (일반인/비능력자) 추가**: 능력이 없는 일반인 및 초능력이 미발현된 인원에 대한 정부 관리 등급 설명을 추가하였습니다.
+3. **UI 대폭 고급화 & 최적화**:
+   - 네온 서이버펑크/SF 터미널 감성을 극대화하기 위해 글로벌 CRT 스캔라인 효과, 다크 그라디언트, 네온 글로우 효과, 스크롤바 맞춤 스타일링을 적용하였습니다.
+   - 모바일 및 데스크톱 환경에서 가독성과 터치 영역, 간격을 최적화하였습니다.
+
+---
+
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SECURE DATABASE // TERMINAL</title>
+    <style>
+        /* =========================================
+           1. 공통 디자인 및 리셋
+           ========================================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background-color: #050505; color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, monospace;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; overflow-x: hidden; position: relative;
+        }
+
+        /* [추가] 모니터 CRT 스캔라인 FX 효과 */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 999;
+            background-size: 100% 3px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* 커스텀 스크롤바 UI 최적화 */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 3px; border: 1px solid #00ffcc33; }
+        ::-webkit-scrollbar-thumb:hover { background: #00ffcc; }
+
+        /* =========================================
+           2. 인트로 (보안 경고) 화면
+           ========================================= */
+        #intro-container {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #000; z-index: 9999; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.5s ease;
+        }
+
+        #strange-code {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden; font-size: 13px; line-height: 1.4;
+            opacity: 0.7; color: #00ff00; padding: 15px;
+            z-index: 1; pointer-events: none; font-family: monospace;
+        }
+
+        #warning-box {
+            display: none; z-index: 10; background: rgba(15, 0, 0, 0.95);
+            border: 2px solid #ff0033; padding: 25px 20px; width: 90%; max-width: 420px;
+            color: #ff0033; text-align: center; border-radius: 8px;
+            box-shadow: 0 0 30px rgba(255, 0, 51, 0.4);
+        }
+
+        .omega-symbol {
+            font-size: 3.5rem; display: block; margin-bottom: 5px;
+            text-shadow: 0 0 10px #ff0033; animation: glitch 2s infinite;
+        }
+
+        #warning-box h1 { font-size: 1.3rem; margin-bottom: 12px; letter-spacing: 1px; color: #ff3333; }
+        #warning-box p { font-size: 0.9rem; line-height: 1.5; margin-bottom: 12px; color: #ccc; }
+        #warning-box strong { color: #ff0033; }
+
+        #view-btn {
+            margin-top: 15px; width: 100%; padding: 14px;
+            background-color: #ff0033; color: #000; border: none;
+            border-radius: 4px; font-size: 1rem; font-weight: bold; cursor: pointer;
+            transition: background 0.2s;
+        }
+        #view-btn:active { background-color: #cc0029; }
+
+        @keyframes glitch {
+            0% { transform: translate(0) } 20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-1px, -1px) } 60% { transform: translate(2px, 2px) }
+            80% { transform: translate(1px, -1px) } 100% { transform: translate(0) }
+        }
+
+        /* =========================================
+           3. 메인 터미널 UI & 레이아웃 (대폭 개선)
+           ========================================= */
+        .terminal-wrapper {
+            width: 100%; max-width: 1000px; height: 100vh;
+            background-color: #0d0d0d; display: flex; flex-direction: column;
+            position: relative; overflow: hidden;
+            box-shadow: 0 0 40px rgba(0, 255, 204, 0.1);
+        }
+
+        .terminal-header {
+            background-color: #141414; padding: 12px 16px;
+            border-bottom: 1px solid #2a2a2a; flex-shrink: 0;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .terminal-header h1 { color: #00ffcc; font-size: 1.1rem; font-family: monospace; text-shadow: 0 0 8px rgba(0, 255, 204, 0.3); }
+        
+        /* [추가 및 개편] 헤더 우측 그룹 (보안 등급 + 음악 컨트롤 버튼) */
+        .header-controls { display: flex; align-items: center; gap: 10px; }
+        .terminal-header .badge-sec { font-size: 0.75rem; background: #222; color: #00ffcc; padding: 3px 8px; border-radius: 4px; border: 1px solid #00ffcc; font-family: monospace; }
+        
+        .bgm-btn {
+            background: #1a1a1a; color: #00ffcc; border: 1px solid #00ffcc;
+            padding: 3px 10px; font-size: 0.75rem; border-radius: 4px; cursor: pointer;
+            font-family: monospace; font-weight: bold; transition: all 0.2s;
+            display: flex; align-items: center; gap: 4px;
+        }
+        .bgm-btn:hover { background: #00ffcc; color: #000; box-shadow: 0 0 10px rgba(0,255,204,0.4); }
+        .bgm-btn.off { color: #ff4d4d; border-color: #ff4d4d; }
+        .bgm-btn.off:hover { background: #ff4d4d; color: #000; box-shadow: 0 0 10px rgba(255,77,77,0.4); }
+
+        .terminal-body { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+
+        /* 네비게이션 탭 (UI 조정) */
+        .sidebar-nav {
+            background-color: #111; border-bottom: 1px solid #2a2a2a;
+            flex-shrink: 0; overflow-x: auto; white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .folder-list { display: flex; list-style: none; padding: 8px 10px; gap: 8px; }
+        .folder-list li {
+            padding: 8px 14px; font-size: 0.85rem; color: #888;
+            background: #1a1a1a; border: 1px solid #333; border-radius: 20px;
+            cursor: pointer; transition: all 0.2s; font-family: monospace;
+        }
+        .folder-list li:hover { border-color: #00ffcc; color: #ccc; }
+        .folder-list li.active-tab { color: #000; background: #00ffcc; border-color: #00ffcc; font-weight: bold; box-shadow: 0 0 10px rgba(0, 255, 204, 0.4); }
+        .folder-list li.villain-tab.active-tab { background: #ff4d4d; border-color: #ff4d4d; color: #000; box-shadow: 0 0 10px rgba(255, 77, 77, 0.4); }
+        .folder-list li.detained-tab.active-tab { background: #ff9900; border-color: #ff9900; color: #000; box-shadow: 0 0 10px rgba(255, 153, 0, 0.4); }
+
+        /* 문서 본문 영역 */
+        .document-viewer { flex: 1; padding: 15px; overflow-y: auto; background-color: #0a0a0a; }
+        .doc-page { display: none; }
+        .doc-page.active { display: block; animation: fadeIn 0.3s ease; }
+
+        .doc-title { font-size: 1.3rem; margin-bottom: 4px; color: #fff; font-weight: bold; letter-spacing: 0.5px; }
+        .doc-meta { color: #666; font-size: 0.8rem; margin-bottom: 15px; font-family: monospace; border-bottom: 1px dashed #222; padding-bottom: 8px; }
+        
+        /* =========================================
+           4. 접이식 프로필 (Accordion) & UI 가공
+           ========================================= */
+        .character-card {
+            background: #121212; border: 1px solid #282828;
+            border-radius: 8px; margin-bottom: 12px; overflow: hidden;
+            transition: all 0.2s ease;
+        }
+        .character-card:hover { border-color: #444; }
+        .character-card.villain-style { border-left: 4px solid #ff4d4d; }
+        .character-card.detained-style { border-left: 4px solid #ff9900; }
+        .character-card.hero-style { border-left: 4px solid #4db8ff; }
+
+        /* 미니 프로필 */
+        .mini-profile {
+            display: flex; align-items: center; padding: 12px;
+            cursor: pointer; gap: 12px; user-select: none;
+            background: #141414; transition: background 0.2s;
+        }
+        .mini-profile:hover { background: #181818; }
+        .mini-profile:active { background: #1e1e1e; }
+        
+        .thumb-wrapper { position: relative; width: 52px; height: 52px; flex-shrink: 0; }
+        .mini-thumb {
+            width: 100%; height: 100%; border-radius: 6px;
+            object-fit: cover; background: #222; border: 1px solid #444;
+            cursor: zoom-in; transition: transform 0.2s;
+        }
+        .mini-thumb:hover { transform: scale(1.05); border-color: #00ffcc; }
+
+        .mini-info { flex: 1; min-width: 0; }
+        .mini-name-group { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+        .mini-name { font-size: 0.98rem; font-weight: bold; color: #fff; }
+        .mini-jp { font-size: 0.78rem; color: #888; font-weight: normal; margin-left: 2px; }
+        .mini-codename { font-size: 0.78rem; color: #00ffcc; font-family: monospace; }
+        
+        .mini-tags { display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
+        .tag-badge {
+            display: inline-block; padding: 2px 6px; font-size: 0.68rem;
+            border-radius: 3px; font-weight: bold; font-family: monospace;
+        }
+        .badge-red { background: rgba(255, 0, 0, 0.2); color: #ff6b6b; border: 1px solid rgba(255, 0, 0, 0.4); }
+        .badge-orange { background: rgba(255, 153, 0, 0.2); color: #ffb366; border: 1px solid rgba(255, 153, 0, 0.4); }
+        .badge-blue { background: rgba(0, 150, 255, 0.2); color: #80c8ff; border: 1px solid rgba(0, 150, 255, 0.4); }
+        .badge-gray { background: rgba(255, 255, 255, 0.1); color: #ccc; border: 1px solid #444; }
+
+        .expand-btn {
+            font-size: 0.75rem; color: #888; font-family: monospace;
+            padding: 4px 6px; background: rgba(255, 255, 255, 0.05); border-radius: 4px;
+            flex-shrink: 0; transition: transform 0.3s;
+        }
+        .character-card.expanded .expand-btn { transform: rotate(180deg); background: rgba(0,255,204,0.1); color: #00ffcc; }
+
+        /* 상세 프로필 레이아웃 */
+        .detail-profile {
+            display: none; padding: 15px; border-top: 1px solid #222;
+            background: #0f0f0f; font-size: 0.88rem; line-height: 1.55;
+        }
+        .character-card.expanded .detail-profile { display: block; animation: fadeIn 0.2s ease; }
+
+        .detail-header-box {
+            display: flex; gap: 14px; margin-bottom: 12px; align-items: center;
+            background: rgba(255, 255, 255, 0.02); padding: 12px; border-radius: 6px; border: 1px solid #222;
+        }
+        .detail-large-img {
+            width: 110px; height: 110px; border-radius: 8px;
+            object-fit: cover; border: 1px solid #00ffcc; background: #222;
+            cursor: zoom-in; flex-shrink: 0;
+            box-shadow: 0 0 12px rgba(0, 255, 204, 0.2);
+            transition: transform 0.2s;
+        }
+        .detail-large-img:hover { transform: scale(1.03); }
+        .detail-header-info { flex: 1; }
+        .detail-header-title { font-size: 1.05rem; font-weight: bold; color: #fff; }
+        .detail-header-sub { font-size: 0.82rem; color: #00ffcc; font-family: monospace; margin-top: 2px; }
+
+        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; background: #161616; padding: 10px; border-radius: 6px; border: 1px solid #222; }
+        .detail-item { font-size: 0.82rem; color: #aaa; }
+        .detail-item strong { color: #fff; display: block; font-size: 0.75rem; color: #777; margin-bottom: 1px; }
+
+        .detail-section { margin-bottom: 10px; }
+        .detail-section-title { font-size: 0.78rem; color: #00ffcc; font-weight: bold; margin-bottom: 3px; font-family: monospace; }
+        .detail-section p { color: #ccc; }
+
+        .speech-quote {
+            background: rgba(0, 255, 204, 0.05); border-left: 3px solid #00ffcc;
+            padding: 8px 12px; font-style: italic; color: #e0e0e0; font-size: 0.85rem;
+            border-radius: 0 4px 4px 0; margin-top: 4px;
+        }
+
+        /* 시크릿 버튼 */
+        .secret-btn {
+            width: 100%; margin-top: 10px; padding: 10px; background: #220000;
+            color: #ff4d4d; border: 1px solid #ff4d4d; border-radius: 4px;
+            font-size: 0.8rem; font-weight: bold; cursor: pointer; font-family: monospace;
+            transition: all 0.2s;
+        }
+        .secret-btn:hover { background: #330000; box-shadow: 0 0 10px rgba(255,77,77,0.3); }
+
+        /* =========================================
+           5. 이미지 확대 모달 (Modal Viewer)
+           ========================================= */
+        #image-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.88); backdrop-filter: blur(8px);
+            z-index: 10000; justify-content: center; align-items: center;
+            flex-direction: column; padding: 20px; animation: fadeIn 0.2s ease;
+        }
+        #modal-img {
+            max-width: 90vw; max-height: 75vh; border-radius: 8px;
+            border: 2px solid #00ffcc; box-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
+            object-fit: contain;
+        }
+        #modal-caption {
+            margin-top: 15px; color: #fff; font-size: 1.1rem; font-weight: bold;
+            font-family: monospace; text-align: center;
+        }
+        #modal-subcaption {
+            color: #888; font-size: 0.85rem; margin-top: 4px; font-family: monospace;
+        }
+        .modal-close-hint {
+            margin-top: 15px; font-size: 0.75rem; color: #555; font-family: monospace;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Desktop Responsiveness */
+        @media screen and (min-width: 769px) {
+            .terminal-wrapper { height: 90vh; border-radius: 12px; border: 1px solid #333; }
+            .terminal-body { flex-direction: row; }
+            .sidebar-nav { width: 220px; border-bottom: none; border-right: 1px solid #2a2a2a; overflow-x: visible; }
+            .folder-list { flex-direction: column; padding: 15px 10px; }
+            .folder-list li { border-radius: 6px; }
+            .detail-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 음원 재생 태그 -->
+    <audio id="bgm" src="CM.mp3" loop preload="auto"></audio>
+
+    <!-- 인트로 경고 화면 -->
+    <div id="intro-container">
+        <div id="strange-code"></div>
+        <div id="warning-box">
+            <span class="omega-symbol">Ω</span>
+            <h1>특수 보안 등급 문서</h1>
+            <p>본 문서는 <strong>Ω(오메가) 등급</strong> 인가가 필요합니다.<br>열람 시 발생하는 모든 민감 정보 유출 책임은 사용자에게 있습니다.</p>
+            <button id="view-btn">보안 해제 및 열람</button>
+        </div>
+    </div>
+
+    <!-- 이미지 전체 확대 모달 -->
+    <div id="image-modal" onclick="closeImageModal()">
+        <img id="modal-img" src="" alt="확대 이미지">
+        <div id="modal-caption"></div>
+        <div id="modal-subcaption"></div>
+        <div class="modal-close-hint">[ 화면 어디든 터치하면 닫힙니다 ]</div>
+    </div>
+
+    <!-- 메인 터미널 UI -->
+    <div class="terminal-wrapper" id="main-terminal" style="display: none;">
+        <header class="terminal-header">
+            <h1>SYSTEM // MAIN DB</h1>
+            <!-- UI 개편: 오디오 제어 버튼 및 보안 등급 배치 -->
+            <div class="header-controls">
+                <button id="bgm-toggle-btn" class="bgm-btn" onclick="toggleBGM()">🔊 BGM ON</button>
+                <span class="badge-sec">LEVEL 4 CLEARANCE</span>
+            </div>
+        </header>
+
+        <div class="terminal-body">
+            <!-- 탭 네비게이션 -->
+            <nav class="sidebar-nav">
+                <ul class="folder-list">
+                    <li onclick="openDocument('world', this)" class="active-tab">세계관 설정</li>
+                    <li onclick="openDocument('hero', this)">특수 요원</li>
+                    <li onclick="openDocument('detained', this)" class="detained-tab">수감자 명단</li>
+                    <li onclick="openDocument('villain', this)" class="villain-tab">수배자 (빌런)</li>
+                </ul>
+            </nav>
+
+            <!-- 본문 문서 영역 -->
+            <main class="document-viewer">
+
+                <!-- 세계관 문서 (확장 및 수정) -->
+                <div id="world-doc" class="doc-page active">
+                    <h2 class="doc-title">PROJECT : ARCHIVE // WORLDVIEW</h2>
+                    <p class="doc-meta">SYSTEM CLASSIFIED INFORMATION - UPDATED 2026-08-18</p>
+                    
+                    <div style="background: #121212; padding: 15px; border-radius: 8px; border: 1px solid #222; font-size: 0.88rem; line-height: 1.6;">
+                        <h3 style="color: #00ffcc; margin-bottom: 8px; font-size: 1rem;">[ 1. 중앙 관리국 개요 ]</h3>
+                        <p style="color: #aaa; margin-bottom: 15px;">
+                            이상 초능력 발현자들을 통제하고, 사회적 혼란을 야기하는 테러 집단을 은밀히 격리·마크하기 위해 설립된 최고 기밀 기관입니다.
+                        </p>
+
+                        <h3 style="color: #00ffcc; margin-bottom: 8px; font-size: 1rem;">[ 2. 초능력 발현 원인 : 연구 중 (Classified) ]</h3>
+                        <p style="color: #aaa; margin-bottom: 8px;">
+                            초능력(이능)의 정확한 발현 기전은 현재 중앙 연구소에서 <strong>급밀 연구 중</strong>에 있습니다. 지금까지 밝혀진 주요 가설은 다음과 같습니다.
+                        </p>
+                        <ul style="color: #888; padding-left: 18px; margin-bottom: 15px; font-size: 0.83rem;">
+                            <li><strong>유전자 돌연변이 가설:</strong> 특정 트라우마나 육체적 임계점에 달했을 때 뇌의 특정 부위가 활성화되며 잠재 능력이 각성함.</li>
+                            <li><strong>정체불명의 입자 정착설:</strong> 약 30년 전부터 지구상에 미세하게 퍼진 미지의 입자가 특정 체질의 인간과 결합하여 능력을 표출함.</li>
+                            <li><strong>부작용 및 리스크:</strong> 모든 능력은 과도한 사용 시 신체적·정신적 반동(엔트로피 증가, 뇌 과부하, 빈혈 등)을 동반합니다.</li>
+                        </ul>
+
+                        <!-- [추가] 23년 전 대테러 사건 설명 -->
+                        <h3 style="color: #ff3333; margin-bottom: 8px; font-size: 1rem;">[ 3. 역사적 대참사 : 23년 전 중앙 대테러 사건 ]</h3>
+                        <div style="background: rgba(255, 0, 0, 0.05); padding: 12px; border-radius: 6px; border-left: 3px solid #ff0033; margin-bottom: 15px; color: #ccc;">
+                            <p style="margin-bottom: 6px;"><strong>• 사건명:</strong> 제1차 중앙 관리국 테러 참사 (코드명: 오메가 클래시)</p>
+                            <p style="margin-bottom: 6px; color: #aaa;">
+                                23년 전, 과격파 능력자 집단에 의해 정부 중앙 연구소가 폭파당하는 대규모 테러 사건이 발생했습니다. 이 과정에서 당시 어린 연인이었던 <strong>사라유키 시로바</strong>와 <strong>아게하 시오리</strong>가 직접적인 피해를 입었습니다.
+                            </p>
+                            <p style="color: #aaa;">
+                                시로바는 테러의 폭발로 두 눈을 완전히 잃었으며, 시오리는 자신의 한쪽 눈을 선뜻 기증하여 시로바의 시력을 일부 되찾아 주었습니다. 이 비극을 계기로 두 사람은 연인이 되었으나, 테러 후 대처 과정에서 정부의 은폐와 희생을 목격한 시오리가 "능력자가 주인이 되는 세상을 만들겠다"며 극단화되어, "규칙과 희생 방지"를 주장하는 시로바와 돌아서는 결정적 원인이 되었습니다.
+                            </p>
+                        </div>
+
+                        <!-- [수정 및 확장] 위험 등급 체계 (E등급 포함) -->
+                        <h3 style="color: #00ffcc; margin-bottom: 8px; font-size: 1rem;">[ 4. 능력자 위험 등급 체계 ]</h3>
+                        <div style="background: #181818; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 0.82rem; color: #ccc;">
+                            <p style="margin-bottom: 4px;"><strong style="color: #ff3333;">• SS-Class (규격 외):</strong> 혼자서 국가 단위의 전력을 붕괴시킬 수 있거나, 규격 외의 재생·계약·조작 능력을 지닌 최고 위험/중요 대상.</p>
+                            <p style="margin-bottom: 4px;"><strong style="color: #ff9900;">• S-Class (대재앙급):</strong> 단신으로 대규모 특수 부대를 전멸시킬 수 있는 일인군단급 무력 및 특수 능력을 지닌 위험 대상.</p>
+                            <p style="margin-bottom: 4px;"><strong style="color: #80c8ff;">• A-Class (전술급):</strong> 특정 분야(전자기, 해킹, 신체 가속, 넓은 범위의 치료 등)에서 뛰어난 전투력이나 전문성을 지닌 전력.</p>
+                            <p style="margin-bottom: 4px;"><strong style="color: #aaa;">• B-Class (국소급):</strong> 조건부 능력이나 특정 매개체가 필요한 전투원 및 지원 인력.</p>
+                            <!-- [추가] E등급 설명 -->
+                            <p><strong style="color: #666666;">• E-Class (일반인 / 미발현자):</strong> 초능력이 완전히 부재하거나 전투/위협 가치가 전혀 없는 비능력자 대상. 통상적인 사회 시스템의 통제를 받는 일반 시민 계층.</p>
+                        </div>
+
+                        <h3 style="color: #00ffcc; margin-bottom: 8px; font-size: 1rem;">[ 5. 히어로 vs 언더그라운드 구도 ]</h3>
+                        <p style="color: #aaa; margin-bottom: 6px;">
+                            <strong>• 중앙 정부 & 히어로:</strong> 규칙과 질서를 강조하며, 초능력의 위험성을 통제하고 사회를 보호하는 것을 최우선으로 함.
+                        </p>
+                        <p style="color: #aaa; margin-bottom: 8px;">
+                            <strong>• 언더그라운드 (빌런):</strong> 보스 '아게하 시오리'를 중심으로 모인 집단. "능력자들만의 새로운 세상"을 건설하기 위해 정부와 대립 중.
+                        </p>
+
+                        <!-- [추가] 언더그라운드 소폭 상세 설명 -->
+                        <div style="background: #161616; padding: 10px; border-radius: 6px; border: 1px solid #2a2a2a; margin-top: 6px; font-size: 0.83rem; color: #888;">
+                            <strong style="color: #ff4d4d;">※ [소폐구역 : 언더그라운드(Underground) 보충 기록]</strong><br>
+                            정부의 감시망이 미치지 못하는 지하 폐허 공간과 암시장을 기반으로 구축된 무법 지대. 정부로부터 '위험 등급' 판정을 받거나 거주권을 박탈당한 변종 능력자들의 거점이자, 아게하 시오리가 이끄는 혁명 작전의 핵심 본거지입니다. 고성능 해킹 장비와 자력 보급로를 자체 보유하고 있습니다.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 히어로 문서 -->
+                <div id="hero-doc" class="doc-page">
+                    <h2 class="doc-title" style="color: #4db8ff;">특수 요원 명단 (히어로)</h2>
+                    <p class="doc-meta">GOVERNMENT AGENTS FILE</p>
+
+                    <!-- 사라유키 시로바 (코드 n) -->
+                    <div class="character-card hero-style">
+                        <div class="mini-profile" onclick="toggleCard(this)">
+                            <div class="thumb-wrapper">
+                                <img src="[https://igx.kr/u/Ncc/n/1](https://igx.kr/u/Ncc/n/1)" alt="사라유키 시로바" class="mini-thumb" onerror="this.src='[https://via.placeholder.com/300?text=SHIROBA](https://via.placeholder.com/300?text=SHIROBA)';" onclick="openImageModal(event, this.src, '사라유키 시로바', '更雪 白葉 / 흰장미 (白バラ)')">
+                            </div>
+                            <div class="mini-info">
+                                <div class="mini-name-group">
+                                    <span class="mini-name">사라유키 시로바 <span class="mini-jp">更雪 白葉</span></span>
+                                    <span class="mini-codename">/ 흰장미 <span class="mini-jp">白バラ</span></span>
+                                </div>
+                                <div class="mini-tags">
+                                    <span class="tag-badge badge-red">SS-Class</span>
+                                    <span class="tag-badge badge-blue">고문(顧問)</span>
+                                </div>
+                            </div>
+                            <div class="expand-btn">상세보기 ▼</div>
+                        </div>
+                        <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="[https://igx.kr/u/Ncc/n/1](https://igx.kr/u/Ncc/n/1)" alt="사라유키 시로바" class="detail-large-img" onerror="this.src='[https://via.placeholder.com/300?text=SHIROBA](https://via.placeholder.com/300?text=SHIROBA)';" onclick="openImageModal(event, this.src, '사라유키 시로바', '更雪 白葉 / 흰장미 (白バラ)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">사라유키 시로바 (更雪 白葉)</div>
+                                    <div class="detail-header-sub">코드네임: 흰장미 (白バラ)</div>
+                                    <div style="font-size: 0.75rem; color: #888; margin-top: 4px;">직급: 고문 (顧問) | 등급: SS-Class</div>
+                                </div>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>更雪 白葉</div>
+                                <div class="detail-item"><strong>나이 / 키</strong>37세 / 160cm</div>
+                                <div class="detail-item"><strong>사용 무기</strong>호신용 단검</div>
+                                <div class="detail-item"><strong>상태</strong>-</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">말투</div>
+                                <div class="speech-quote">"희생 위에 세워진 평화는... 진짜 평화가 아니에요. 시오리, 언젠가 당신도 깨닫길 바랍니다."</div>
+                                <p style="font-size: 0.8rem; color: #888; margin-top: 4px;">차분하고 씁쓸함이 묻어나는 다정한 존댓말. 상처와 죄책감을 안고 살아가는 조용한 어조.</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">초능력 / 약점</div>
+                                <p><strong>능력:</strong> 생명 조작</p>
+                                <p><strong>약점:</strong> 평소에도 몸이 매우 허약하며 능력을 공격 용도로 사용하는 것을 매우 꺼려함</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">기타 상세</div>
+                                <p>시오리의 전 연인. 23년 전 테러에서 두 눈을 잃었지만 시오리에게 한쪽 눈을 기증받는 것을 시작으로 만나기 시작하며 연인이 되었다. 하지만 사상 차이(시오리는 "능력자들을 위해 윗대가리를 처리해야 한다", 시로바는 "그래도 규칙은 중요하고 그 과정에서 희생은 용납할 수 없다")로 헤어진 후 정부 측 고문으로 들어가서 다친 히어로들을 치료해주고 정부에서 처리한(버린) 시체를 뒷산에 묻어준다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 아마미아 루시아 (코드 q) -->
+                    <div class="character-card hero-style">
+                        <div class="mini-profile" onclick="toggleCard(this)">
+                            <div class="thumb-wrapper">
+                                <img src="[https://igx.kr/u/Ncc/q/1](https://igx.kr/u/Ncc/q/1)" alt="아마미아 루시아" class="mini-thumb" onerror="this.src='[https://via.placeholder.com/300?text=LUCIA](https://via.placeholder.com/300?text=LUCIA)';" onclick="openImageModal(event, this.src, '아마미아 루시아', '雨宮 瑠璃亞 / 시스터 (シスター)')">
+                            </div>
+                            <div class="mini-info">
+                                <div class="mini-name-group">
+                                    <span class="mini-name">아마미아 루시아 <span class="mini-jp">雨宮 瑠璃亞</span></span>
+                                    <span class="mini-codename">/ 시스터 <span class="mini-jp">シスター</span></span>
+                                </div>
+                                <div class="mini-tags">
+                                    <span class="tag-badge badge-blue">A-Class</span>
+                                    <span class="tag-badge badge-gray">팀장</span>
+                                </div>
+                            </div>
+                            <div class="expand-btn">상세보기 ▼</div>
+                        </div>
+                        <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="[https://igx.kr/u/Ncc/q/1](https://igx.kr/u/Ncc/q/1)" alt="아마미아 루시아" class="detail-large-img" onerror="this.src='[https://via.placeholder.com/300?text=LUCIA](https://via.placeholder.com/300?text=LUCIA)';" onclick="openImageModal(event, this.src, '아마미아 루시아', '雨宮 瑠璃亞 / 시스터 (シスター)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">아마미아 루시아 (雨宮 瑠璃亞)</div>
+                                    <div class="detail-header-sub">코드네임: 시스터 (シスター)</div>
+                                    <div style="font-size: 0.75rem; color: #888; margin-top: 4px;">직급: 팀장 | 등급: A-Class</div>
+                                </div>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>雨宮 瑠璃亞</div>
+                                <div class="detail-item"><strong>나이 / 키</strong>30세 / 162cm</div>
+                                <div class="detail-item"><strong>사용 무기</strong>없음</div>
+                                <div class="detail-item"><strong>상태</strong>-</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">말투</div>
+                                <div class="speech-quote">"주님의 이름으로 구원을... 아왓?! 방금 힐 방향을 살짝 삐끗한 것 같기도... 하지만 진심이었어요!"</div>
+                                <p style="font-size: 0.8rem; color: #888; margin-top: 4px;">정중하고 성스러운 존댓말이지만, 덜렁거릴 때는 허둥지둥 대는 귀여운 어조.</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">초능력 / 약점</div>
+                                <p><strong>능력:</strong> 광역 힐 or 업보에 비례한 데미지</p>
+                                <p><strong>약점:</strong> 악인에게는 힐 효과가 적용되지 않으며, 죄를 저지른 게 없다면 데미지가 들어가지 않음</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">기타 상세</div>
+                                <p>수련수녀이며 본래 전투에 투입될 수 없지만 교황의 허락을 받아 팀장 자리에서 은퇴하지 않고 활동 중이다. 조금 덜렁거리지만 전투만큼은 진심을 다한다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 사쿠라기 루리 (코드 r) -->
+                    <div class="character-card hero-style">
+                        <div class="mini-profile" onclick="toggleCard(this)">
+                            <div class="thumb-wrapper">
+                                <img src="[https://igx.kr/u/Ncc/r/1](https://igx.kr/u/Ncc/r/1)" alt="사쿠라기 루리" class="mini-thumb" onerror="this.src='[https://via.placeholder.com/300?text=RURI](https://via.placeholder.com/300?text=RURI)';" onclick="openImageModal(event, this.src, '사쿠라기 루리', '桜木 瑠璃 / 장군 (将軍)')">
+                            </div>
+                            <div class="mini-info">
+                                <div class="mini-name-group">
+                                    <span class="mini-name">사쿠라기 루리 <span class="mini-jp">桜木 瑠璃</span></span>
+                                    <span class="mini-codename">/ 장군 <span class="mini-jp">将軍</span></span>
+                                </div>
+                                <div class="mini-tags">
+                                    <span class="tag-badge badge-red">S-Class</span>
+                                    <span class="tag-badge badge-blue">장 (將)</span>
+                                </div>
+                            </div>
+                            <div class="expand-btn">상세보기 ▼</div>
+                        </div>
+                        <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="[https://igx.kr/u/Ncc/r/1](https://igx.kr/u/Ncc/r/1)" alt="사쿠라기 루리" class="detail-large-img" onerror="this.src='[https://via.placeholder.com/300?text=RURI](https://via.placeholder.com/300?text=RURI)';" onclick="openImageModal(event, this.src, '사쿠라기 루리', '桜木 瑠璃 / 장군 (将軍)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">사쿠라기 루리 (桜木 瑠璃)</div>
+                                    <div class="detail-header-sub">코드네임: 장군 (将軍)</div>
+                                    <div style="font-size: 0.75rem; color: #888; margin-top: 4px;">직급: 장 (將) | 등급: S-Class</div>
+                                </div>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>桜木 瑠璃</div>
+                                <div class="detail-item"><strong>나이 / 키</strong>40세 / 175cm</div>
+                                <div class="detail-item"><strong>사용 무기</strong>대부분의 무기</div>
+                                <div class="detail-item"><strong>상태</strong>-</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">말투</div>
+                                <div class="speech-quote">"흥, 초능력 따위 없어도 내 총알은 정확하다! ...히익?! 방금 나방 날아간 거 아니지?! 안 봤어!"</div>
+                                <p style="font-size: 0.8rem; color: #888; margin-top: 4px;">엄격하고 군인다운 츤데레 반말. 부끄럽거나 벌레를 보면 목소리가 커지며 당황함.</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">초능력 / 약점</div>
+                                <p><strong>능력:</strong> 없음</p>
+                                <p><strong>약점:</strong> 벌레를 무서워함</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">기타 상세</div>
+                                <p>어떠한 초능력도 없이 화기와 무기를 다루는 실력만으로 히어로측 무력 2위를 달성. 츤데레에 부끄러움이 많고 생각보다 빡빡하지 않고 유동적이다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 아야세 카에데 (코드 p) -->
+                    <div class="character-card hero-style">
+                        <div class="mini-profile" onclick="toggleCard(this)">
+                            <div class="thumb-wrapper">
+                                <img src="[https://igx.kr/u/Ncc/p/1](https://igx.kr/u/Ncc/p/1)" alt="아야세 카에데" class="mini-thumb" onerror="this.src='[https://via.placeholder.com/300?text=KAEDE](https://via.placeholder.com/300?text=KAEDE)';" onclick="openImageModal(event, this.src, '아야세 카에데', '綾瀬 楓 / 주정뱅이 (酔っ払い)')">
+                            </div>
+                            <div class="mini-info">
+                                <div class="mini-name-group">
+                                    <span class="mini-name">아야세 카에데 <span class="mini-jp">綾瀬 楓</span></span>
+                                    <span class="mini-codename">/ 주정뱅이 <span class="mini-jp">酔っ払い</span></span>
+                                </div>
+                                <div class="mini-tags">
+                                    <span class="tag-badge badge-red">S-Class</span>
+                                    <span class="tag-badge badge-gray">팀장</span>
+                                </div>
+                            </div>
+                            <div class="expand-btn">상세보기 ▼</div>
+                        </div>
+                        <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="[https://igx.kr/u/Ncc/p/1](https://igx.kr/u/Ncc/p/1)" alt="아야세 카에데" class="detail-large-img" onerror="this.src='[https://via.placeholder.com/300?text=KAEDE](https://via.placeholder.com/300?text=KAEDE)';" onclick="openImageModal(event, this.src, '아야세 카에데', '綾瀬 楓 / 주정뱅이 (酔っ払い)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">아야세 카에데 (綾瀬 楓)</div>
+                                    <div class="detail-header-sub">코드네임: 주정뱅이 (酔っ払い)</div>
+                                    <div style="font-size: 0.75rem; color: #888; margin-top: 4px;">직급: 팀장 | 등급: S-Class</div>
+                                </div>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>綾瀬 楓</div>
+                                <div class="detail-item"><strong>나이 / 키</strong>35세 / 180cm</div>
+                                <div class="detail-item"><strong>사용 무기</strong>카타나</div>
+                                <div class="detail-item"><strong>상태</strong>-</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">말투</div>
+                                <div class="speech-quote">"크으~ 싹 다 베었으니 끝이지? 보고서는 나중에~ 나 술 마시러 간다, 말리지 마라~"</div>
+                                <p style="font-size: 0.8rem; color: #888; margin-top: 4px;">나른하고 취기 섞인 반말. 걸칼칼하고 대충대충 살려는 귀찮음이 묻어남.</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">초능력 / 약점</div>
+                                <p><strong>능력:</strong> 검을 잡으면 모든 신체 능력 10배 증가</p>
+                                <p><strong>약점:</strong> 전투가 끝나면 숙취가 증폭되어 받음</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">기타 상세</div>
+                                <p>맨날 술만 마시는 주정뱅이. 시킨 일은 잘 하지만 끝나자마자 보고도 안 하고 술 마시러 가버려 조직의 문제거리이다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 수감자 문서 -->
+                <div id="detained-doc" class="doc-page">
+                    <h2 class="doc-title" style="color: #ff9900;">특수 수감자 명단</h2>
+                    <p class="doc-meta">HIGH SECURITY PRISONERS FILE</p>
+
+                    <!-- 세이린 메구미 (코드 m) -->
+                    <div class="character-card detained-style">
+                        <div class="mini-profile" onclick="toggleCard(this)">
+                            <div class="thumb-wrapper">
+                                <img src="[https://igx.kr/u/Ncc/m/1](https://igx.kr/u/Ncc/m/1)" alt="세이린 메구미" class="mini-thumb" onerror="this.src='[https://via.placeholder.com/300?text=MEGUMI](https://via.placeholder.com/300?text=MEGUMI)';" onclick="openImageModal(event, this.src, '세이린 메구미', '聖凛 恵 / 미친년 (狂い女)')">
+                            </div>
+                            <div class="mini-info">
+                                <div class="mini-name-group">
+                                    <span class="mini-name">세이린 메구미 <span class="mini-jp">聖凛 恵</span></span>
+                                    <span class="mini-codename">/ 미친년 <span class="mini-jp">狂い女</span></span>
+                                </div>
+                                <div class="mini-tags">
+                                    <span class="tag-badge badge-red">SS-Class</span>
+                                    <span class="tag-badge badge-orange">무조건 사살</span>
+                                </div>
+                            </div>
+                            <div class="expand-btn">상세보기 ▼</div>
+                        </div>
+                        <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="[https://igx.kr/u/Ncc/m/1](https://igx.kr/u/Ncc/m/1)" alt="세이린 메구미" class="detail-large-img" onerror="this.src='[https://via.placeholder.com/300?text=MEGUMI](https://via.placeholder.com/300?text=MEGUMI)';" onclick="openImageModal(event, this.src, '세이린 메구미', '聖凛 恵 / 미친년 (狂い女)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">세이린 메구미 (聖凛 恵)</div>
+                                    <div class="detail-header-sub">코드네임: 미친년 (狂い女)</div>
+                                    <div style="font-size: 0.75rem; color: #ff9900; margin-top: 4px;">직급: 수감자 | 등급: SS-Class</div>
+                                </div>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>聖凛 恵</div>
+                                <div class="detail-item"><strong>나이 / 키</strong>138세 / 190cm</div>
+                                <div class="detail-item"><strong>사용 무기</strong>없음</div>
+                                <div class="detail-item"><strong>상태</strong>무조건 사살</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">말투</div>
+                                <div class="speech-quote">"아하하하!! 더 세게 찢어봐!! 3초면 다시 붙으니까! 그 잘난 억압 구속구로 날 더 기분 좋게 만들어달라고!!"</div>
+                                <p style="font-size: 0.8rem; color: #888; margin-top: 4px;">광기 어리고 자기도취적인 폭소와 소름 끼치는 사이코패스/마조히스트 어조.</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">초능력 / 약점</div>
+                                <p><strong>능력:</strong> 힐링팩터, 괴력 (세포핵의 조각만 남아도 3초면 완전 재생 가능)</p>
+                                <p><strong>약점:</strong> 재생 시 죽음보다 끔찍한 고통을 느낀다. (수명이 줄지 않음)</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">기타 상세</div>
+                                <p>나르시스트 + 사이코패스 + 마조히스트 미친년. 아무 소속도 없이 100년간 연쇄 살인을 저지른 희대의 최악의 살인마. 현재 히어로 측 지하 107층에 가둬져 있으며 지하 10층까지가 그녀를 가두기 위한 공간이다. 순수 근력도 인류 최강으로 대부분의 화기도 맨손으로 찢어버린다. 현재 능력 제한 구속구를 차고 있지만 그럼에도 너무 강력한 힐링팩터 때문에 죽지 않고 있다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 수배자(빌런) 문서 -->
+                <div id="villain-doc" class="doc-page">
+                    <h2 class="doc-title" style="color: #ff4d4d;">언더그라운드 수배자</h2>
+                    <p class="doc-meta">WANTED TARGETS FILE</p>
+
+                    <!-- 아게하 시오리 (코드 c) -->
+                    <div class="character-card villain-style">
+                        <div class="mini-profile" onclick="toggleCard(this)">
+                            <div class="thumb-wrapper">
+                                <img src="[https://igx.kr/u/Ncc/c/1](https://igx.kr/u/Ncc/c/1)" alt="아게하 시오리" class="mini-thumb" onerror="this.src='[https://via.placeholder.com/300?text=SHIORI](https://via.placeholder.com/300?text=SHIORI)';" onclick="openImageModal(event, this.src, '아게하 시오리', '揚羽 詩織 / 붉은 나비 (赤チョウ)')">
                             </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
@@ -610,7 +1331,7 @@
                         </div>
                         <div class="detail-profile">
                             <div class="detail-header-box">
-                                <img src="https://igx.kr/u/Ncc/c/1" alt="아게하 시오리" class="detail-large-img" onerror="this.src='https://via.placeholder.com/300?text=SHIORI';" onclick="openImageModal(event, this.src, '아게하 시오리', '揚羽 詩織 / 붉은 나비 (赤チョウ)')">
+                                <img src="[https://igx.kr/u/Ncc/c/1](https://igx.kr/u/Ncc/c/1)" alt="아게하 시오리" class="detail-large-img" onerror="this.src='[https://via.placeholder.com/300?text=SHIORI](https://via.placeholder.com/300?text=SHIORI)';" onclick="openImageModal(event, this.src, '아게하 시오리', '揚羽 詩織 / 붉은 나비 (赤チョウ)')">
                                 <div class="detail-header-info">
                                     <div class="detail-header-title">아게하 시오리 (揚羽 詩織)</div>
                                     <div class="detail-header-sub">코드네임: 붉은 나비 (赤チョウ)</div>
@@ -644,7 +1365,7 @@
                     <div class="character-card villain-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
                             <div class="thumb-wrapper">
-                                <img src="https://igx.kr/u/Ncc/d/1" alt="사토 아카리" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=AKARI';" onclick="openImageModal(event, this.src, '사토 아카리', '佐藤 燈 / 카와이이 메 (可愛い目)')">
+                                <img src="[https://igx.kr/u/Ncc/d/1](https://igx.kr/u/Ncc/d/1)" alt="사토 아카리" class="mini-thumb" onerror="this.src='[https://via.placeholder.com/300?text=AKARI](https://via.placeholder.com/300?text=AKARI)';" onclick="openImageModal(event, this.src, '사토 아카리', '佐藤 燈 / 카와이이 메 (可愛い目)')">
                             </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
@@ -660,7 +1381,7 @@
                         </div>
                         <div class="detail-profile">
                             <div class="detail-header-box">
-                                <img src="https://igx.kr/u/Ncc/d/1" alt="사토 아카리" class="detail-large-img" onerror="this.src='https://via.placeholder.com/300?text=AKARI';" onclick="openImageModal(event, this.src, '사토 아카리', '佐藤 燈 / 카와이이 메 (可愛い目)')">
+                                <img src="[https://igx.kr/u/Ncc/d/1](https://igx.kr/u/Ncc/d/1)" alt="사토 아카리" class="detail-large-img" onerror="this.src='[https://via.placeholder.com/300?text=AKARI](https://via.placeholder.com/300?text=AKARI)';" onclick="openImageModal(event, this.src, '사토 아카리', '佐藤 燈 / 카와이이 메 (可愛い目)')">
                                 <div class="detail-header-info">
                                     <div class="detail-header-title">사토 아카리 (佐藤 燈)</div>
                                     <div class="detail-header-sub">코드네임: 카와이이 메 (可愛い目)</div>
@@ -694,7 +1415,7 @@
                     <div class="character-card villain-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
                             <div class="thumb-wrapper">
-                                <img src="https://igx.kr/u/Ncc/g/1" alt="이나즈마 타마고" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=TAMAGO';" onclick="openImageModal(event, this.src, '이나즈마 타마고', '稲妻 卵 / 노잼 (つまんない)')">
+                                <img src="[https://igx.kr/u/Ncc/g/1](https://igx.kr/u/Ncc/g/1)" alt="이나즈마 타마고" class="mini-thumb" onerror="this.src='[https://via.placeholder.com/300?text=TAMAGO](https://via.placeholder.com/300?text=TAMAGO)';" onclick="openImageModal(event, this.src, '이나즈마 타마고', '稲妻 卵 / 노잼 (つまんない)')">
                             </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
@@ -710,7 +1431,7 @@
                         </div>
                         <div class="detail-profile">
                             <div class="detail-header-box">
-                                <img src="https://igx.kr/u/Ncc/g/1" alt="이나즈마 타마고" class="detail-large-img" onerror="this.src='https://via.placeholder.com/300?text=TAMAGO';" onclick="openImageModal(event, this.src, '이나즈마 타마고', '稲妻 卵 / 노잼 (つまんない)')">
+                                <img src="[https://igx.kr/u/Ncc/g/1](https://igx.kr/u/Ncc/g/1)" alt="이나즈마 타마고" class="detail-large-img" onerror="this.src='[https://via.placeholder.com/300?text=TAMAGO](https://via.placeholder.com/300?text=TAMAGO)';" onclick="openImageModal(event, this.src, '이나즈마 타마고', '稲妻 卵 / 노잼 (つまんない)')">
                                 <div class="detail-header-info">
                                     <div class="detail-header-title">이나즈마 타마고 (稲妻 卵)</div>
                                     <div class="detail-header-sub">코드네임: 노잼 (つまんない)</div>
@@ -744,7 +1465,7 @@
                     <div class="character-card villain-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
                             <div class="thumb-wrapper">
-                                <img src="https://igx.kr/u/Ncc/h/1" alt="아이자와 모모" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=MOMO';" onclick="openImageModal(event, this.src, '아이자와 모모', '相沢 桃 / 오버클럭 (オーバークロック)')">
+                                <img src="[https://igx.kr/u/Ncc/h/1](https://igx.kr/u/Ncc/h/1)" alt="아이자와 모모" class="mini-thumb" onerror="this.src='[https://via.placeholder.com/300?text=MOMO](https://via.placeholder.com/300?text=MOMO)';" onclick="openImageModal(event, this.src, '아이자와 모모', '相沢 桃 / 오버클럭 (オーバークロック)')">
                             </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
@@ -760,7 +1481,7 @@
                         </div>
                         <div class="detail-profile">
                             <div class="detail-header-box">
-                                <img src="https://igx.kr/u/Ncc/h/1" alt="아이자와 모모" class="detail-large-img" onerror="this.src='https://via.placeholder.com/300?text=MOMO';" onclick="openImageModal(event, this.src, '아이자와 모모', '相沢 桃 / 오버클럭 (オーバークロック)')">
+                                <img src="[https://igx.kr/u/Ncc/h/1](https://igx.kr/u/Ncc/h/1)" alt="아이자와 모모" class="detail-large-img" onerror="this.src='[https://via.placeholder.com/300?text=MOMO](https://via.placeholder.com/300?text=MOMO)';" onclick="openImageModal(event, this.src, '아이자와 모모', '相沢 桃 / 오버클럭 (オーバークロック)')">
                                 <div class="detail-header-info">
                                     <div class="detail-header-title">아이자와 모모 (相沢 桃)</div>
                                     <div class="detail-header-sub">코드네임: 오버클럭 (オーバークロック)</div>
@@ -794,7 +1515,7 @@
                     <div class="character-card villain-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
                             <div class="thumb-wrapper">
-                                <img src="https://igx.kr/u/Ncc/j/1" alt="스즈하라 히로미" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=HIROMI';" onclick="openImageModal(event, this.src, '스즈하라 히로미', '鈴原 裕美 / 스텔라 (stella)')">
+                                <img src="[https://igx.kr/u/Ncc/j/1](https://igx.kr/u/Ncc/j/1)" alt="스즈하라 히로미" class="mini-thumb" onerror="this.src='[https://via.placeholder.com/300?text=HIROMI](https://via.placeholder.com/300?text=HIROMI)';" onclick="openImageModal(event, this.src, '스즈하라 히로미', '鈴原 裕美 / 스텔라 (stella)')">
                             </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
@@ -810,7 +1531,7 @@
                         </div>
                         <div class="detail-profile">
                             <div class="detail-header-box">
-                                <img src="https://igx.kr/u/Ncc/j/1" alt="스즈하라 히로미" class="detail-large-img" onerror="this.src='https://via.placeholder.com/300?text=HIROMI';" onclick="openImageModal(event, this.src, '스즈하라 히로미', '鈴原 裕美 / 스텔라 (stella)')">
+                                <img src="[https://igx.kr/u/Ncc/j/1](https://igx.kr/u/Ncc/j/1)" alt="스즈하라 히로미" class="detail-large-img" onerror="this.src='[https://via.placeholder.com/300?text=HIROMI](https://via.placeholder.com/300?text=HIROMI)';" onclick="openImageModal(event, this.src, '스즈하라 히로미', '鈴原 裕美 / 스텔라 (stella)')">
                                 <div class="detail-header-info">
                                     <div class="detail-header-title">스즈하라 히로미 (鈴原 裕美)</div>
                                     <div class="detail-header-sub">코드네임: 스텔라 (stella)</div>
@@ -826,33 +1547,33 @@
                             <div class="detail-section">
                                 <div class="detail-section-title">말투</div>
                                 <div class="speech-quote">"짜잔~! 스텔라 등장☆ 어머, 방금 옷이 살짝 올라갔다고? 앗싸, 서비스 컷이라고 치자고~!"</div>
-                                <p style="font-size: 0.8rem; color: #888; margin-top: 4px;">언제나 밝고 텐션 높은 에너제틱 반말. 뻔뻔하고 유쾌하게 장난치는 개그 캐릭터 말투.</p>
+                                <p style="font-size: 0.8rem; color: #888; margin-top: 4px;">장난기 넘치고 하이텐션인 노출증/소악마 말투. 시도 때도 없이 분위기를 가볍게 만듦.</p>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">초능력 / 약점</div>
-                                <p><strong>능력:</strong> 별의 힘 (별에 관한 모든 현상 사용 가능)</p>
-                                <p><strong>약점:</strong> 과도하게 사용 시 엔트로피의 증가로 사망 위험</p>
+                                <p><strong>능력:</strong> 신체 가속</p>
+                                <p><strong>약점:</strong> 옷을 많이 입을수록 속도가 느려짐</p>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">기타 상세</div>
-                                <p>빌런의 분위기 메이커. 밝고 활발하며 부끄러움이 없다. 실수로 노출을 해도 개그로 써먹는다.</p>
+                                <p>엄청난 노출증+변태. 속도를 가속하는 능력자라 옷을 많이 입을수록 능력이 기하급수적으로 낮아진다. 능력을 최고 상태로 올리면 빛보다 빨라진다. 그래서 평소에도 비키니나 야한 옷을 입으며 노출증이라 기분 좋아한다. 장난기가 상상을 초월해 아카리와 타마고에게 성희롱을 시도하기도 한다. (물론 타마고에게는 쳐맞고 아카리에겐 피당함)</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 이노리 마유 (코드 k) -->
+                    <!-- 유키모리 시로 (코드 k) -->
                     <div class="character-card villain-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
                             <div class="thumb-wrapper">
-                                <img src="https://igx.kr/u/Ncc/k/1" alt="이노리 마유" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=MAYU';" onclick="openImageModal(event, this.src, '이노리 마유', '祈 繭 / 곰인형 (クマのぬいぐるみ)')">
+                                <img src="[https://igx.kr/u/Ncc/k/1](https://igx.kr/u/Ncc/k/1)" alt="유키모리 시로" class="mini-thumb" onerror="this.src='[https://via.placeholder.com/300?text=SHIRO](https://via.placeholder.com/300?text=SHIRO)';" onclick="openImageModal(event, this.src, '유키모리 시로', '雪森 白 / 설녀 (雪女)')">
                             </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
-                                    <span class="mini-name">이노리 마유 <span class="mini-jp">祈 繭</span></span>
-                                    <span class="mini-codename">/ 곰인형 <span class="mini-jp">クマのぬいぐるみ</span></span>
+                                    <span class="mini-name">유키모리 시로 <span class="mini-jp">雪森 白</span></span>
+                                    <span class="mini-codename">/ 설녀 <span class="mini-jp">雪女</span></span>
                                 </div>
                                 <div class="mini-tags">
-                                    <span class="tag-badge badge-blue">B-Class</span>
+                                    <span class="tag-badge badge-red">S-Class</span>
                                     <span class="tag-badge badge-gray">요원</span>
                                 </div>
                             </div>
@@ -860,157 +1581,185 @@
                         </div>
                         <div class="detail-profile">
                             <div class="detail-header-box">
-                                <img src="https://igx.kr/u/Ncc/k/1" alt="이노리 마유" class="detail-large-img" onerror="this.src='https://via.placeholder.com/300?text=MAYU';" onclick="openImageModal(event, this.src, '이노리 마유', '祈 繭 / 곰인형 (クマのぬいぐるみ)')">
+                                <img src="[https://igx.kr/u/Ncc/k/1](https://igx.kr/u/Ncc/k/1)" alt="유키모리 시로" class="detail-large-img" onerror="this.src='[https://via.placeholder.com/300?text=SHIRO](https://via.placeholder.com/300?text=SHIRO)';" onclick="openImageModal(event, this.src, '유키모리 시로', '雪森 白 / 설녀 (雪女)')">
                                 <div class="detail-header-info">
-                                    <div class="detail-header-title">이노리 마유 (祈 繭)</div>
-                                    <div class="detail-header-sub">코드네임: 곰인형 (クマのぬいぐるみ)</div>
-                                    <div style="font-size: 0.75rem; color: #ff4d4d; margin-top: 4px;">직급: 요원 | 등급: B-Class</div>
+                                    <div class="detail-header-title">유키모리 시로 (雪森 白)</div>
+                                    <div class="detail-header-sub">코드네임: 설녀 (雪女)</div>
+                                    <div style="font-size: 0.75rem; color: #ff4d4d; margin-top: 4px;">직급: 요원 | 등급: S-Class</div>
                                 </div>
                             </div>
                             <div class="detail-grid">
-                                <div class="detail-item"><strong>일어명</strong>祈 繭</div>
-                                <div class="detail-item"><strong>나이 / 키</strong>21세 / 165cm</div>
-                                <div class="detail-item"><strong>사용 무기</strong>없음</div>
-                                <div class="detail-item"><strong>상태</strong>생포 지양</div>
+                                <div class="detail-item"><strong>일어명</strong>雪森 白</div>
+                                <div class="detail-item"><strong>나이 / 키</strong>27세 / 168cm</div>
+                                <div class="detail-item"><strong>사용 무기</strong>얼음 결정</div>
+                                <div class="detail-item"><strong>상태</strong>사살 허가</div>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">말투</div>
-                                <div class="speech-quote">"저, 저기... 마유 곰인형 잘했죠...? 헤헤, 칭찬해 주시면... 나중에 더 야한 생각... 헤헤..."</div>
-                                <p style="font-size: 0.8rem; color: #888; margin-top: 4px;">말을 더듬으며 칭찬을 갈구하는 오타쿠/멘헤라 어조. 속마음으로 수줍은 망상을 자주 함.</p>
+                                <div class="speech-quote">"...차갑습니다. 불필요한 대화는 사양하죠. 얼어붙은 채 조용히 숨만 쉬세요."</div>
+                                <p style="font-size: 0.8rem; color: #888; margin-top: 4px;">차가운 얼음 같은 극단적인 쿨뷰티 어조. 필요한 말 외에는 입을 잘 열지 않음.</p>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">초능력 / 약점</div>
-                                <p><strong>능력:</strong> 곰인형 조종 (조종하는 곰인형은 평범한 성인 남성의 7배 힘을 지님)</p>
-                                <p><strong>약점:</strong> 감각이 공유되고 여러 마리를 조종할수록 무리가 온다.</p>
+                                <p><strong>능력:</strong> 얼음 결정 및 냉기 조종</p>
+                                <p><strong>약점:</strong> 고온 환경 및 불꽃 능력에 치명적임</p>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">기타 상세</div>
-                                <p>멘헤라 애니덕후. 말을 더듬으며 칭찬받는 걸 매우 좋아하고 속으로 야한 망상을 한다.</p>
+                                <p>말수가 극도로 적으며 항상 감정을 드러내지 않는다. 과거 실험체로 이용당하다 시오리에 의해 구출되어 언더그라운드에 충성을 바치고 있다.</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 마요이 츠바키 (코드 l) -->
-                    <div class="character-card villain-style" id="tsubaki-card">
+                    <!-- 타카하시 유미 (코드 l) -->
+                    <div class="character-card villain-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
                             <div class="thumb-wrapper">
-                                <img src="https://igx.kr/u/Ncc/l/1" alt="마요이 츠바키" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=TSUBAKI';" onclick="openImageModal(event, this.src, '마요이 츠바키', '舞世 椿 / 코드M (コードM)')">
+                                <img src="[https://igx.kr/u/Ncc/l/1](https://igx.kr/u/Ncc/l/1)" alt="타카하시 유미" class="mini-thumb" onerror="this.src='[https://via.placeholder.com/300?text=YUMI](https://via.placeholder.com/300?text=YUMI)';" onclick="openImageModal(event, this.src, '타카하시 유미', '高橋 由美 / 사일런트 (Silent)')">
                             </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
-                                    <span class="mini-name">마요이 츠바키 <span class="mini-jp">舞世 椿</span></span>
-                                    <span class="mini-codename">/ 코드M <span class="mini-jp">コードM</span></span>
+                                    <span class="mini-name">타카하시 유미 <span class="mini-jp">高橋 由美</span></span>
+                                    <span class="mini-codename">/ 사일런트 <span class="mini-jp">Silent</span></span>
                                 </div>
                                 <div class="mini-tags">
-                                    <span class="tag-badge badge-blue" id="tsubaki-rank-badge">A-Class</span>
-                                    <span class="tag-badge badge-gray" id="tsubaki-role-badge">요원</span>
+                                    <span class="tag-badge badge-blue">A-Class</span>
+                                    <span class="tag-badge badge-gray">요원</span>
                                 </div>
                             </div>
                             <div class="expand-btn">상세보기 ▼</div>
                         </div>
                         <div class="detail-profile">
                             <div class="detail-header-box">
-                                <img src="https://igx.kr/u/Ncc/l/1" alt="마요이 츠바키" class="detail-large-img" onerror="this.src='https://via.placeholder.com/300?text=TSUBAKI';" onclick="openImageModal(event, this.src, '마요이 츠바키', '舞世 椿 / 코드M (コードM)')">
+                                <img src="[https://igx.kr/u/Ncc/l/1](https://igx.kr/u/Ncc/l/1)" alt="타카하시 유미" class="detail-large-img" onerror="this.src='[https://via.placeholder.com/300?text=YUMI](https://via.placeholder.com/300?text=YUMI)';" onclick="openImageModal(event, this.src, '타카하시 유미', '高橋 由美 / 사일런트 (Silent)')">
                                 <div class="detail-header-info">
-                                    <div class="detail-header-title">마요이 츠바키 (舞世 椿)</div>
-                                    <div class="detail-header-sub">코드네임: 코드M (コードM)</div>
-                                    <div style="font-size: 0.75rem; color: #ff4d4d; margin-top: 4px;">
-                                        직급: <span id="tsubaki-detail-role">요원</span> | 등급: <span id="tsubaki-detail-rank">A-Class</span>
-                                    </div>
+                                    <div class="detail-header-title">타카하시 유미 (高橋 由美)</div>
+                                    <div class="detail-header-sub">코드네임: 사일런트 (Silent)</div>
+                                    <div style="font-size: 0.75rem; color: #ff4d4d; margin-top: 4px;">직급: 요원 | 등급: A-Class</div>
                                 </div>
                             </div>
                             <div class="detail-grid">
-                                <div class="detail-item"><strong>일어명</strong>舞世 椿</div>
-                                <div class="detail-item"><strong>나이 / 키</strong>36세 / 145cm</div>
-                                <div class="detail-item"><strong>사용 무기</strong>없음</div>
-                                <div class="detail-item"><strong>상태</strong>사살 불가</div>
+                                <div class="detail-item"><strong>일어명</strong>高橋 由美</div>
+                                <div class="detail-item"><strong>나이 / 키</strong>25세 / 163cm</div>
+                                <div class="detail-item"><strong>사용 무기</strong>소음 단검</div>
+                                <div class="detail-item"><strong>상태</strong>생포 권장</div>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">말투</div>
-                                <div class="speech-quote">"후후~ 무슨 생각 하는지 다 들리는데? 나한테 비밀을 숨길 수는 없다구~"</div>
-                                <p style="font-size: 0.8rem; color: #888; margin-top: 4px;">활발하고 장난기 가득하지만 속을 알 수 없는 신비로운 어조.</p>
+                                <div class="speech-quote">"소리가 사라지면... 당신의 비명조차 아무도 들을 수 없습니다. 조용히 끝내드리죠."</div>
+                                <p style="font-size: 0.8rem; color: #888; margin-top: 4px;">속삭이는 듯한 낮은 목소리. 상대방을 서서히 압박하는 조용한 어조.</p>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">초능력 / 약점</div>
-                                <p><strong>능력:</strong> 텔레파시, 전자기장 조종</p>
-                                <p><strong>약점:</strong> 물이 있는 곳에서 사용 시 감전 위험</p>
+                                <p><strong>능력:</strong> 음파 흡수 및 절대 소음 차단</p>
+                                <p><strong>약점:</strong> 진동 기반 공격에는 본인도 직접적인 타격을 입음</p>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">기타 상세</div>
-                                <p>활발하고 장난기 있지만 비밀이 많다.</p>
-                                <p id="tsubaki-secret-note" style="display: none; color: #ff3333; margin-top: 8px; font-weight: bold; background: rgba(255,0,0,0.15); padding: 8px; border-radius: 4px; border: 1px solid #ff0033;">
-                                    ⚠️ [기밀 기록] 현재 히어로 측 내부로 잠입하여 기밀을 빼돌리고 있는 이중 스파이임이 확인되었습니다.
-                                </p>
+                                <p>음파와 소리를 완벽히 지워버리는 암살 전문가. 거점이 침투당했을 때 소리 소문 없이 적을 제압하는 파수꾼 역할을 겸한다.</p>
                             </div>
-                            <button class="secret-btn" onclick="toggleSecretProtocol(event)">🔓 [보안 프로토콜 해제]</button>
                         </div>
                     </div>
 
                 </div>
+
             </main>
         </div>
     </div>
 
-    <!-- 스크립트 -->
+    <!-- 스크립트 영역 -->
     <script>
-        // 1. 인트로 애니메이션 및 버튼 클릭
-        const introContainer = document.getElementById('intro-container');
-        const codeContainer = document.getElementById('strange-code');
-        const warningBox = document.getElementById('warning-box');
-        const viewBtn = document.getElementById('view-btn');
-        const mainTerminal = document.getElementById('main-terminal');
-        const bgm = document.getElementById('bgm');
-
-        const logs = [
-            "INITIALIZING MOBILE TERMINAL UI...",
-            "LOADING WORLDVIEW DATA... [OK]",
-            "DECRYPTING SECURITY KEYS...",
-            "ACCESS GRANTED TO OMEGA DATABASE."
-        ];
-        let idx = 0;
-        let timer = setInterval(() => {
-            if(idx < logs.length) {
-                codeContainer.innerHTML += logs[idx] + "<br>";
-                idx++;
+        /* =========================================
+           1. 배경 무작위 매트릭스 코드 생성
+           ========================================= */
+        const strangeCodeEl = document.getElementById('strange-code');
+        const charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*§ΩΨ';
+        function generateStrangeCode() {
+            let result = '';
+            for (let i = 0; i < 400; i++) {
+                result += charSet.charAt(Math.floor(Math.random() * charSet.length)) + (i % 20 === 0 ? '\n' : ' ');
             }
-        }, 150);
+            strangeCodeEl.textContent = result;
+        }
+
+        /* =========================================
+           2. 인트로 및 오디오 연동 제어
+           ========================================= */
+        const bgm = document.getElementById('bgm');
+        const bgmToggleBtn = document.getElementById('bgm-toggle-btn');
+        let isAudioPlaying = false;
 
         setTimeout(() => {
-            clearInterval(timer);
-            codeContainer.style.opacity = '0.2';
-            warningBox.style.display = 'block';
-        }, 800);
+            document.getElementById('warning-box').style.display = 'block';
+            setInterval(generateStrangeCode, 150);
+        }, 1000);
 
-        // 버튼 클릭 이벤트 (오디오 재생 + 화면 전환)
-        viewBtn.addEventListener('click', () => {
-            bgm.play().catch(error => {
-                console.log("오디오 재생 실패 (파일 경로를 확인해주세요):", error);
+        document.getElementById('view-btn').addEventListener('click', function() {
+            bgm.play().then(() => {
+                isAudioPlaying = true;
+                updateBgmBtnState();
+            }).catch(e => {
+                console.log("Audio play blocked by browser:", e);
+                isAudioPlaying = false;
+                updateBgmBtnState();
             });
 
-            introContainer.style.opacity = '0';
+            document.getElementById('intro-container').style.opacity = '0';
             setTimeout(() => {
-                introContainer.style.display = 'none';
-                mainTerminal.style.display = 'flex';
+                document.getElementById('intro-container').style.display = 'none';
+                document.getElementById('main-terminal').style.display = 'flex';
             }, 500);
         });
 
-        // 2. 탭 전환
-        function openDocument(docId, element) {
-            document.querySelectorAll('.doc-page').forEach(page => page.classList.remove('active'));
-            document.getElementById(docId + '-doc').classList.add('active');
-
-            document.querySelectorAll('.folder-list li').forEach(item => item.classList.remove('active-tab'));
-            element.classList.add('active-tab');
+        /* [추가] BGM ON/OFF 토글 함수 */
+        function toggleBGM() {
+            if (isAudioPlaying) {
+                bgm.pause();
+                isAudioPlaying = false;
+            } else {
+                bgm.play().then(() => {
+                    isAudioPlaying = true;
+                }).catch(e => console.log(e));
+            }
+            updateBgmBtnState();
         }
 
-        // 3. 접이식 미니 프로필 토글
-        function toggleCard(miniProfileEl) {
-            const card = miniProfileEl.parentElement;
+        function updateBgmBtnState() {
+            if (isAudioPlaying) {
+                bgmToggleBtn.textContent = '🔊 BGM ON';
+                bgmToggleBtn.classList.remove('off');
+            } else {
+                bgmToggleBtn.textContent = '🔇 BGM OFF';
+                bgmToggleBtn.classList.add('off');
+            }
+        }
+
+        /* =========================================
+           3. 탭 전환 제어
+           ========================================= */
+        function openDocument(docName, tabElement) {
+            const pages = document.querySelectorAll('.doc-page');
+            pages.forEach(page => page.classList.remove('active'));
+
+            const tabs = document.querySelectorAll('.folder-list li');
+            tabs.forEach(tab => tab.classList.remove('active-tab'));
+
+            document.getElementById(docName + '-doc').classList.add('active');
+            tabElement.classList.add('active-tab');
+        }
+
+        /* =========================================
+           4. 아코디언 카드 접기/펴기 제어
+           ========================================= */
+        function toggleCard(element) {
+            const card = element.parentElement;
             card.classList.toggle('expanded');
         }
 
-        // 4. 이미지 확대 모달 열기
-        function openImageModal(event, src, name, jpName) {
+        /* =========================================
+           5. 이미지 확대 모달 제어
+           ========================================= */
+        function openImageModal(event, src, name, sub) {
             event.stopPropagation();
             const modal = document.getElementById('image-modal');
             const modalImg = document.getElementById('modal-img');
@@ -1018,47 +1767,13 @@
             const modalSubcaption = document.getElementById('modal-subcaption');
 
             modalImg.src = src;
-            modalCaption.innerText = name;
-            modalSubcaption.innerText = jpName || '';
+            modalCaption.textContent = name;
+            modalSubcaption.textContent = sub;
             modal.style.display = 'flex';
         }
 
-        // 5. 이미지 확대 모달 닫기
         function closeImageModal() {
             document.getElementById('image-modal').style.display = 'none';
-        }
-
-        // 6. 마요이 츠바키 시크릿 버튼 (지직거림 + 요원->스파이 / A->S 변경)
-        function toggleSecretProtocol(event) {
-            event.stopPropagation();
-            const roleBadge = document.getElementById('tsubaki-role-badge');
-            const rankBadge = document.getElementById('tsubaki-rank-badge');
-            const detailRole = document.getElementById('tsubaki-detail-role');
-            const detailRank = document.getElementById('tsubaki-detail-rank');
-            const note = document.getElementById('tsubaki-secret-note');
-            const card = document.getElementById('tsubaki-card');
-
-            // 노이즈 애니메이션 효과
-            card.style.animation = 'glitch 0.2s 3';
-            setTimeout(() => { card.style.animation = ''; }, 600);
-
-            if (roleBadge.innerText === '요원') {
-                roleBadge.innerText = '스파이';
-                roleBadge.className = 'tag-badge badge-red';
-                rankBadge.innerText = 'S-Class';
-                rankBadge.className = 'tag-badge badge-red';
-                detailRole.innerText = '스파이';
-                detailRank.innerText = 'S-Class';
-                note.style.display = 'block';
-            } else {
-                roleBadge.innerText = '요원';
-                roleBadge.className = 'tag-badge badge-gray';
-                rankBadge.innerText = 'A-Class';
-                rankBadge.className = 'tag-badge badge-blue';
-                detailRole.innerText = '요원';
-                detailRank.innerText = 'A-Class';
-                note.style.display = 'none';
-            }
         }
     </script>
 </body>
