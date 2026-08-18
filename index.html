@@ -32,13 +32,11 @@
             overflow: hidden; font-size: 15px; line-height: 1.5;
             opacity: 0.85; color: #00ff00; padding: 20px;
             z-index: 1; pointer-events: none;
-            text-align: left; 
-            white-space: pre-wrap;
+            text-align: left; white-space: pre-wrap;
         }
 
         #warning-box {
-            display: none; 
-            z-index: 10; background: rgba(20, 0, 0, 0.95);
+            display: none; z-index: 10; background: rgba(20, 0, 0, 0.95);
             border: 2px solid #ff0033; padding: 40px; max-width: 90%; width: 500px;
             color: #ff0033; text-align: center;
             box-shadow: 0 0 40px rgba(255, 0, 51, 0.5);
@@ -107,6 +105,7 @@
         }
         .folder-list li:hover, .folder-list li.active-tab { background-color: #2a2a2a; color: #fff; border-color: #777; border-left: 4px solid #00ffcc; }
         .folder-list li.villain-tab:hover, .folder-list li.villain-tab.active-tab { border-left: 4px solid #ff4d4d; }
+        .folder-list li.detained-tab:hover, .folder-list li.detained-tab.active-tab { border-left: 4px solid #ff9900; }
 
         .document-viewer { flex: 1; padding: 40px; overflow-y: auto; background-color: #0a0a0a; position: relative; }
         .doc-page { display: none; }
@@ -116,20 +115,51 @@
         .doc-meta { color: #777; margin-bottom: 20px; font-size: 0.9rem; }
         #hero-doc .doc-title { color: #4db8ff; }
         #villain-doc .doc-title { color: #ff4d4d; }
+        #detained-doc .doc-title { color: #ff9900; }
         #world-doc .doc-title { color: #d4af37; }
         hr { border: none; border-top: 1px dashed #444; margin-bottom: 30px; }
 
+        /* 캐릭터 카드 공통 */
         .character-record { border: 1px solid #333; padding: 25px; margin-bottom: 30px; background-color: #121212; position: relative; overflow: hidden; }
         .villain-alert { border-color: #501515; background-color: #1a0808; }
-        .record-header { display: flex; gap: 25px; margin-bottom: 25px; border-bottom: 1px dashed #444; padding-bottom: 25px; position: relative; z-index: 1; }
-        .photo-placeholder { width: 130px; height: 150px; background-color: #1a1a1a; border: 1px solid #444; display: flex; align-items: center; justify-content: center; text-align: center; color: #555; flex-shrink: 0; }
+        .detained-alert { border-color: #553300; background-color: #1a1205; }
+        
+        .record-header { display: flex; gap: 25px; margin-bottom: 20px; border-bottom: 1px dashed #444; padding-bottom: 20px; position: relative; z-index: 1; }
+        
+        /* 이미지 프로필 */
+        .photo-img { width: 130px; height: 160px; object-fit: cover; border: 1px solid #555; background-color: #1a1a1a; flex-shrink: 0; }
+        
         .record-info { flex: 1; }
-        .record-info h3 { font-size: 1.6rem; margin-bottom: 15px; color: #fff; border-bottom: 1px solid #333; padding-bottom: 5px; }
-        .record-info p { margin-bottom: 8px; color: #ccc; }
-        .redacted { background-color: #e0e0e0; color: #e0e0e0; padding: 0 5px; user-select: none; }
-        .record-body { position: relative; z-index: 1; }
-        .record-body p { margin-bottom: 15px; line-height: 1.7; color: #bbb; }
+        .record-info h3 { font-size: 1.5rem; margin-bottom: 12px; color: #fff; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        .record-info p { margin-bottom: 6px; color: #ccc; font-size: 0.95rem; }
+        .record-info strong { color: #fff; }
+        
+        .tag-badge { display: inline-block; padding: 2px 8px; font-size: 0.8rem; border-radius: 3px; font-weight: bold; margin-left: 5px; }
+        .badge-red { background-color: #880000; color: #ff9999; }
+        .badge-orange { background-color: #885500; color: #ffcc99; }
+        .badge-blue { background-color: #004488; color: #99ccff; }
+
+        .record-body { position: relative; z-index: 1; font-size: 0.95rem; line-height: 1.6; }
+        .record-body p { margin-bottom: 10px; color: #bbb; }
         .record-body strong { color: #ddd; }
+
+        /* 시크릿 버튼 관련 */
+        .secret-btn {
+            background: #222; color: #ff4d4d; border: 1px solid #ff4d4d;
+            padding: 5px 12px; cursor: pointer; font-family: inherit; font-size: 0.85rem;
+            margin-top: 8px; transition: all 0.2s;
+        }
+        .secret-btn:hover { background: #ff4d4d; color: #000; box-shadow: 0 0 10px #ff4d4d; }
+        .glitch-effect { animation: glitchCard 0.3s ease infinite; }
+
+        @keyframes glitchCard {
+            0% { transform: translate(0) }
+            20% { transform: translate(-5px, 3px) }
+            40% { transform: translate(5px, -3px) }
+            60% { transform: translate(-3px, -3px) }
+            80% { transform: translate(3px, 3px) }
+            100% { transform: translate(0) }
+        }
 
         @keyframes glitchFade { 
             0% { opacity: 0; transform: translateX(-10px); } 
@@ -150,6 +180,7 @@
             .folder-list li { white-space: nowrap; padding: 10px 15px; border-left: 1px solid #333; border-bottom: 4px solid #555; margin-bottom: 0; }
             .folder-list li:hover, .folder-list li.active-tab { border-left: 1px solid #777; border-bottom: 4px solid #00ffcc; }
             .folder-list li.villain-tab:hover, .folder-list li.villain-tab.active-tab { border-bottom: 4px solid #ff4d4d; }
+            .folder-list li.detained-tab:hover, .folder-list li.detained-tab.active-tab { border-bottom: 4px solid #ff9900; }
             .document-viewer { padding: 20px 15px; }
             .doc-title { font-size: 1.5rem; }
             .record-header { flex-direction: column; align-items: center; text-align: center; }
@@ -184,11 +215,13 @@
                 <ul class="folder-list">
                     <li onclick="openDocument('world', this)" class="active-tab">📄 세계관_설정.txt</li>
                     <li onclick="openDocument('hero', this)">📄 특수격리_명단.doc</li>
+                    <li onclick="openDocument('detained', this)" class="detained-tab">🔒 수감중_명단.doc</li>
                     <li onclick="openDocument('villain', this)" class="villain-tab">⚠️ 수배자_감시.doc</li>
                 </ul>
             </aside>
 
             <main class="document-viewer">
+                <!-- 세계관 문서 -->
                 <div id="world-doc" class="doc-page active">
                     <h2 class="doc-title">PROJECT : 아카이브</h2>
                     <p class="doc-meta">작성일: 2026-08-17 | 분류: 1급 기밀</p>
@@ -196,26 +229,27 @@
                     <div class="character-record">
                         <div class="record-body">
                             <h3 style="color: #fff; margin-bottom:10px;">[ 개요 ]</h3>
-                            <p>이곳에 세계관의 핵심 배경을 서술합니다.</p>
+                            <p>본 시스템은 이상 능력 발현자 관리 및 위험 세력 차단을 위한 중앙 관리국 통합 DB입니다.</p>
                             <br>
                             <h3 style="color: #fff; margin-bottom:10px;">[ 주요 세력 ]</h3>
-                            <p><strong>- 중앙 관리국:</strong> 이상 현상을 은폐하고 관리하는 정부 산하 비밀 조직.</p>
+                            <p><strong>- 중앙 관리국:</strong> 발현된 모든 초능력자들을 공식 등록하여 통제 및 보호하는 비밀 조직. 일반 대중에게 초능력의 존재를 철저히 은폐하여 혼란을 방지하고, 능력을 악용하는 위험 인자로부터 사회를 지키는 임무를 수행한다.</p>
                             <p><strong>- 언더그라운드:</strong> "능력자들을 위한 세상"을 건설한다는 명분 아래 결성된 반정부 세력. 그러나 그 목적을 달성하는 과정에서 민간인 희생과 무자비한 살인을 서슴지 않아 관리국 제1의 위협으로 분류됨.</p>
                         </div>
                     </div>
                 </div>
 
+                <!-- 히어로 문서 -->
                 <div id="hero-doc" class="doc-page">
                     <h2 class="doc-title">CLASSIFIED: 특수 요원 명단</h2>
                     <p class="doc-meta">보안 등급 충족됨. 요원 데이터를 불러옵니다.</p>
                     <hr>
                     <div class="character-record">
                         <div class="record-header">
-                            <div class="photo-placeholder">IMAGE<br>UNAVAILABLE</div>
+                            <img src="https://via.placeholder.com/130x160?text=AGENT" alt="요원" class="photo-img">
                             <div class="record-info">
                                 <h3>코드네임: 에이펙스 (Apex)</h3>
-                                <p><strong>본명:</strong> <span class="redacted">김은폐</span></p>
-                                <p><strong>등급:</strong> A-Class 요원</p>
+                                <p><strong>본명:</strong> 김은폐</p>
+                                <p><strong>직급 / 등급:</strong> 현장 요원 / A-Class</p>
                             </div>
                         </div>
                         <div class="record-body">
@@ -224,23 +258,183 @@
                     </div>
                 </div>
 
-                <div id="villain-doc" class="doc-page">
-                    <h2 class="doc-title">WARNING: 특수 수배자</h2>
-                    <p class="doc-meta" style="color: #ff4d4d;">주의: 조우 시 교전을 피하고 즉각 보고할 것.</p>
+                <!-- 수감자 문서 -->
+                <div id="detained-doc" class="doc-page">
+                    <h2 class="doc-title">RESTRICTED: 특수 수감자 명단</h2>
+                    <p class="doc-meta" style="color: #ff9900;">보안 등급: 최상위 격리 구역 | 무단 접근 엄금</p>
                     <hr>
-                    <div class="character-record villain-alert">
+
+                    <!-- 세이린 메구미 -->
+                    <div class="character-record detained-alert">
                         <div class="record-header">
-                            <div class="photo-placeholder" style="color:#ff4d4d; border-color:#ff4d4d;">WANTED</div>
+                            <img src="https://igx.kr/u/Ncc/m/1" alt="세이린 메구미" class="photo-img" onerror="this.onerror=null; this.src='https://via.placeholder.com/130x160?text=MEGUMI';">
                             <div class="record-info">
-                                <h3 style="color: #ff6b6b;">코드네임: 노이즈 (Noise)</h3>
-                                <p><strong>본명:</strong> 불명</p>
-                                <p><strong>등급:</strong> S-Class (사살 허가)</p>
+                                <h3 style="color: #ffaa33;">세이린 메구미 (聖凛 恵)</h3>
+                                <p><strong>코드네임:</strong> 미친년 (狂い女) <span class="tag-badge badge-red">무조건 사살</span></p>
+                                <p><strong>직급 / 등급:</strong> 특수 수감자 / SS-Class</p>
+                                <p><strong>신체 정보:</strong> 138세 | 190cm</p>
+                                <p><strong>성향 분석:</strong> 혼돈 악 (Chaotic Evil) | ESTP | 8w7</p>
                             </div>
                         </div>
                         <div class="record-body">
-                            <p><strong>특이사항:</strong> 통신망 마비 및 폭주 유발.</p>
+                            <p><strong>초능력:</strong> 힐링팩터, 인류 최강급 괴력 (세포핵 조각만 남아도 3초 내 완전 재생. 수명 감소 없음)</p>
+                            <p><strong>약점:</strong> 재생 시 죽음보다 끔찍한 고통 수반</p>
+                            <p><strong>사용 무기:</strong> 없음 (순수 근력으로 화기 파괴 가능)</p>
+                            <p><strong>상세 설명:</strong> 나르시스트+사이코패스+마조히스트. 아무 소속 없이 100년간 연쇄 살인을 저지른 희대의 최악의 살인마. 현재 관리국 지하 107층에 가둬져 있으며, 지하 10층 전체가 그녀를 가두기 위한 격리 공간이다. 현재 능력 제한 구속구를 착용 중이나 압도적인 힐링팩터로 인해 죽지 않고 구금된 상태이다.</p>
                         </div>
                     </div>
+                </div>
+
+                <!-- 수배자(빌런) 문서 -->
+                <div id="villain-doc" class="doc-page">
+                    <h2 class="doc-title">WARNING: 특수 수배자 (언더그라운드)</h2>
+                    <p class="doc-meta" style="color: #ff4d4d;">주의: 조우 시 교전을 피하고 즉각 보고할 것.</p>
+                    <hr>
+
+                    <!-- 아게하 시오리 -->
+                    <div class="character-record villain-alert">
+                        <div class="record-header">
+                            <img src="https://igx.kr/u/Ncc/c/1" alt="아게하 시오리" class="photo-img" onerror="this.onerror=null; this.src='https://via.placeholder.com/130x160?text=SHIORI';">
+                            <div class="record-info">
+                                <h3 style="color: #ff6b6b;">아게하 시오리 (揚羽 詩織)</h3>
+                                <p><strong>코드네임:</strong> 붉은 나비 (赤チョウ) <span class="tag-badge badge-orange">생포 지양 (시로바 요청)</span></p>
+                                <p><strong>직급 / 등급:</strong> 언더그라운드 보스 / SS-Class</p>
+                                <p><strong>신체 정보:</strong> 38세 | 170cm</p>
+                                <p><strong>성향 분석:</strong> 질서 악 (Lawful Evil) | ENTJ | 8w7</p>
+                            </div>
+                        </div>
+                        <div class="record-body">
+                            <p><strong>초능력:</strong> 붉은 나비와 시야 공유, 계약을 맺은 자의 능력을 부작용 없이 사용</p>
+                            <p><strong>약점:</strong> 계약된 능력 개수 제한은 없으나 한번에 사용 가능한 능력은 1개</p>
+                            <p><strong>사용 무기:</strong> 없음</p>
+                            <p><strong>상세 설명:</strong> 사라유키 시로바의 전 연인. 오만하며 능력자들만의 세상을 만든다는 야망을 품고 같은 뜻을 가진 자들을 모으고 있다.</p>
+                        </div>
+                    </div>
+
+                    <!-- 사토 아카리 -->
+                    <div class="character-record villain-alert">
+                        <div class="record-header">
+                            <img src="https://igx.kr/u/Ncc/d/1" alt="사토 아카리" class="photo-img" onerror="this.onerror=null; this.src='https://via.placeholder.com/130x160?text=AKARI';">
+                            <div class="record-info">
+                                <h3 style="color: #ff6b6b;">사토 아카리 (佐藤 燈)</h3>
+                                <p><strong>코드네임:</strong> 카와이이 메 (可愛い目) <span class="tag-badge badge-blue">사살 불가</span></p>
+                                <p><strong>직급 / 등급:</strong> 없음 / B-Class</p>
+                                <p><strong>신체 정보:</strong> 20세 | 160cm</p>
+                                <p><strong>성향 분석:</strong> 참 중립 (True Neutral) | INFP | 9w1</p>
+                            </div>
+                        </div>
+                        <div class="record-body">
+                            <p><strong>초능력:</strong> 대상에게 자력 부여</p>
+                            <p><strong>약점:</strong> 손에 닿은 대상에게만 자력 부여 가능</p>
+                            <p><strong>사용 무기:</strong> 금속 구슬</p>
+                            <p><strong>상세 설명:</strong> 사라유키 시로바와 아게하 시오리의 수양딸. 베이비박스에 버려진 것을 미성년자 시절 연애 중이던 두 사람이 발견하여 입양했다. 시오리와 시로바가 헤어진 후 시오리의 딸로 들어갔다. 말이 적고 모두에게 존댓말을 쓰며, 항상 옥상에서 지평선을 바라보며 시로바를 매우 그리워하고 있다.</p>
+                        </div>
+                    </div>
+
+                    <!-- 이나즈마 타마고 -->
+                    <div class="character-record villain-alert">
+                        <div class="record-header">
+                            <img src="https://igx.kr/u/Ncc/g/1" alt="이나즈마 타마고" class="photo-img" onerror="this.onerror=null; this.src='https://via.placeholder.com/130x160?text=TAMAGO';">
+                            <div class="record-info">
+                                <h3 style="color: #ff6b6b;">이나즈마 타마고 (稲妻 卵)</h3>
+                                <p><strong>코드네임:</strong> 노잼 (つまんない) <span class="tag-badge badge-red">사살 허가</span></p>
+                                <p><strong>직급 / 등급:</strong> 시오리의 비서 / S-Class</p>
+                                <p><strong>신체 정보:</strong> 35세 | 165cm</p>
+                                <p><strong>성향 분석:</strong> 질서 중립 (Lawful Neutral) | ISTJ | 5w6</p>
+                            </div>
+                        </div>
+                        <div class="record-body">
+                            <p><strong>초능력:</strong> 혈액 생성 + 조종 및 경질화</p>
+                            <p><strong>약점:</strong> 피에 물이 섞이면 조종 불가능, 과도 사용 시 빈혈 발생</p>
+                            <p><strong>사용 무기:</strong> 없음</p>
+                            <p><strong>상세 설명:</strong> 무표정에 말이 없고 진지해 보이지만 끊임없이 아재개그를 던진다. 자신의 개그에 유일하게 웃어주는 아카리와 매우 친하며 비서를 빙자한 사실상 아카리의 메이드. 업무 능력이 뛰어나 1시간 만에 1주일 치 서류를 모두 처리하기 때문에 메이드 겸직이 가능하다.</p>
+                        </div>
+                    </div>
+
+                    <!-- 아이자와 모모 -->
+                    <div class="character-record villain-alert">
+                        <div class="record-header">
+                            <img src="https://igx.kr/u/Ncc/h/1" alt="아이자와 모모" class="photo-img" onerror="this.onerror=null; this.src='https://via.placeholder.com/130x160?text=MOMO';">
+                            <div class="record-info">
+                                <h3 style="color: #ff6b6b;">아이자와 모모 (相沢 桃)</h3>
+                                <p><strong>코드네임:</strong> 오버클럭 (Overclock) <span class="tag-badge badge-red">사살 허가</span></p>
+                                <p><strong>직급 / 등급:</strong> 언더그라운드 해커 / A-Class</p>
+                                <p><strong>신체 정보:</strong> 20세 | 149cm</p>
+                                <p><strong>성향 분석:</strong> 혼돈 중립 (Chaotic Neutral) | INTP | 5w4</p>
+                            </div>
+                        </div>
+                        <div class="record-body">
+                            <p><strong>초능력:</strong> 순간 뇌 가속</p>
+                            <p><strong>약점:</strong> 1시간 이상 연속 사용 시 뇌 과부하 발생</p>
+                            <p><strong>사용 무기:</strong> 없음</p>
+                            <p><strong>상세 설명:</strong> 10세 때 해킹 대회 1위를 차지한 천재로 5년간 1위를 지키다 흥미를 잃고 은퇴함. 당시 세운 해킹 성공 기록(1.7초)은 현재 2위 기록의 15배에 달한다. 사회성이 떨어지고 기계 조립 및 발명을 좋아하며, 언더그라운드의 해커 겸 과학자/공학자로 활동 중이다. 시오리가 가장 편애하는 인물.</p>
+                        </div>
+                    </div>
+
+                    <!-- 스즈하라 히로미 -->
+                    <div class="character-record villain-alert">
+                        <div class="record-header">
+                            <img src="https://igx.kr/u/Ncc/j/1" alt="스즈하라 히로미" class="photo-img" onerror="this.onerror=null; this.src='https://via.placeholder.com/130x160?text=HIROMI';">
+                            <div class="record-info">
+                                <h3 style="color: #ff6b6b;">스즈하라 히로미 (鈴原 裕美)</h3>
+                                <p><strong>코드네임:</strong> 스텔라 (Stella) <span class="tag-badge badge-orange">생포 지양</span></p>
+                                <p><strong>직급 / 등급:</strong> 요원 / S-Class</p>
+                                <p><strong>신체 정보:</strong> 23세 | 158cm</p>
+                                <p><strong>성향 분석:</strong> 혼돈 선 (Chaotic Good) | ENFP | 7w6</p>
+                            </div>
+                        </div>
+                        <div class="record-body">
+                            <p><strong>초능력:</strong> 별의 힘 (별에 관한 모든 현상 구현 가능)</p>
+                            <p><strong>약점:</strong> 과도 사용 시 엔트로피 증가로 인한 사망 위험</p>
+                            <p><strong>사용 무기:</strong> 없음</p>
+                            <p><strong>상세 설명:</strong> 빌런 조직의 분위기 메이커. 매우 밝고 활발하며 부끄러움이 없다. 실수로 노출 사고가 일어나도 개그 소재로 승화시킬 만큼 낙천적인 성격이다.</p>
+                        </div>
+                    </div>
+
+                    <!-- 이노리 마유 -->
+                    <div class="character-record villain-alert">
+                        <div class="record-header">
+                            <img src="https://igx.kr/u/Ncc/k/1" alt="이노리 마유" class="photo-img" onerror="this.onerror=null; this.src='https://via.placeholder.com/130x160?text=MAYU';">
+                            <div class="record-info">
+                                <h3 style="color: #ff6b6b;">이노리 마유 (祈 繭)</h3>
+                                <p><strong>코드네임:</strong> 곰인형 (クマのぬいぐるみ) <span class="tag-badge badge-orange">생포 지양</span></p>
+                                <p><strong>직급 / 등급:</strong> 요원 / B-Class</p>
+                                <p><strong>신체 정보:</strong> 21세 | 165cm</p>
+                                <p><strong>성향 분석:</strong> 혼돈 중립 (Chaotic Neutral) | INFP | 4w5</p>
+                            </div>
+                        </div>
+                        <div class="record-body">
+                            <p><strong>초능력:</strong> 곰인형 조종 (성인 남성 7배의 근력)</p>
+                            <p><strong>약점:</strong> 조종 대상과 감각 공유, 다수 조종 시 과부하</p>
+                            <p><strong>사용 무기:</strong> 없음</p>
+                            <p><strong>상세 설명:</strong> 멘헤라 성향의 애니 덕후. 말을 자주 더듬고 칭찬받는 것에 극도로 목말라 있으며, 속으로 온갖 야한 망상을 즐기는 독특한 내면을 가졌다.</p>
+                        </div>
+                    </div>
+
+                    <!-- 마요이 츠바키 (시크릿 전환 기능 포함) -->
+                    <div class="character-record villain-alert" id="tsubaki-card">
+                        <div class="record-header">
+                            <img src="https://igx.kr/u/Ncc/l/1" alt="마요이 츠바키" class="photo-img" onerror="this.onerror=null; this.src='https://via.placeholder.com/130x160?text=TSUBAKI';">
+                            <div class="record-info">
+                                <h3 style="color: #ff6b6b;">마요이 츠바키 (舞世 椿)</h3>
+                                <p><strong>코드네임:</strong> 코드M <span class="tag-badge badge-blue">사살 불가</span></p>
+                                <p><strong>직급 / 등급:</strong> <span id="tsubaki-role">요원</span> / <span id="tsubaki-rank">A-Class</span></p>
+                                <p><strong>신체 정보:</strong> 36세 | 145cm</p>
+                                <p><strong>성향 분석:</strong> 혼돈 중립 (Chaotic Neutral) | ENTP | 7w8</p>
+                                <button class="secret-btn" onclick="toggleSecretProtocol()">🔒 [기밀 프로토콜 해제]</button>
+                            </div>
+                        </div>
+                        <div class="record-body">
+                            <p><strong>초능력:</strong> 텔레파시, 전자기장 조종</p>
+                            <p><strong>약점:</strong> 수중 혹은 물이 많은 곳에서 사용 시 감전 위험</p>
+                            <p><strong>사용 무기:</strong> 없음</p>
+                            <p><strong>상세 설명:</strong> 장난기 넘치고 활발한 성격이지만 비밀이 매우 많다.</p>
+                            <p id="tsubaki-secret-note" style="display: none; color: #ff3333; font-weight: bold; margin-top: 10px; background: rgba(255,0,0,0.1); padding: 8px; border: 1px solid #ff3333;">
+                                ⚠️ [기밀 문서] 확인 결과: 본 개체는 현재 관리국 내부로 침투하여 공작을 수행 중인 이중 스파이임이 확인되었습니다.
+                            </p>
+                        </div>
+                    </div>
+
                 </div>
             </main>
         </div>
@@ -318,6 +512,34 @@
             const listItems = document.querySelectorAll('.folder-list li');
             listItems.forEach(item => item.classList.remove('active-tab'));
             if(element) element.classList.add('active-tab');
+        }
+
+        // --- 4. 마요이 츠바키 시크릿 프로토콜 스위치 ---
+        function toggleSecretProtocol() {
+            const card = document.getElementById('tsubaki-card');
+            const role = document.getElementById('tsubaki-role');
+            const rank = document.getElementById('tsubaki-rank');
+            const note = document.getElementById('tsubaki-secret-note');
+
+            // 화면 글리치 효과
+            card.classList.add('glitch-effect');
+
+            setTimeout(() => {
+                card.classList.remove('glitch-effect');
+                if (role.innerText === '요원') {
+                    role.innerText = '스파이 (내부 침투 중)';
+                    role.style.color = '#ff3333';
+                    rank.innerText = 'S-Class';
+                    rank.style.color = '#ff3333';
+                    note.style.display = 'block';
+                } else {
+                    role.innerText = '요원';
+                    role.style.color = '#ccc';
+                    rank.innerText = 'A-Class';
+                    rank.style.color = '#ccc';
+                    note.style.display = 'none';
+                }
+            }, 300);
         }
     </script>
 </body>
