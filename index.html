@@ -83,7 +83,7 @@
 
         .terminal-body { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
 
-        /* 네비게이션 탭 (모바일 상단 스크롤 가능) */
+        /* 네비게이션 탭 */
         .sidebar-nav {
             background-color: #111; border-bottom: 1px solid #2a2a2a;
             flex-shrink: 0; overflow-x: auto; white-space: nowrap;
@@ -119,7 +119,7 @@
         .character-card.detained-style { border-left: 4px solid #ff9900; }
         .character-card.hero-style { border-left: 4px solid #4db8ff; }
 
-        /* 미니 프로필 (항상 보임) */
+        /* 미니 프로필 */
         .mini-profile {
             display: flex; align-items: center; padding: 12px;
             cursor: pointer; gap: 12px; user-select: none;
@@ -127,19 +127,30 @@
         }
         .mini-profile:active { background: #1e1e1e; }
         
+        /* 프로필 썸네일 (확대 가능 표시 포함) */
+        .thumb-wrapper {
+            position: relative; width: 48px; height: 48px; flex-shrink: 0;
+        }
         .mini-thumb {
-            width: 48px; height: 48px; border-radius: 6px;
-            object-fit: cover; background: #222; border: 1px solid #444; flex-shrink: 0;
+            width: 100%; height: 100%; border-radius: 6px;
+            object-fit: cover; background: #222; border: 1px solid #444;
+            cursor: zoom-in; transition: transform 0.2s;
+        }
+        .thumb-wrapper::after {
+            content: '🔍'; position: absolute; bottom: 2px; right: 2px;
+            font-size: 10px; background: rgba(0,0,0,0.6); border-radius: 3px; padding: 1px;
+            pointer-events: none;
         }
 
         .mini-info { flex: 1; min-width: 0; }
         .mini-name-group { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
-        .mini-name { font-size: 1rem; font-weight: bold; color: #fff; }
-        .mini-codename { font-size: 0.8rem; color: #aaa; font-family: monospace; }
+        .mini-name { font-size: 0.98rem; font-weight: bold; color: #fff; }
+        .mini-jp { font-size: 0.78rem; color: #888; font-weight: normal; margin-left: 3px; }
+        .mini-codename { font-size: 0.78rem; color: #00ffcc; font-family: monospace; }
         
         .mini-tags { display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
         .tag-badge {
-            display: inline-block; padding: 2px 6px; font-size: 0.7rem;
+            display: inline-block; padding: 2px 6px; font-size: 0.68rem;
             border-radius: 3px; font-weight: bold; font-family: monospace;
         }
         .badge-red { background: rgba(255, 0, 0, 0.2); color: #ff6b6b; border: 1px solid rgba(255, 0, 0, 0.4); }
@@ -148,13 +159,13 @@
         .badge-gray { background: rgba(255, 255, 255, 0.1); color: #ccc; border: 1px solid #444; }
 
         .expand-btn {
-            font-size: 0.8rem; color: #00ffcc; font-family: monospace;
-            padding: 4px 8px; background: rgba(0, 255, 204, 0.1); border-radius: 4px;
+            font-size: 0.75rem; color: #888; font-family: monospace;
+            padding: 4px 6px; background: rgba(255, 255, 255, 0.05); border-radius: 4px;
             flex-shrink: 0; transition: transform 0.3s;
         }
-        .character-card.expanded .expand-btn { transform: rotate(180deg); background: rgba(255,255,255,0.1); color: #fff; }
+        .character-card.expanded .expand-btn { transform: rotate(180deg); background: rgba(0,255,204,0.1); color: #00ffcc; }
 
-        /* 상세 프로필 (클릭 시 펼쳐짐) */
+        /* 상세 프로필 */
         .detail-profile {
             display: none; padding: 15px; border-top: 1px solid #222;
             background: #0f0f0f; font-size: 0.88rem; line-height: 1.55;
@@ -174,6 +185,31 @@
             width: 100%; margin-top: 10px; padding: 10px; background: #220000;
             color: #ff4d4d; border: 1px solid #ff4d4d; border-radius: 4px;
             font-size: 0.8rem; font-weight: bold; cursor: pointer; font-family: monospace;
+        }
+
+        /* =========================================
+           5. 이미지 확대 모달 (Modal Viewer)
+           ========================================= */
+        #image-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.88); backdrop-filter: blur(8px);
+            z-index: 10000; justify-content: center; align-items: center;
+            flex-direction: column; padding: 20px; animation: fadeIn 0.2s ease;
+        }
+        #modal-img {
+            max-width: 90vw; max-height: 75vh; border-radius: 8px;
+            border: 2px solid #00ffcc; box-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
+            object-fit: contain;
+        }
+        #modal-caption {
+            margin-top: 15px; color: #fff; font-size: 1.1rem; font-weight: bold;
+            font-family: monospace; text-align: center;
+        }
+        #modal-subcaption {
+            color: #888; font-size: 0.85rem; margin-top: 4px; font-family: monospace;
+        }
+        .modal-close-hint {
+            margin-top: 15px; font-size: 0.75rem; color: #555; font-family: monospace;
         }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
@@ -202,7 +238,15 @@
         </div>
     </div>
 
-    <!-- [2] 메인 터미널 UI -->
+    <!-- [2] 이미지 확대 모달 -->
+    <div id="image-modal" onclick="closeImageModal()">
+        <img id="modal-img" src="" alt="확대 이미지">
+        <div id="modal-caption"></div>
+        <div id="modal-subcaption"></div>
+        <div class="modal-close-hint">[ 화면 어디든 터치하면 닫힙니다 ]</div>
+    </div>
+
+    <!-- [3] 메인 터미널 UI -->
     <div class="terminal-wrapper" id="main-terminal" style="display: none;">
         <header class="terminal-header">
             <h1>SYSTEM // MAIN DB</h1>
@@ -247,10 +291,12 @@
 
                     <div class="character-card hero-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
-                            <img src="https://via.placeholder.com/80?text=APEX" alt="에이펙스" class="mini-thumb">
+                            <div class="thumb-wrapper">
+                                <img src="https://via.placeholder.com/300?text=APEX" alt="김은폐" class="mini-thumb" onclick="openImageModal(event, this.src, '김은폐', '金隱蔽 / APEX')">
+                            </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
-                                    <span class="mini-name">김은폐</span>
+                                    <span class="mini-name">김은폐 <span class="mini-jp">金隱蔽</span></span>
                                     <span class="mini-codename">/ 에이펙스</span>
                                 </div>
                                 <div class="mini-tags">
@@ -258,7 +304,7 @@
                                     <span class="tag-badge badge-gray">현장 요원</span>
                                 </div>
                             </div>
-                            <div class="expand-btn">▼</div>
+                            <div class="expand-btn">상세보기 ▼</div>
                         </div>
                         <div class="detail-profile">
                             <div class="detail-section">
@@ -277,10 +323,12 @@
                     <!-- 세이린 메구미 -->
                     <div class="character-card detained-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
-                            <img src="https://igx.kr/u/Ncc/m/1" alt="세이린 메구미" class="mini-thumb" onerror="this.src='https://via.placeholder.com/80?text=MEGUMI';">
+                            <div class="thumb-wrapper">
+                                <img src="https://igx.kr/u/Ncc/m/1" alt="세이린 메구미" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=MEGUMI';" onclick="openImageModal(event, this.src, '세이린 메구미', '瀬井凛 めぐみ')">
+                            </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
-                                    <span class="mini-name">세이린 메구미</span>
+                                    <span class="mini-name">세이린 메구미 <span class="mini-jp">瀬井凛 めぐみ</span></span>
                                     <span class="mini-codename">/ 미친년</span>
                                 </div>
                                 <div class="mini-tags">
@@ -288,10 +336,11 @@
                                     <span class="tag-badge badge-orange">무조건 사살</span>
                                 </div>
                             </div>
-                            <div class="expand-btn">▼</div>
+                            <div class="expand-btn">상세보기 ▼</div>
                         </div>
                         <div class="detail-profile">
                             <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>瀬井凛 めぐみ</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>138세 / 190cm</div>
                                 <div class="detail-item"><strong>MBTI / 애니어그램</strong>ESTP / 8w7</div>
                                 <div class="detail-item"><strong>성향 (Alignment)</strong>혼돈 악 (Chaotic Evil)</div>
@@ -317,10 +366,12 @@
                     <!-- 아게하 시오리 -->
                     <div class="character-card villain-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
-                            <img src="https://igx.kr/u/Ncc/c/1" alt="아게하 시오리" class="mini-thumb" onerror="this.src='https://via.placeholder.com/80?text=SHIORI';">
+                            <div class="thumb-wrapper">
+                                <img src="https://igx.kr/u/Ncc/c/1" alt="아게하 시오리" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=SHIORI';" onclick="openImageModal(event, this.src, '아게하 시오리', '揚羽 しおり')">
+                            </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
-                                    <span class="mini-name">아게하 시오리</span>
+                                    <span class="mini-name">아게하 시오리 <span class="mini-jp">揚羽 しおり</span></span>
                                     <span class="mini-codename">/ 붉은 나비</span>
                                 </div>
                                 <div class="mini-tags">
@@ -329,10 +380,11 @@
                                     <span class="tag-badge badge-gray">생포 지양</span>
                                 </div>
                             </div>
-                            <div class="expand-btn">▼</div>
+                            <div class="expand-btn">상세보기 ▼</div>
                         </div>
                         <div class="detail-profile">
                             <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>揚羽 しおり</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>38세 / 170cm</div>
                                 <div class="detail-item"><strong>MBTI / 애니어그램</strong>ENTJ / 8w7</div>
                                 <div class="detail-item"><strong>성향</strong>질서 악 (Lawful Evil)</div>
@@ -352,10 +404,12 @@
                     <!-- 사토 아카리 -->
                     <div class="character-card villain-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
-                            <img src="https://igx.kr/u/Ncc/d/1" alt="사토 아카리" class="mini-thumb" onerror="this.src='https://via.placeholder.com/80?text=AKARI';">
+                            <div class="thumb-wrapper">
+                                <img src="https://igx.kr/u/Ncc/d/1" alt="사토 아카리" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=AKARI';" onclick="openImageModal(event, this.src, '사토 아카리', '佐藤 あかり')">
+                            </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
-                                    <span class="mini-name">사토 아카리</span>
+                                    <span class="mini-name">사토 아카리 <span class="mini-jp">佐藤 あかり</span></span>
                                     <span class="mini-codename">/ 카와이이 메</span>
                                 </div>
                                 <div class="mini-tags">
@@ -363,10 +417,11 @@
                                     <span class="tag-badge badge-red">사살 불가</span>
                                 </div>
                             </div>
-                            <div class="expand-btn">▼</div>
+                            <div class="expand-btn">상세보기 ▼</div>
                         </div>
                         <div class="detail-profile">
                             <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>佐藤 あかり</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>20세 / 160cm</div>
                                 <div class="detail-item"><strong>MBTI / 애니어그램</strong>INFP / 9w1</div>
                                 <div class="detail-item"><strong>무기</strong>금속 구슬</div>
@@ -385,10 +440,12 @@
                     <!-- 이나즈마 타마고 -->
                     <div class="character-card villain-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
-                            <img src="https://igx.kr/u/Ncc/g/1" alt="이나즈마 타마고" class="mini-thumb" onerror="this.src='https://via.placeholder.com/80?text=TAMAGO';">
+                            <div class="thumb-wrapper">
+                                <img src="https://igx.kr/u/Ncc/g/1" alt="이나즈마 타마고" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=TAMAGO';" onclick="openImageModal(event, this.src, '이나즈마 타마고', '稲妻 たまご')">
+                            </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
-                                    <span class="mini-name">이나즈마 타마고</span>
+                                    <span class="mini-name">이나즈마 타마고 <span class="mini-jp">稲妻 たまご</span></span>
                                     <span class="mini-codename">/ 노잼</span>
                                 </div>
                                 <div class="mini-tags">
@@ -396,10 +453,11 @@
                                     <span class="tag-badge badge-gray">비서</span>
                                 </div>
                             </div>
-                            <div class="expand-btn">▼</div>
+                            <div class="expand-btn">상세보기 ▼</div>
                         </div>
                         <div class="detail-profile">
                             <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>稲妻 たまご</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>35세 / 165cm</div>
                                 <div class="detail-item"><strong>MBTI / 애니어그램</strong>ISTJ / 5w6</div>
                                 <div class="detail-item"><strong>성향</strong>질서 중립 (Lawful Neutral)</div>
@@ -419,10 +477,12 @@
                     <!-- 아이자와 모모 -->
                     <div class="character-card villain-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
-                            <img src="https://igx.kr/u/Ncc/h/1" alt="아이자와 모모" class="mini-thumb" onerror="this.src='https://via.placeholder.com/80?text=MOMO';">
+                            <div class="thumb-wrapper">
+                                <img src="https://igx.kr/u/Ncc/h/1" alt="아이자와 모모" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=MOMO';" onclick="openImageModal(event, this.src, '아이자와 모모', '相沢 もも')">
+                            </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
-                                    <span class="mini-name">아이자와 모모</span>
+                                    <span class="mini-name">아이자와 모모 <span class="mini-jp">相沢 もも</span></span>
                                     <span class="mini-codename">/ 오버클럭</span>
                                 </div>
                                 <div class="mini-tags">
@@ -430,10 +490,11 @@
                                     <span class="tag-badge badge-gray">해커/과학자</span>
                                 </div>
                             </div>
-                            <div class="expand-btn">▼</div>
+                            <div class="expand-btn">상세보기 ▼</div>
                         </div>
                         <div class="detail-profile">
                             <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>相沢 もも</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>20세 / 149cm</div>
                                 <div class="detail-item"><strong>MBTI / 애니어그램</strong>INTP / 5w4</div>
                                 <div class="detail-item"><strong>성향</strong>혼돈 중립 (Chaotic Neutral)</div>
@@ -452,10 +513,12 @@
                     <!-- 스즈하라 히로미 -->
                     <div class="character-card villain-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
-                            <img src="https://igx.kr/u/Ncc/j/1" alt="스즈하라 히로미" class="mini-thumb" onerror="this.src='https://via.placeholder.com/80?text=HIROMI';">
+                            <div class="thumb-wrapper">
+                                <img src="https://igx.kr/u/Ncc/j/1" alt="스즈하라 히로미" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=HIROMI';" onclick="openImageModal(event, this.src, '스즈하라 히로미', '鈴原 ひろみ')">
+                            </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
-                                    <span class="mini-name">스즈하라 히로미</span>
+                                    <span class="mini-name">스즈하라 히로미 <span class="mini-jp">鈴原 ひろみ</span></span>
                                     <span class="mini-codename">/ 스텔라</span>
                                 </div>
                                 <div class="mini-tags">
@@ -463,10 +526,11 @@
                                     <span class="tag-badge badge-gray">요원</span>
                                 </div>
                             </div>
-                            <div class="expand-btn">▼</div>
+                            <div class="expand-btn">상세보기 ▼</div>
                         </div>
                         <div class="detail-profile">
                             <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>鈴原 ひろみ</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>23세 / 158cm</div>
                                 <div class="detail-item"><strong>MBTI / 애니어그램</strong>ENFP / 7w6</div>
                                 <div class="detail-item"><strong>성향</strong>혼돈 선 (Chaotic Good)</div>
@@ -486,10 +550,12 @@
                     <!-- 이노리 마유 -->
                     <div class="character-card villain-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
-                            <img src="https://igx.kr/u/Ncc/k/1" alt="이노리 마유" class="mini-thumb" onerror="this.src='https://via.placeholder.com/80?text=MAYU';">
+                            <div class="thumb-wrapper">
+                                <img src="https://igx.kr/u/Ncc/k/1" alt="이노리 마유" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=MAYU';" onclick="openImageModal(event, this.src, '이노리 마유', '祈 まゆ')">
+                            </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
-                                    <span class="mini-name">이노리 마유</span>
+                                    <span class="mini-name">이노리 마유 <span class="mini-jp">祈 まゆ</span></span>
                                     <span class="mini-codename">/ 곰인형</span>
                                 </div>
                                 <div class="mini-tags">
@@ -497,10 +563,11 @@
                                     <span class="tag-badge badge-gray">요원</span>
                                 </div>
                             </div>
-                            <div class="expand-btn">▼</div>
+                            <div class="expand-btn">상세보기 ▼</div>
                         </div>
                         <div class="detail-profile">
                             <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>祈 まゆ</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>21세 / 165cm</div>
                                 <div class="detail-item"><strong>MBTI / 애니어그램</strong>INFP / 4w5</div>
                                 <div class="detail-item"><strong>성향</strong>혼돈 중립 (Chaotic Neutral)</div>
@@ -520,10 +587,12 @@
                     <!-- 마요이 츠바키 -->
                     <div class="character-card villain-style" id="tsubaki-card">
                         <div class="mini-profile" onclick="toggleCard(this)">
-                            <img src="https://igx.kr/u/Ncc/l/1" alt="마요이 츠바키" class="mini-thumb" onerror="this.src='https://via.placeholder.com/80?text=TSUBAKI';">
+                            <div class="thumb-wrapper">
+                                <img src="https://igx.kr/u/Ncc/l/1" alt="마요이 츠바키" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=TSUBAKI';" onclick="openImageModal(event, this.src, '마요이 츠바키', '迷井 つばき')">
+                            </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
-                                    <span class="mini-name">마요이 츠바키</span>
+                                    <span class="mini-name">마요이 츠바키 <span class="mini-jp">迷井 つばき</span></span>
                                     <span class="mini-codename">/ 코드M</span>
                                 </div>
                                 <div class="mini-tags">
@@ -531,10 +600,11 @@
                                     <span class="tag-badge badge-gray" id="tsubaki-role-badge">요원</span>
                                 </div>
                             </div>
-                            <div class="expand-btn">▼</div>
+                            <div class="expand-btn">상세보기 ▼</div>
                         </div>
                         <div class="detail-profile">
                             <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>迷井 つばき</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>36세 / 145cm</div>
                                 <div class="detail-item"><strong>MBTI / 애니어그램</strong>ENTP / 7w8</div>
                                 <div class="detail-item"><strong>성향</strong>혼돈 중립 (Chaotic Neutral)</div>
@@ -560,7 +630,7 @@
         </div>
     </div>
 
-    <!-- [3] 스크립트 -->
+    <!-- [4] 스크립트 -->
     <script>
         // 1. 인트로 애니메이션
         const introContainer = document.getElementById('intro-container');
@@ -612,7 +682,26 @@
             card.classList.toggle('expanded');
         }
 
-        // 4. 마요이 츠바키 비밀 전환 버튼 (상위 카드 토글 방지)
+        // 4. 이미지 확대 모달 열기 (카드 토글 방지)
+        function openImageModal(event, src, name, jpName) {
+            event.stopPropagation();
+            const modal = document.getElementById('image-modal');
+            const modalImg = document.getElementById('modal-img');
+            const modalCaption = document.getElementById('modal-caption');
+            const modalSubcaption = document.getElementById('modal-subcaption');
+
+            modalImg.src = src;
+            modalCaption.innerText = name;
+            modalSubcaption.innerText = jpName || '';
+            modal.style.display = 'flex';
+        }
+
+        // 5. 이미지 확대 모달 닫기
+        function closeImageModal() {
+            document.getElementById('image-modal').style.display = 'none';
+        }
+
+        // 6. 마요이 츠바키 비밀 전환 버튼
         function toggleSecretProtocol(event) {
             event.stopPropagation();
             const roleBadge = document.getElementById('tsubaki-role-badge');
