@@ -611,8 +611,13 @@
                                 <div class="detail-item"><strong>무기</strong>금속 구슬</div>
                             </div>
                             <div class="detail-section">
+                                <div class="detail-section-title">초능력 / 약점</div>
+                                <p><strong>능력:</strong> 염동력 (금속 구슬 제어 및 사격)</p>
+                                <p><strong>약점:</strong> 신체 능력이 일반인 수준이며 집중력이 흐트러지면 구슬 제어 능력을 잃음</p>
+                            </div>
+                            <div class="detail-section">
                                 <div class="detail-section-title">상세 설명</div>
-                                <p>시로바와 시오리의 수양딸. 옥상에서 시로바를 늘 그리워하고 있음.</p>
+                                <p>시로바와 시오리의 수양딸. 시오리 밑에서 자랐으나 마음속으로는 늘 시로바를 그리워하며 옥상에서 하늘을 올려다보곤 한다.</p>
                             </div>
                         </div>
                     </div>
@@ -646,10 +651,16 @@
                             <div class="detail-grid">
                                 <div class="detail-item"><strong>일어명</strong>稲妻 たまご</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>35세 / 165cm</div>
+                                <div class="detail-item"><strong>무기</strong>전기 채찍</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">초능력 / 약점</div>
+                                <p><strong>능력:</strong> 뇌전 조작 (전기 생성 및 방전)</p>
+                                <p><strong>약점:</strong> 물에 젖으면 능력이 자신에게도 역류함</p>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">상세 설명</div>
-                                <p>진지한 외모지만 아재개그를 연발함. 사실상 메이드 역할.</p>
+                                <p>언더그라운드의 보스 비서. 진지하고 차가운 외모와 달리 시도 때도 없이 아재개그를 던지며 사실상 조직의 살림과 메이드 역할을 전담하고 있다.</p>
                             </div>
                         </div>
                     </div>
@@ -683,6 +694,16 @@
                             <div class="detail-grid">
                                 <div class="detail-item"><strong>일어명</strong>相沢 もも</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>20세 / 149cm</div>
+                                <div class="detail-item"><strong>무기</strong>커스텀 해킹 키보드</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">초능력 / 약점</div>
+                                <p><strong>능력:</strong> 전자기기 및 데이터 고속 해킹/제어</p>
+                                <p><strong>약점:</strong> 능력을 과도하게 사용할 경우 심한 두통과 함께 뇌 과열 현상이 발생함</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">상세 설명</div>
+                                <p>언더그라운드의 천재 해커. 어린 나이임에도 정부 관리국의 보안 망을 손쉽게 무력화하며, 방구석에서 게임과 해킹을 즐기는 마이페이스 성격이다.</p>
                             </div>
                         </div>
                     </div>
@@ -716,8 +737,16 @@
                             <div class="detail-grid">
                                 <div class="detail-item"><strong>일어명</strong>迷井 つばき</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>36세 / 145cm</div>
+                                <div class="detail-item"><strong>무기</strong>은장 권총</div>
                             </div>
                             <div class="detail-section">
+                                <div class="detail-section-title">초능력 / 약점</div>
+                                <p><strong>능력:</strong> 환각 생성 및 정보 교란</p>
+                                <p><strong>약점:</strong> 자신보다 정신력이 강한 상대에게는 환각이 통하지 않음</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">상세 설명</div>
+                                <p>정부 관리국 요원으로 위장하여 활동 중인 이중 스파이. 철저하게 신분을 숨기며 언더그라운드에 극비 정보를 제공하고 있다.</p>
                                 <p id="tsubaki-secret-note" style="display: none; color: #ff3333; margin-top: 6px; font-weight: bold; background: rgba(255,0,0,0.1); padding: 8px; border-radius: 4px;">
                                     ⚠️ [기밀] 현재 관리국 내부로 침투한 이중 스파이임이 확인되었습니다.
                                 </p>
@@ -763,7 +792,7 @@
 
         // 버튼 클릭 이벤트 (오디오 재생 + 화면 전환)
         viewBtn.addEventListener('click', () => {
-            // CM.mp3 재생 시도
+            // CM.mp3 재생
             bgm.play().catch(error => {
                 console.log("오디오 재생 실패 (파일 경로를 확인해주세요):", error);
             });
