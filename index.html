@@ -119,7 +119,7 @@
         .character-card.detained-style { border-left: 4px solid #ff9900; }
         .character-card.hero-style { border-left: 4px solid #4db8ff; }
 
-        /* 미니 프로필 */
+        /* 미니 프로필 (상단 바) */
         .mini-profile {
             display: flex; align-items: center; padding: 12px;
             cursor: pointer; gap: 12px; user-select: none;
@@ -127,7 +127,6 @@
         }
         .mini-profile:active { background: #1e1e1e; }
         
-        /* 프로필 썸네일 (확대 가능 표시 포함) */
         .thumb-wrapper {
             position: relative; width: 48px; height: 48px; flex-shrink: 0;
         }
@@ -136,16 +135,11 @@
             object-fit: cover; background: #222; border: 1px solid #444;
             cursor: zoom-in; transition: transform 0.2s;
         }
-        .thumb-wrapper::after {
-            content: '🔍'; position: absolute; bottom: 2px; right: 2px;
-            font-size: 10px; background: rgba(0,0,0,0.6); border-radius: 3px; padding: 1px;
-            pointer-events: none;
-        }
 
         .mini-info { flex: 1; min-width: 0; }
         .mini-name-group { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
         .mini-name { font-size: 0.98rem; font-weight: bold; color: #fff; }
-        .mini-jp { font-size: 0.78rem; color: #888; font-weight: normal; margin-left: 3px; }
+        .mini-jp { font-size: 0.78rem; color: #888; font-weight: normal; margin-left: 2px; }
         .mini-codename { font-size: 0.78rem; color: #00ffcc; font-family: monospace; }
         
         .mini-tags { display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
@@ -165,12 +159,27 @@
         }
         .character-card.expanded .expand-btn { transform: rotate(180deg); background: rgba(0,255,204,0.1); color: #00ffcc; }
 
-        /* 상세 프로필 */
+        /* 상세 프로필 (펼쳐진 레이아웃) */
         .detail-profile {
             display: none; padding: 15px; border-top: 1px solid #222;
             background: #0f0f0f; font-size: 0.88rem; line-height: 1.55;
         }
         .character-card.expanded .detail-profile { display: block; animation: fadeIn 0.2s ease; }
+
+        /* 상세 이미지 헤더 */
+        .detail-header-box {
+            display: flex; gap: 12px; margin-bottom: 12px; align-items: center;
+            background: rgba(255, 255, 255, 0.02); padding: 10px; border-radius: 6px; border: 1px solid #222;
+        }
+        .detail-large-img {
+            width: 90px; height: 90px; border-radius: 8px;
+            object-fit: cover; border: 1px solid #00ffcc; background: #222;
+            cursor: zoom-in; flex-shrink: 0;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.15);
+        }
+        .detail-header-info { flex: 1; }
+        .detail-header-title { font-size: 1rem; font-weight: bold; color: #fff; }
+        .detail-header-sub { font-size: 0.8rem; color: #00ffcc; font-family: monospace; margin-top: 2px; }
 
         .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; background: #161616; padding: 10px; border-radius: 6px; }
         .detail-item { font-size: 0.82rem; color: #aaa; }
@@ -227,6 +236,9 @@
 </head>
 <body>
 
+    <!-- [0] 음원 재생 태그 (무한 반복 설정) -->
+    <audio id="bgm" src="CM.mp3" loop preload="auto"></audio>
+
     <!-- [1] 인트로 경고 화면 -->
     <div id="intro-container">
         <div id="strange-code"></div>
@@ -238,7 +250,7 @@
         </div>
     </div>
 
-    <!-- [2] 이미지 확대 모달 -->
+    <!-- [2] 이미지 전체 확대 모달 -->
     <div id="image-modal" onclick="closeImageModal()">
         <img id="modal-img" src="" alt="확대 이미지">
         <div id="modal-caption"></div>
@@ -286,33 +298,185 @@
 
                 <!-- 히어로 문서 -->
                 <div id="hero-doc" class="doc-page">
-                    <h2 class="doc-title">특수 요원 명단</h2>
-                    <p class="doc-meta">ACTIVE AGENTS FILE</p>
+                    <h2 class="doc-title" style="color: #4db8ff;">특수 요원 명단 (히어로)</h2>
+                    <p class="doc-meta">GOVERNMENT AGENTS FILE</p>
 
+                    <!-- 사라유키 시로바 -->
                     <div class="character-card hero-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
                             <div class="thumb-wrapper">
-                                <img src="https://via.placeholder.com/300?text=APEX" alt="김은폐" class="mini-thumb" onclick="openImageModal(event, this.src, '김은폐', '金隱蔽 / APEX')">
+                                <img src="https://igx.kr/u/Ncc/n/1" alt="사라유키 시로바" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=SHIROBA';" onclick="openImageModal(event, this.src, '사라유키 시로바', '更雪 白葉 / 흰장미 (白バラ)')">
                             </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
-                                    <span class="mini-name">김은폐 <span class="mini-jp">金隱蔽</span></span>
-                                    <span class="mini-codename">/ 에이펙스</span>
+                                    <span class="mini-name">사라유키 시로바 <span class="mini-jp">更雪 白葉</span></span>
+                                    <span class="mini-codename">/ 흰장미 <span class="mini-jp">白バラ</span></span>
                                 </div>
                                 <div class="mini-tags">
-                                    <span class="tag-badge badge-blue">A-Class</span>
-                                    <span class="tag-badge badge-gray">현장 요원</span>
+                                    <span class="tag-badge badge-red">SS-Class</span>
+                                    <span class="tag-badge badge-blue">고문</span>
                                 </div>
                             </div>
                             <div class="expand-btn">상세보기 ▼</div>
                         </div>
                         <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="https://igx.kr/u/Ncc/n/1" alt="사라유키 시로바" class="detail-large-img" onerror="this.src='https://via.placeholder.com/300?text=SHIROBA';" onclick="openImageModal(event, this.src, '사라유키 시로바', '更雪 白葉 / 흰장미 (白バラ)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">사라유키 시로바 (更雪 白葉)</div>
+                                    <div class="detail-header-sub">코드네임: 흰장미 (白バラ)</div>
+                                    <div style="font-size: 0.75rem; color: #888; margin-top: 4px;">직책: 정부측 고문 (顧問)</div>
+                                </div>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>更雪 白葉</div>
+                                <div class="detail-item"><strong>나이 / 키</strong>37세 / 160cm</div>
+                                <div class="detail-item"><strong>무기</strong>호신용 단검</div>
+                            </div>
                             <div class="detail-section">
-                                <div class="detail-section-title">특이사항 및 설명</div>
-                                <p>뛰어난 신체 능력과 전술적 판단력을 보유한 현장 요원.</p>
+                                <div class="detail-section-title">초능력 / 약점</div>
+                                <p><strong>능력:</strong> 생명 조작</p>
+                                <p><strong>약점:</strong> 평소에도 몸이 매우 허약하며 능력을 공격 용도로 사용하는 것을 매우 꺼려함</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">상세 설명</div>
+                                <p>아게하 시오리의 전 연인. 23년 전 테러에서 두 눈을 잃었으나 시오리에게 한쪽 눈을 기증받은 것을 계기로 만남을 시작해 연인이 되었다. 하지만 "능력자를 위해 지배층을 제거해야 한다"는 시오리와 "규칙 준수와 희생 방지가 우선"이라는 시로바의 사상 차이로 이별하였다. 헤어진 후 정부 측 고문으로 들어가 다친 히어로들을 치료하고, 정부에서 버린 시체들을 뒷산에 묻어주는 역할을 맡고 있다.</p>
                             </div>
                         </div>
                     </div>
+
+                    <!-- 아마미아 루시아 -->
+                    <div class="character-card hero-style">
+                        <div class="mini-profile" onclick="toggleCard(this)">
+                            <div class="thumb-wrapper">
+                                <img src="https://igx.kr/u/Ncc/q/1" alt="아마미아 루시아" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=LUCIA';" onclick="openImageModal(event, this.src, '아마미아 루시아', '雨宮 瑠璃亞 / 시스터 (シスター)')">
+                            </div>
+                            <div class="mini-info">
+                                <div class="mini-name-group">
+                                    <span class="mini-name">아마미아 루시아 <span class="mini-jp">雨宮 瑠璃亞</span></span>
+                                    <span class="mini-codename">/ 시스터 <span class="mini-jp">シスター</span></span>
+                                </div>
+                                <div class="mini-tags">
+                                    <span class="tag-badge badge-blue">A-Class</span>
+                                    <span class="tag-badge badge-gray">팀장</span>
+                                </div>
+                            </div>
+                            <div class="expand-btn">상세보기 ▼</div>
+                        </div>
+                        <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="https://igx.kr/u/Ncc/q/1" alt="아마미아 루시아" class="detail-large-img" onerror="this.src='https://via.placeholder.com/300?text=LUCIA';" onclick="openImageModal(event, this.src, '아마미아 루시아', '雨宮 瑠璃亞 / 시스터 (シスター)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">아마미아 루시아 (雨宮 瑠璃亞)</div>
+                                    <div class="detail-header-sub">코드네임: 시스터 (シスター)</div>
+                                    <div style="font-size: 0.75rem; color: #888; margin-top: 4px;">직책: 현장 팀장</div>
+                                </div>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>雨宮 瑠璃亞</div>
+                                <div class="detail-item"><strong>나이 / 키</strong>30세 / 162cm</div>
+                                <div class="detail-item"><strong>무기</strong>없음</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">초능력 / 약점</div>
+                                <p><strong>능력:</strong> 광역 힐 or 업보에 비례한 데미지 부여</p>
+                                <p><strong>약점:</strong> 악인에게는 힐 효과가 적용되지 않으며, 죄를 저지르지 않은 대상에게는 데미지가 들어가지 않음</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">상세 설명</div>
+                                <p>수련수녀 신분으로 본래 전투 투입이 불가능하지만, 교황의 특별 허락을 받아 팀장 자리에서 은퇴하지 않고 활동 중이다. 평소에는 조금 덜렁거리지만 전투에 임할 때만큼은 진심을 다한다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 사쿠라기 루리 -->
+                    <div class="character-card hero-style">
+                        <div class="mini-profile" onclick="toggleCard(this)">
+                            <div class="thumb-wrapper">
+                                <img src="https://via.placeholder.com/300?text=RURI" alt="사쿠라기 루리" class="mini-thumb" onclick="openImageModal(event, this.src, '사쿠라기 루리', '桜木 瑠璃 / 장군 (将軍)')">
+                            </div>
+                            <div class="mini-info">
+                                <div class="mini-name-group">
+                                    <span class="mini-name">사쿠라기 루리 <span class="mini-jp">桜木 瑠璃</span></span>
+                                    <span class="mini-codename">/ 장군 <span class="mini-jp">将軍</span></span>
+                                </div>
+                                <div class="mini-tags">
+                                    <span class="tag-badge badge-red">S-Class</span>
+                                    <span class="tag-badge badge-blue">무력 2위</span>
+                                </div>
+                            </div>
+                            <div class="expand-btn">상세보기 ▼</div>
+                        </div>
+                        <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="https://via.placeholder.com/300?text=RURI" alt="사쿠라기 루리" class="detail-large-img" onclick="openImageModal(event, this.src, '사쿠라기 루리', '桜木 瑠璃 / 장군 (将軍)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">사쿠라기 루리 (桜木 瑠璃)</div>
+                                    <div class="detail-header-sub">코드네임: 장군 (将軍)</div>
+                                    <div style="font-size: 0.75rem; color: #888; margin-top: 4px;">직책: 장 (將)</div>
+                                </div>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>桜木 瑠璃</div>
+                                <div class="detail-item"><strong>나이 / 키</strong>40세 / 175cm</div>
+                                <div class="detail-item"><strong>무기</strong>대부분의 화기 및 무기</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">초능력 / 약점</div>
+                                <p><strong>능력:</strong> 없음 (순수 무기술 및 전술)</p>
+                                <p><strong>약점:</strong> 벌레를 매우 무서워함</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">상세 설명</div>
+                                <p>어떠한 초능력도 없이 순수 화기와 무기를 다루는 실력만으로 히어로측 무력 2위를 달성한 인물. 츤데레 성향에 부끄러움이 많으며, 생각보다 원칙에만 얽매이지 않고 유동적으로 상황을 처리한다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 아야세 카에데 -->
+                    <div class="character-card hero-style">
+                        <div class="mini-profile" onclick="toggleCard(this)">
+                            <div class="thumb-wrapper">
+                                <img src="https://via.placeholder.com/300?text=KAEDE" alt="아야세 카에데" class="mini-thumb" onclick="openImageModal(event, this.src, '아야세 카에데', '綾瀬 楓 / 주정뱅이 (酔っ払い)')">
+                            </div>
+                            <div class="mini-info">
+                                <div class="mini-name-group">
+                                    <span class="mini-name">아야세 카에데 <span class="mini-jp">綾瀬 楓</span></span>
+                                    <span class="mini-codename">/ 주정뱅이 <span class="mini-jp">酔っ払い</span></span>
+                                </div>
+                                <div class="mini-tags">
+                                    <span class="tag-badge badge-red">S-Class</span>
+                                    <span class="tag-badge badge-gray">팀장</span>
+                                </div>
+                            </div>
+                            <div class="expand-btn">상세보기 ▼</div>
+                        </div>
+                        <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="https://via.placeholder.com/300?text=KAEDE" alt="아야세 카에데" class="detail-large-img" onclick="openImageModal(event, this.src, '아야세 카에데', '綾瀬 楓 / 주정뱅이 (酔っ払い)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">아야세 카에데 (綾瀬 楓)</div>
+                                    <div class="detail-header-sub">코드네임: 주정뱅이 (酔っ払い)</div>
+                                    <div style="font-size: 0.75rem; color: #888; margin-top: 4px;">직책: 팀장</div>
+                                </div>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item"><strong>일어명</strong>綾瀬 楓</div>
+                                <div class="detail-item"><strong>나이 / 키</strong>35세 / 180cm</div>
+                                <div class="detail-item"><strong>무기</strong>카타나</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">초능력 / 약점</div>
+                                <p><strong>능력:</strong> 검을 잡으면 모든 신체 능력 10배 증가</p>
+                                <p><strong>약점:</strong> 전투 종료 시 증폭된 숙취를 몰아서 받음</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">상세 설명</div>
+                                <p>늘 술에 취해 있는 주정뱅이. 맡은 지시사항은 완벽히 수행하지만, 전투가 끝나자마자 보고도 하지 않고 바로 술을 마시러 가버려 조직의 문제거리로 꼽힌다.</p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <!-- 수감자 문서 -->
@@ -324,7 +488,7 @@
                     <div class="character-card detained-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
                             <div class="thumb-wrapper">
-                                <img src="https://igx.kr/u/Ncc/m/1" alt="세이린 메구미" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=MEGUMI';" onclick="openImageModal(event, this.src, '세이린 메구미', '瀬井凛 めぐみ')">
+                                <img src="https://igx.kr/u/Ncc/m/1" alt="세이린 메구미" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=MEGUMI';" onclick="openImageModal(event, this.src, '세이린 메구미', '瀬井凛 めぐみ / 미친년')">
                             </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
@@ -339,20 +503,28 @@
                             <div class="expand-btn">상세보기 ▼</div>
                         </div>
                         <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="https://igx.kr/u/Ncc/m/1" alt="세이린 메구미" class="detail-large-img" onerror="this.src='https://via.placeholder.com/300?text=MEGUMI';" onclick="openImageModal(event, this.src, '세이린 메구미', '瀬井凛 めぐみ / 미친년')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">세이린 메구미 (瀬井凛 めぐみ)</div>
+                                    <div class="detail-header-sub">코드네임: 미친년</div>
+                                    <div style="font-size: 0.75rem; color: #ff9900; margin-top: 4px;">수감 장소: 지하 107층 격리소</div>
+                                </div>
+                            </div>
                             <div class="detail-grid">
                                 <div class="detail-item"><strong>일어명</strong>瀬井凛 めぐみ</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>138세 / 190cm</div>
                                 <div class="detail-item"><strong>MBTI / 애니어그램</strong>ESTP / 8w7</div>
-                                <div class="detail-item"><strong>성향 (Alignment)</strong>혼돈 악 (Chaotic Evil)</div>
+                                <div class="detail-item"><strong>성향</strong>혼돈 악 (Chaotic Evil)</div>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">초능력 / 약점</div>
-                                <p><strong>능력:</strong> 힐링팩터, 인류 최강급 괴력 (세포핵 조각만 남아도 3초 내 완전 재생. 수명 감소 없음)</p>
+                                <p><strong>능력:</strong> 힐링팩터, 인류 최강급 괴력 (세포핵 조각만 남아도 3초 내 완전 재생)</p>
                                 <p><strong>약점:</strong> 재생 시 죽음보다 끔찍한 고통 수반</p>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">상세 설명</div>
-                                <p>나르시스트 + 사이코패스 + 마조히스트. 소속 없이 100년간 연쇄 살인을 저지른 최악의 살인마. 지하 107층 특수 격리소에 감금되어 있으며, 구속구를 차고도 힐링팩터로 인해 사망하지 않는 상태.</p>
+                                <p>나르시스트 + 사이코패스 + 마조히스트. 소속 없이 100년간 연쇄 살인을 저지른 최악의 살인마.</p>
                             </div>
                         </div>
                     </div>
@@ -367,27 +539,33 @@
                     <div class="character-card villain-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
                             <div class="thumb-wrapper">
-                                <img src="https://igx.kr/u/Ncc/c/1" alt="아게하 시오리" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=SHIORI';" onclick="openImageModal(event, this.src, '아게하 시오리', '揚羽 しおり')">
+                                <img src="https://igx.kr/u/Ncc/c/1" alt="아게하 시오리" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=SHIORI';" onclick="openImageModal(event, this.src, '아게하 시오리', '揚羽 しおり / 붉은 나비 (赤い蝶)')">
                             </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
                                     <span class="mini-name">아게하 시오리 <span class="mini-jp">揚羽 しおり</span></span>
-                                    <span class="mini-codename">/ 붉은 나비</span>
+                                    <span class="mini-codename">/ 붉은 나비 <span class="mini-jp">赤い蝶</span></span>
                                 </div>
                                 <div class="mini-tags">
                                     <span class="tag-badge badge-red">SS-Class</span>
                                     <span class="tag-badge badge-orange">보스</span>
-                                    <span class="tag-badge badge-gray">생포 지양</span>
                                 </div>
                             </div>
                             <div class="expand-btn">상세보기 ▼</div>
                         </div>
                         <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="https://igx.kr/u/Ncc/c/1" alt="아게하 시오리" class="detail-large-img" onerror="this.src='https://via.placeholder.com/300?text=SHIORI';" onclick="openImageModal(event, this.src, '아게하 시오리', '揚羽 しおり / 붉은 나비 (赤い蝶)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">아게하 시오리 (揚羽 しおり)</div>
+                                    <div class="detail-header-sub">코드네임: 붉은 나비 (赤い蝶)</div>
+                                    <div style="font-size: 0.75rem; color: #ff4d4d; margin-top: 4px;">소속: 언더그라운드 수장</div>
+                                </div>
+                            </div>
                             <div class="detail-grid">
                                 <div class="detail-item"><strong>일어명</strong>揚羽 しおり</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>38세 / 170cm</div>
                                 <div class="detail-item"><strong>MBTI / 애니어그램</strong>ENTJ / 8w7</div>
-                                <div class="detail-item"><strong>성향</strong>질서 악 (Lawful Evil)</div>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">초능력 / 약점</div>
@@ -396,7 +574,7 @@
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">상세 설명</div>
-                                <p>사라유키 시로바의 전 연인. 오만하며 능력자들만의 세상을 만든다는 야망으로 세력을 집결시키고 있음.</p>
+                                <p>사라유키 시로바의 전 연인. 능력자들만의 세상을 만든다는 야망으로 세력을 집결시키고 있다.</p>
                             </div>
                         </div>
                     </div>
@@ -405,12 +583,12 @@
                     <div class="character-card villain-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
                             <div class="thumb-wrapper">
-                                <img src="https://igx.kr/u/Ncc/d/1" alt="사토 아카리" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=AKARI';" onclick="openImageModal(event, this.src, '사토 아카리', '佐藤 あかり')">
+                                <img src="https://igx.kr/u/Ncc/d/1" alt="사토 아카리" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=AKARI';" onclick="openImageModal(event, this.src, '사토 아카리', '佐藤 あかり / 카와이이 메 (可愛い目)')">
                             </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
                                     <span class="mini-name">사토 아카리 <span class="mini-jp">佐藤 あかり</span></span>
-                                    <span class="mini-codename">/ 카와이이 메</span>
+                                    <span class="mini-codename">/ 카와이이 메 <span class="mini-jp">可愛い目</span></span>
                                 </div>
                                 <div class="mini-tags">
                                     <span class="tag-badge badge-blue">B-Class</span>
@@ -420,19 +598,21 @@
                             <div class="expand-btn">상세보기 ▼</div>
                         </div>
                         <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="https://igx.kr/u/Ncc/d/1" alt="사토 아카리" class="detail-large-img" onerror="this.src='https://via.placeholder.com/300?text=AKARI';" onclick="openImageModal(event, this.src, '사토 아카리', '佐藤 あかり / 카와이이 메 (可愛い目)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">사토 아카리 (佐藤 あかり)</div>
+                                    <div class="detail-header-sub">코드네임: 카와이이 메 (可愛い目)</div>
+                                </div>
+                            </div>
                             <div class="detail-grid">
                                 <div class="detail-item"><strong>일어명</strong>佐藤 あかり</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>20세 / 160cm</div>
-                                <div class="detail-item"><strong>MBTI / 애니어그램</strong>INFP / 9w1</div>
                                 <div class="detail-item"><strong>무기</strong>금속 구슬</div>
                             </div>
                             <div class="detail-section">
-                                <div class="detail-section-title">초능력 / 약점</div>
-                                <p><strong>능력:</strong> 대상에게 자력 부여 (손에 닿은 대상 한정)</p>
-                            </div>
-                            <div class="detail-section">
                                 <div class="detail-section-title">상세 설명</div>
-                                <p>시로바와 시오리의 수양딸. 둘이 헤어진 후 시오리의 딸로 등록됨. 말이 적고 항상 존댓말을 쓰며, 옥상에서 시로바를 늘 그리워하고 있음.</p>
+                                <p>시로바와 시오리의 수양딸. 옥상에서 시로바를 늘 그리워하고 있음.</p>
                             </div>
                         </div>
                     </div>
@@ -441,12 +621,12 @@
                     <div class="character-card villain-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
                             <div class="thumb-wrapper">
-                                <img src="https://igx.kr/u/Ncc/g/1" alt="이나즈마 타마고" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=TAMAGO';" onclick="openImageModal(event, this.src, '이나즈마 타마고', '稲妻 たまご')">
+                                <img src="https://igx.kr/u/Ncc/g/1" alt="이나즈마 타마고" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=TAMAGO';" onclick="openImageModal(event, this.src, '이나즈마 타마고', '稲妻 たまご / 노잼 (つまらない)')">
                             </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
                                     <span class="mini-name">이나즈마 타마고 <span class="mini-jp">稲妻 たまご</span></span>
-                                    <span class="mini-codename">/ 노잼</span>
+                                    <span class="mini-codename">/ 노잼 <span class="mini-jp">つまらない</span></span>
                                 </div>
                                 <div class="mini-tags">
                                     <span class="tag-badge badge-red">S-Class</span>
@@ -456,20 +636,20 @@
                             <div class="expand-btn">상세보기 ▼</div>
                         </div>
                         <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="https://igx.kr/u/Ncc/g/1" alt="이나즈마 타마고" class="detail-large-img" onerror="this.src='https://via.placeholder.com/300?text=TAMAGO';" onclick="openImageModal(event, this.src, '이나즈마 타마고', '稲妻 たまご / 노잼 (つまらない)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">이나즈마 타마고 (稲妻 たまご)</div>
+                                    <div class="detail-header-sub">코드네임: 노잼 (つまらない)</div>
+                                </div>
+                            </div>
                             <div class="detail-grid">
                                 <div class="detail-item"><strong>일어명</strong>稲妻 たまご</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>35세 / 165cm</div>
-                                <div class="detail-item"><strong>MBTI / 애니어그램</strong>ISTJ / 5w6</div>
-                                <div class="detail-item"><strong>성향</strong>질서 중립 (Lawful Neutral)</div>
-                            </div>
-                            <div class="detail-section">
-                                <div class="detail-section-title">초능력 / 약점</div>
-                                <p><strong>능력:</strong> 혈액 생성 + 조종 및 경질화</p>
-                                <p><strong>약점:</strong> 피에 물이 섞이면 조종 불가, 과도 사용 시 빈혈</p>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">상세 설명</div>
-                                <p>진지한 외모지만 아재개그를 연발함. 자신 개그에 웃어주는 아카리와 친하며 사실상 메이드 역할. 서류 처리를 1시간 만에 끝낼 만큼 능력이 뛰어남.</p>
+                                <p>진지한 외모지만 아재개그를 연발함. 사실상 메이드 역할.</p>
                             </div>
                         </div>
                     </div>
@@ -478,108 +658,31 @@
                     <div class="character-card villain-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
                             <div class="thumb-wrapper">
-                                <img src="https://igx.kr/u/Ncc/h/1" alt="아이자와 모모" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=MOMO';" onclick="openImageModal(event, this.src, '아이자와 모모', '相沢 もも')">
+                                <img src="https://igx.kr/u/Ncc/h/1" alt="아이자와 모모" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=MOMO';" onclick="openImageModal(event, this.src, '아이자와 모모', '相沢 もも / 오버클럭 (オーバークロック)')">
                             </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
                                     <span class="mini-name">아이자와 모모 <span class="mini-jp">相沢 もも</span></span>
-                                    <span class="mini-codename">/ 오버클럭</span>
+                                    <span class="mini-codename">/ 오버클럭 <span class="mini-jp">オーバークロック</span></span>
                                 </div>
                                 <div class="mini-tags">
                                     <span class="tag-badge badge-blue">A-Class</span>
-                                    <span class="tag-badge badge-gray">해커/과학자</span>
+                                    <span class="tag-badge badge-gray">해커</span>
                                 </div>
                             </div>
                             <div class="expand-btn">상세보기 ▼</div>
                         </div>
                         <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="https://igx.kr/u/Ncc/h/1" alt="아이자와 모모" class="detail-large-img" onerror="this.src='https://via.placeholder.com/300?text=MOMO';" onclick="openImageModal(event, this.src, '아이자와 모모', '相沢 もも / 오버클럭 (オーバークロック)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">아이자와 모모 (相沢 もも)</div>
+                                    <div class="detail-header-sub">코드네임: 오버클럭 (オーバークロック)</div>
+                                </div>
+                            </div>
                             <div class="detail-grid">
                                 <div class="detail-item"><strong>일어명</strong>相沢 もも</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>20세 / 149cm</div>
-                                <div class="detail-item"><strong>MBTI / 애니어그램</strong>INTP / 5w4</div>
-                                <div class="detail-item"><strong>성향</strong>혼돈 중립 (Chaotic Neutral)</div>
-                            </div>
-                            <div class="detail-section">
-                                <div class="detail-section-title">초능력 / 약점</div>
-                                <p><strong>능력:</strong> 순간 뇌 가속 (1시간 이상 사용 시 뇌 과부하)</p>
-                            </div>
-                            <div class="detail-section">
-                                <div class="detail-section-title">상세 설명</div>
-                                <p>10세 때 해킹 대회 1위를 기록한 천재 (해킹 성공 1.7초). 사회성이 부족하며 기계 조립 및 발명을 좋아함. 시오리가 가장 편애하는 인물.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 스즈하라 히로미 -->
-                    <div class="character-card villain-style">
-                        <div class="mini-profile" onclick="toggleCard(this)">
-                            <div class="thumb-wrapper">
-                                <img src="https://igx.kr/u/Ncc/j/1" alt="스즈하라 히로미" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=HIROMI';" onclick="openImageModal(event, this.src, '스즈하라 히로미', '鈴原 ひろみ')">
-                            </div>
-                            <div class="mini-info">
-                                <div class="mini-name-group">
-                                    <span class="mini-name">스즈하라 히로미 <span class="mini-jp">鈴原 ひろみ</span></span>
-                                    <span class="mini-codename">/ 스텔라</span>
-                                </div>
-                                <div class="mini-tags">
-                                    <span class="tag-badge badge-red">S-Class</span>
-                                    <span class="tag-badge badge-gray">요원</span>
-                                </div>
-                            </div>
-                            <div class="expand-btn">상세보기 ▼</div>
-                        </div>
-                        <div class="detail-profile">
-                            <div class="detail-grid">
-                                <div class="detail-item"><strong>일어명</strong>鈴原 ひろみ</div>
-                                <div class="detail-item"><strong>나이 / 키</strong>23세 / 158cm</div>
-                                <div class="detail-item"><strong>MBTI / 애니어그램</strong>ENFP / 7w6</div>
-                                <div class="detail-item"><strong>성향</strong>혼돈 선 (Chaotic Good)</div>
-                            </div>
-                            <div class="detail-section">
-                                <div class="detail-section-title">초능력 / 약점</div>
-                                <p><strong>능력:</strong> 별의 힘 (별에 관한 현상 구현)</p>
-                                <p><strong>약점:</strong> 과도 사용 시 엔트로피 증가로 사망 위험</p>
-                            </div>
-                            <div class="detail-section">
-                                <div class="detail-section-title">상세 설명</div>
-                                <p>조직의 분위기 메이커. 매우 밝고 활발하며 부끄러움이 없다. 노출 사고도 개그 소재로 삼을 만큼 낙천적임.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 이노리 마유 -->
-                    <div class="character-card villain-style">
-                        <div class="mini-profile" onclick="toggleCard(this)">
-                            <div class="thumb-wrapper">
-                                <img src="https://igx.kr/u/Ncc/k/1" alt="이노리 마유" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=MAYU';" onclick="openImageModal(event, this.src, '이노리 마유', '祈 まゆ')">
-                            </div>
-                            <div class="mini-info">
-                                <div class="mini-name-group">
-                                    <span class="mini-name">이노리 마유 <span class="mini-jp">祈 まゆ</span></span>
-                                    <span class="mini-codename">/ 곰인형</span>
-                                </div>
-                                <div class="mini-tags">
-                                    <span class="tag-badge badge-blue">B-Class</span>
-                                    <span class="tag-badge badge-gray">요원</span>
-                                </div>
-                            </div>
-                            <div class="expand-btn">상세보기 ▼</div>
-                        </div>
-                        <div class="detail-profile">
-                            <div class="detail-grid">
-                                <div class="detail-item"><strong>일어명</strong>祈 まゆ</div>
-                                <div class="detail-item"><strong>나이 / 키</strong>21세 / 165cm</div>
-                                <div class="detail-item"><strong>MBTI / 애니어그램</strong>INFP / 4w5</div>
-                                <div class="detail-item"><strong>성향</strong>혼돈 중립 (Chaotic Neutral)</div>
-                            </div>
-                            <div class="detail-section">
-                                <div class="detail-section-title">초능력 / 약점</div>
-                                <p><strong>능력:</strong> 곰인형 조종 (성인 남성 7배 근력)</p>
-                                <p><strong>약점:</strong> 감각 공유, 다수 조종 시 과부하</p>
-                            </div>
-                            <div class="detail-section">
-                                <div class="detail-section-title">상세 설명</div>
-                                <p>멘헤라 애니 덕후. 말을 더듬으며 칭찬받는 것을 좋아하고 속으로 야한 망상을 즐김.</p>
                             </div>
                         </div>
                     </div>
@@ -588,12 +691,12 @@
                     <div class="character-card villain-style" id="tsubaki-card">
                         <div class="mini-profile" onclick="toggleCard(this)">
                             <div class="thumb-wrapper">
-                                <img src="https://igx.kr/u/Ncc/l/1" alt="마요이 츠바키" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=TSUBAKI';" onclick="openImageModal(event, this.src, '마요이 츠바키', '迷井 つばき')">
+                                <img src="https://igx.kr/u/Ncc/l/1" alt="마요이 츠바키" class="mini-thumb" onerror="this.src='https://via.placeholder.com/300?text=TSUBAKI';" onclick="openImageModal(event, this.src, '마요이 츠바키', '迷井 つばき / 코드M (コードM)')">
                             </div>
                             <div class="mini-info">
                                 <div class="mini-name-group">
                                     <span class="mini-name">마요이 츠바키 <span class="mini-jp">迷井 つばき</span></span>
-                                    <span class="mini-codename">/ 코드M</span>
+                                    <span class="mini-codename">/ 코드M <span class="mini-jp">コードM</span></span>
                                 </div>
                                 <div class="mini-tags">
                                     <span class="tag-badge badge-blue" id="tsubaki-rank-badge">A-Class</span>
@@ -603,20 +706,18 @@
                             <div class="expand-btn">상세보기 ▼</div>
                         </div>
                         <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="https://igx.kr/u/Ncc/l/1" alt="마요이 츠바키" class="detail-large-img" onerror="this.src='https://via.placeholder.com/300?text=TSUBAKI';" onclick="openImageModal(event, this.src, '마요이 츠바키', '迷井 つばき / 코드M (コードM)')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">마요이 츠바키 (迷井 つばき)</div>
+                                    <div class="detail-header-sub">코드네임: 코드M (コードM)</div>
+                                </div>
+                            </div>
                             <div class="detail-grid">
                                 <div class="detail-item"><strong>일어명</strong>迷井 つばき</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>36세 / 145cm</div>
-                                <div class="detail-item"><strong>MBTI / 애니어그램</strong>ENTP / 7w8</div>
-                                <div class="detail-item"><strong>성향</strong>혼돈 중립 (Chaotic Neutral)</div>
                             </div>
                             <div class="detail-section">
-                                <div class="detail-section-title">초능력 / 약점</div>
-                                <p><strong>능력:</strong> 텔레파시, 전자기장 조종</p>
-                                <p><strong>약점:</strong> 물이 많은 곳에서 사용 시 감전 위험</p>
-                            </div>
-                            <div class="detail-section">
-                                <div class="detail-section-title">상세 설명</div>
-                                <p>장난기 넘치고 활발하지만 비밀이 많음.</p>
                                 <p id="tsubaki-secret-note" style="display: none; color: #ff3333; margin-top: 6px; font-weight: bold; background: rgba(255,0,0,0.1); padding: 8px; border-radius: 4px;">
                                     ⚠️ [기밀] 현재 관리국 내부로 침투한 이중 스파이임이 확인되었습니다.
                                 </p>
@@ -632,16 +733,17 @@
 
     <!-- [4] 스크립트 -->
     <script>
-        // 1. 인트로 애니메이션
+        // 1. 인트로 애니메이션 및 버튼 클릭
         const introContainer = document.getElementById('intro-container');
         const codeContainer = document.getElementById('strange-code');
         const warningBox = document.getElementById('warning-box');
         const viewBtn = document.getElementById('view-btn');
         const mainTerminal = document.getElementById('main-terminal');
+        const bgm = document.getElementById('bgm');
 
         const logs = [
             "INITIALIZING MOBILE TERMINAL UI...",
-            "LOADING ASSETS... [OK]",
+            "LOADING HERO DATABASE... [OK]",
             "DECRYPTING SECURITY KEYS...",
             "ACCESS GRANTED TO OMEGA DATABASE."
         ];
@@ -659,7 +761,13 @@
             warningBox.style.display = 'block';
         }, 800);
 
+        // 버튼 클릭 이벤트 (오디오 재생 + 화면 전환)
         viewBtn.addEventListener('click', () => {
+            // CM.mp3 재생 시도
+            bgm.play().catch(error => {
+                console.log("오디오 재생 실패 (파일 경로를 확인해주세요):", error);
+            });
+
             introContainer.style.opacity = '0';
             setTimeout(() => {
                 introContainer.style.display = 'none';
@@ -682,7 +790,7 @@
             card.classList.toggle('expanded');
         }
 
-        // 4. 이미지 확대 모달 열기 (카드 토글 방지)
+        // 4. 이미지 확대 모달 열기
         function openImageModal(event, src, name, jpName) {
             event.stopPropagation();
             const modal = document.getElementById('image-modal');
