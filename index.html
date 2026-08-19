@@ -213,7 +213,7 @@
         }
         .character-card.expanded .expand-btn { background: var(--cyan); color: #000; box-shadow: 0 0 10px var(--cyan-glow); }
 
-        /* 상세 프로필 (상하 길이 대폭 압축) */
+        /* 상세 프로필 */
         .detail-profile {
             display: none; padding: 15px; border-top: 1px solid var(--border-color);
             background: rgba(0,0,0,0.2); font-size: 0.85rem; line-height: 1.5;
@@ -235,8 +235,9 @@
         .detail-header-title { font-size: 1.15rem; font-weight: bold; color: #fff; letter-spacing: 1px; }
         .detail-header-sub { font-size: 0.8rem; color: var(--cyan); font-family: monospace; margin-top: 3px; }
 
+        /* 행(열)을 정확히 2개로 고정하는 그리드 레이아웃 */
         .detail-grid { 
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 12px; 
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px; 
             background: #0d0d12; padding: 10px; border-radius: 4px; border: 1px solid #1a1a24; 
         }
         .detail-item { font-size: 0.8rem; color: #bbb; display: flex; flex-direction: column; }
@@ -247,6 +248,20 @@
         .detail-section-title { font-size: 0.8rem; color: var(--cyan); font-weight: bold; margin-bottom: 4px; font-family: monospace; display: flex; align-items: center; }
         .detail-section-title::before { content: "▶"; font-size: 0.55rem; margin-right: 5px; }
         .detail-section p { color: #ccc; line-height: 1.5; margin-bottom: 4px; }
+
+        /* 말투 전용 네모박스 스타일 (블록쿼트) */
+        .dialogue-box {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px dashed var(--border-color);
+            border-left: 3px solid var(--cyan);
+            padding: 10px 12px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+        .dialogue-box p {
+            margin-bottom: 0 !important;
+            color: #d0d0e0;
+        }
 
         .secret-btn {
             width: 100%; margin-top: 10px; padding: 10px; background: rgba(255, 51, 51, 0.1);
@@ -415,7 +430,7 @@
                                 <div class="detail-item"><strong>코드네임</strong>흰장미(白バラ)</div>
                                 <div class="detail-item"><strong>상태</strong>활동 중</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>37세 / 160cm</div>
-                                <div class="detail-item"><strong>사용 무기</strong>호신용 단검</div>
+                                <div class="detail-item" style="grid-column: span 2;"><strong>사용 무기</strong>호신용 단검</div>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">초능력 및 약점</div>
@@ -424,7 +439,9 @@
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">말투 및 성격</div>
-                                <p><strong style="color:#aaa">[말투]</strong> 차분하고 다정하지만 어딘가 쓸쓸한 존댓말. "부디 다치지 않게 조심하세요. 더 이상의 희생은 원치 않으니까요."</p>
+                                <div class="dialogue-box">
+                                    <p><strong style="color:#aaa">[말투]</strong> 차분하고 다정하지만 어딘가 쓸쓸한 존댓말. "부디 다치지 않게 조심하세요. 더 이상의 희생은 원치 않으니까요."</p>
+                                </div>
                                 <p>시오리의 전 연인. 23년 전 테러로 시력을 잃었으나 시오리의 눈을 기증받으며 연인으로 발전했다. 하지만 목적을 위해 희생을 강요하는 사상 차이로 이별 후 정부 측 고문으로 합류했다. 부상당한 히어로들을 치료하며, 정부가 비밀리에 처분한 이들의 시신을 몰래 거두어 묻어주는 등 내면은 온정적이고 도덕적인 성품을 지녔다.</p>
                             </div>
                         </div>
@@ -457,7 +474,7 @@
                                 <div class="detail-item"><strong>코드네임</strong>시스터(シスター)</div>
                                 <div class="detail-item"><strong>상태</strong>정상 활동</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>30세 / 162cm</div>
-                                <div class="detail-item"><strong>사용 무기</strong>없음</div>
+                                <div class="detail-item" style="grid-column: span 2;"><strong>사용 무기</strong>없음</div>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">초능력 및 약점</div>
@@ -466,7 +483,9 @@
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">말투 및 성격</div>
-                                <p><strong style="color:#aaa">[말투]</strong> 공손하고 단정하지만 은근히 허당기 있는 존댓말. "주여, 이 죄인들에게 자비를... 앗, 또 넘어질 뻔했네요!"</p>
+                                <div class="dialogue-box">
+                                    <p><strong style="color:#aaa">[말투]</strong> 공손하고 단정하지만 은근히 허당기 있는 존댓말. "주여, 이 죄인들에게 자비를... 앗, 또 넘어질 뻔했네요!"</p>
+                                </div>
                                 <p>본래 전투에 투입될 수 없는 수련 수녀이나, 교황의 특별 허가로 팀장직을 유지하고 있다. 평소에는 덜렁거리고 잦은 실수를 하지만, 전투에 돌입하면 진심을 다해 누구보다 헌신적으로 임한다.</p>
                             </div>
                         </div>
@@ -499,7 +518,7 @@
                                 <div class="detail-item"><strong>코드네임</strong>장군(将軍)</div>
                                 <div class="detail-item"><strong>상태</strong>없음</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>40세 / 175cm</div>
-                                <div class="detail-item"><strong>사용 무기</strong>대부분의 무기</div>
+                                <div class="detail-item" style="grid-column: span 2;"><strong>사용 무기</strong>대부분의 무기</div>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">초능력 및 약점</div>
@@ -508,7 +527,9 @@
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">말투 및 성격</div>
-                                <p><strong style="color:#aaa">[말투]</strong> 퉁명스럽고 거친 츤데레 톤. "하아? 내가 널 왜 도와줘? ...뒤에 숨기나 해, 방해되니까!"</p>
+                                <div class="dialogue-box">
+                                    <p><strong style="color:#aaa">[말투]</strong> 퉁명스럽고 거친 츤데레 톤. "하아? 내가 널 왜 도와줘? ...뒤에 숨기나 해, 방해되니까!"</p>
+                                </div>
                                 <p>초능력 없이 오직 화기와 무기를 다루는 실력만으로 히어로 측 무력 2위를 달성한 입지전적인 인물. 규칙에 얽매이는 것을 싫어해 유동적으로 행동한다. 강인하고 무뚝뚝한 겉모습과 달리 부끄러움을 많이 타고 벌레 앞에서 무너지는 반전 매력을 지녔다.</p>
                             </div>
                         </div>
@@ -541,7 +562,7 @@
                                 <div class="detail-item"><strong>코드네임</strong>주정뱅이(酔っ払い)</div>
                                 <div class="detail-item"><strong>상태</strong>활동 중</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>35세 / 180cm</div>
-                                <div class="detail-item"><strong>사용 무기</strong>카타나</div>
+                                <div class="detail-item" style="grid-column: span 2;"><strong>사용 무기</strong>카타나</div>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">초능력 및 약점</div>
@@ -550,7 +571,9 @@
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">말투 및 성격</div>
-                                <p><strong style="color:#aaa">[말투]</strong> 느릿하고 나른하며 늘 술기운이 묻어나는 반말. "딸꾹... 아, 일 끝났지? 나 먼저 마시러 간다~"</p>
+                                <div class="dialogue-box">
+                                    <p><strong style="color:#aaa">[말투]</strong> 느릿하고 나른하며 늘 술기운이 묻어나는 반말. "딸꾹... 아, 일 끝났지? 나 먼저 마시러 간다~"</p>
+                                </div>
                                 <p>맨날 술만 마시는 만성 주정뱅이. 능력 효율은 타의 추종을 불허하지만, 시킨 임무가 끝나자마자 결과 보고조차 생략하고 술집으로 직행해버려 상층부의 골칫거리로 취급받고 있다.</p>
                             </div>
                         </div>
@@ -589,7 +612,7 @@
                                 <div class="detail-item"><strong>코드네임</strong>미친년(狂い女)</div>
                                 <div class="detail-item"><strong>상태</strong>무조건 사살</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>138세 / 190cm</div>
-                                <div class="detail-item"><strong>사용 무기</strong>맨손</div>
+                                <div class="detail-item" style="grid-column: span 2;"><strong>사용 무기</strong>맨손</div>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">초능력 및 약점</div>
@@ -598,7 +621,9 @@
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">말투 및 성격</div>
-                                <p><strong style="color:#aaa">[말투]</strong> 가학성을 띠며 비웃는 오만한 반말. "아하핫! 고작 그 정도로 날 죽이겠다고? 더, 더 찢어봐!"</p>
+                                <div class="dialogue-box">
+                                    <p><strong style="color:#aaa">[말투]</strong> 가학성을 띠며 비웃는 오만한 반말. "아하핫! 고작 그 정도로 날 죽이겠다고? 더, 더 찢어봐!"</p>
+                                </div>
                                 <p>소속 없이 100년간 연쇄 살인을 저지른 최악의 살인마. 나르시스트, 사이코패스, 마조히스트 성향을 모두 갖춘 구제 불능의 광인이다. 현재 관리국 지하 107층에 가둬져 있으며, 10층까지의 공간 전체가 그녀를 봉쇄하기 위한 완충 지대다. 화기를 맨손으로 찢어버리며, 능력 제한 구속구를 찼음에도 죽지 않고 연명하고 있다.</p>
                             </div>
                         </div>
@@ -637,7 +662,7 @@
                                 <div class="detail-item"><strong>코드네임</strong>붉은 나비(赤チョウ)</div>
                                 <div class="detail-item"><strong>상태</strong>생포 지양(시로바 요청)</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>38세 / 170cm</div>
-                                <div class="detail-item"><strong>사용 무기</strong>없음</div>
+                                <div class="detail-item" style="grid-column: span 2;"><strong>사용 무기</strong>없음</div>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">초능력 및 약점</div>
@@ -646,7 +671,9 @@
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">말투 및 성격</div>
-                                <p><strong style="color:#aaa">[말투]</strong> 여유롭고 상대를 꿰뚫어 보는 듯한 압도적인 카리스마의 존댓말. "새로운 세상에는 언제나 낡은 피가 필요한 법이지요."</p>
+                                <div class="dialogue-box">
+                                    <p><strong style="color:#aaa">[말투]</strong> 여유롭고 상대를 꿰뚫어 보는 듯한 압도적인 카리스마의 존댓말. "새로운 세상에는 언제나 낡은 피가 필요한 법이지요."</p>
+                                </div>
                                 <p>사라유키 시로바의 전 연인. 능력자들이 차별받지 않는 새로운 세상을 구축하겠다는 오만한 야망을 품고 반정부 조직을 결성했다. 목적을 위해서라면 희생을 감수하는 냉혹함을 지녔으나, 압도적인 카리스마로 부하들을 이끈다.</p>
                             </div>
                         </div>
@@ -679,7 +706,7 @@
                                 <div class="detail-item"><strong>코드네임</strong>카와이이 메(可愛い目)</div>
                                 <div class="detail-item"><strong>상태</strong>사살 불가</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>20세 / 160cm</div>
-                                <div class="detail-item"><strong>사용 무기</strong>금속 구슬</div>
+                                <div class="detail-item" style="grid-column: span 2;"><strong>사용 무기</strong>금속 구슬</div>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">초능력 및 약점</div>
@@ -688,7 +715,9 @@
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">말투 및 성격</div>
-                                <p><strong style="color:#aaa">[말투]</strong> 감정 기복 없이 기계적이고 깍듯한 극존칭. "명령을 하달해 주십시오. 전부 배제하겠습니다."</p>
+                                <div class="dialogue-box">
+                                    <p><strong style="color:#aaa">[말투]</strong> 감정 기복 없이 기계적이고 깍듯한 극존칭. "명령을 하달해 주십시오. 전부 배제하겠습니다."</p>
+                                </div>
                                 <p>시로바와 시오리의 양딸. 베이비박스에 버려진 것을 미성년자 시절 두 사람이 거두었다. 두 사람이 헤어진 뒤 현재는 시오리의 밑에 속해 있으나, 항상 옥상에서 지평선을 바라보며 시로바를 몹시 그리워하고 있다. 과묵하며 속마음을 잘 드러내지 않는다.</p>
                             </div>
                         </div>
@@ -721,7 +750,7 @@
                                 <div class="detail-item"><strong>코드네임</strong>노잼(つまんない)</div>
                                 <div class="detail-item"><strong>상태</strong>사살 허가</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>35세 / 165cm</div>
-                                <div class="detail-item"><strong>사용 무기</strong>없음</div>
+                                <div class="detail-item" style="grid-column: span 2;"><strong>사용 무기</strong>없음</div>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">초능력 및 약점</div>
@@ -730,7 +759,9 @@
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">말투 및 성격</div>
-                                <p><strong style="color:#aaa">[말투]</strong> 감정 없는 무미건조한 톤으로 읊조리는 아재개그. "왕이 넘어지면 뭔지 아십니까? ...킹콩. 훗."</p>
+                                <div class="dialogue-box">
+                                    <p><strong style="color:#aaa">[말투]</strong> 감정 없는 무미건조한 톤으로 읊조리는 아재개그. "왕이 넘어지면 뭔지 아십니까? ...킹콩. 훗."</p>
+                                </div>
                                 <p>시오리의 직속 비서이자 아카리의 사실상 전속 메이드. 무표정하고 진지한 얼굴로 썰렁한 개그를 던지는 취미가 있으며, 이 개그에 유일하게 반응해 주는 아카리와 각별히 친하다. 능력 활용도가 뛰어나 1주일 치 서류를 단 1시간 만에 완벽히 처리해 낸다.</p>
                             </div>
                         </div>
@@ -763,7 +794,7 @@
                                 <div class="detail-item"><strong>코드네임</strong>싸이퍼(Cipher)</div>
                                 <div class="detail-item"><strong>상태</strong>사살 허가</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>20세 / 149cm</div>
-                                <div class="detail-item"><strong>사용 무기</strong>없음</div>
+                                <div class="detail-item" style="grid-column: span 2;"><strong>사용 무기</strong>없음</div>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">초능력 및 약점</div>
@@ -772,7 +803,9 @@
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">말투 및 성격</div>
-                                <p><strong style="color:#aaa">[말투]</strong> 귀찮음이 가득 묻어나는 인터넷 용어 섞인 퉁명스러운 반말. "아 진짜 귀찮게. 서버 뚫는 데 3초면 되니까 좀 조용히 해."</p>
+                                <div class="dialogue-box">
+                                    <p><strong style="color:#aaa">[말투]</strong> 귀찮음이 가득 묻어나는 인터넷 용어 섞인 퉁명스러운 반말. "아 진짜 귀찮게. 서버 뚫는 데 3초면 되니까 좀 조용히 해."</p>
+                                </div>
                                 <p>하루의 대부분을 잠을 줄여가며 게임에 몰두하는 게임 폐인. 10살에 세계 해킹 대회를 제패하고 5년간 1위를 차지하다 '지루해서' 은퇴했다. 여전히 세계 2위 기록보다 15배나 빠른 해킹 처리 속도를 지녔다. 사회생활엔 젬병이지만 천재적인 발명 실력 덕분에 시오리에게 가장 편애받고 있다.</p>
                             </div>
                         </div>
@@ -805,7 +838,7 @@
                                 <div class="detail-item"><strong>코드네임</strong>스텔라(stella)</div>
                                 <div class="detail-item"><strong>상태</strong>생포 지양</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>23세 / 158cm</div>
-                                <div class="detail-item"><strong>사용 무기</strong>없음</div>
+                                <div class="detail-item" style="grid-column: span 2;"><strong>사용 무기</strong>없음</div>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">초능력 및 약점</div>
@@ -814,7 +847,9 @@
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">말투 및 성격</div>
-                                <p><strong style="color:#aaa">[말투]</strong> 텐션이 높고 뻔뻔하며 언제나 활기찬 톤. "야호~! 스텔라 쨩 등장! 방금 좀 보였어? 뭐 어때, 팬 서비스야~!"</p>
+                                <div class="dialogue-box">
+                                    <p><strong style="color:#aaa">[말투]</strong> 텐션이 높고 뻔뻔하며 언제나 활기찬 톤. "야호~! 스텔라 쨩 등장! 방금 좀 보였어? 뭐 어때, 팬 서비스야~!"</p>
+                                </div>
                                 <p>빌런 진영의 독보적인 분위기 메이커. 무겁고 어두운 조직 내에서 홀로 부끄러움 없이 밝고 쾌활하게 행동한다. 전투 중 옷이 찢어져 신체 노출이 생겨도 유쾌한 농담으로 넘겨버릴 만큼 대범하고 기분파인 성격이다.</p>
                             </div>
                         </div>
@@ -847,7 +882,7 @@
                                 <div class="detail-item"><strong>코드네임</strong>곰인형(クマのぬいぐるみ)</div>
                                 <div class="detail-item"><strong>상태</strong>생포 지양</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>21세 / 165cm</div>
-                                <div class="detail-item"><strong>사용 무기</strong>없음</div>
+                                <div class="detail-item" style="grid-column: span 2;"><strong>사용 무기</strong>없음</div>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">초능력 및 약점</div>
@@ -856,7 +891,9 @@
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">말투 및 성격</div>
-                                <p><strong style="color:#aaa">[말투]</strong> 말을 심하게 더듬으며 소극적이지만 칭찬을 갈구하는 톤. "저, 저기... 칭, 칭찬해 주시면 안 될까요...? 헤헤..."</p>
+                                <div class="dialogue-box">
+                                    <p><strong style="color:#aaa">[말투]</strong> 말을 심하게 더듬으며 소극적이지만 칭찬을 갈구하는 톤. "저, 저기... 칭, 칭찬해 주시면 안 될까요...? 헤헤..."</p>
+                                </div>
                                 <p>극도의 멘헤라 성향을 가진 애니메이션 오타쿠 요원. 겉으로는 극도로 소심해 보이지만, 머릿속으로는 야릇한 상상을 쉼 없이 굴리는 독특한 취향의 소유자다. 누군가 자신을 칭찬해 주는 상황에 중독되어 있다.</p>
                             </div>
                         </div>
@@ -894,7 +931,7 @@
                                 <div class="detail-item"><strong>코드네임</strong>코드M</div>
                                 <div class="detail-item"><strong>상태</strong>사살 불가</div>
                                 <div class="detail-item"><strong>나이 / 키</strong>36세 / 145cm</div>
-                                <div class="detail-item"><strong>사용 무기</strong>없음</div>
+                                <div class="detail-item" style="grid-column: span 2;"><strong>사용 무기</strong>없음</div>
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">초능력 및 약점</div>
@@ -903,7 +940,9 @@
                             </div>
                             <div class="detail-section">
                                 <div class="detail-section-title">말투 및 성격</div>
-                                <p><strong style="color:#aaa">[말투]</strong> 장난기가 다분하고 속을 알 수 없는 능글맞은 반말. "에~ 그렇게 경계하지 마. 난 그저 재미있는 쪽을 구경할 뿐이니까♪"</p>
+                                <div class="dialogue-box">
+                                    <p><strong style="color:#aaa">[말투]</strong> 장난기가 다분하고 속을 알 수 없는 능글맞은 반말. "에~ 그렇게 경계하지 마. 난 그저 재미있는 쪽을 구경할 뿐이니까♪"</p>
+                                </div>
                                 <p>표면적으로는 활발하고 장난기가 넘치는 평범한 요원으로 보이지만, 본심을 숨기는 데 능통하고 비밀을 잔뜩 쥔 미스터리한 인물이다.</p>
                                 <p id="tsubaki-secret-note" style="display: none; color: #ff3333; margin-top: 10px; font-size: 0.8rem; font-weight: bold; background: rgba(255,0,0,0.1); padding: 10px; border-radius: 4px; border: 1px dashed var(--red);">
                                     ⚠️ [기밀 해제 : 시크릿 데이터] 지직... 현 시간부로 직급이 '요원'에서 '스파이'로 변경되고, 위험 등급이 'A-Class'에서 'S-Class'로 격상되었습니다.<br>
@@ -982,7 +1021,7 @@
             }
         });
 
-        // 4. 네비게이션 탭 전환 (스크롤 버그 수정 적용)
+        // 4. 네비게이션 탭 전환 (스크롤 초기화 포함)
         function openDocument(docId, element) {
             document.querySelectorAll('.doc-page').forEach(page => {
                 page.classList.remove('active');
@@ -1017,35 +1056,24 @@
             document.getElementById('image-modal').style.display = 'none';
         }
 
-        // 7. 마요이 츠바키 시크릿 프로토콜 (지직거리는 노이즈 이펙트 + 직급/등급 스파이로 전환)
+        // 7. 마요이 츠바키 시크릿 프로토콜
         function toggleSecretProtocol(event) {
             event.stopPropagation();
             const card = document.getElementById('tsubaki-card');
             
-            // 시각적 글리치 이펙트
             card.style.animation = "glitch 0.15s 4";
             setTimeout(() => { card.style.animation = ""; }, 600);
             
-            // 데이터 변경 (요원 -> 스파이 / A-Class -> S-Class)
             document.getElementById('tsubaki-role-badge').className = "tag-badge badge-red";
             document.getElementById('tsubaki-role-badge').innerText = "스파이";
             document.getElementById('tsubaki-detail-role').innerText = "스파이";
-            
-            // 코드 수정 전 츠바키의 그리드 안쪽에 있던 직급 id 적용
-            const tsubakiGridRole = document.getElementById('tsubaki-grid-role');
-            if(tsubakiGridRole) tsubakiGridRole.innerText = "스파이";
 
             document.getElementById('tsubaki-rank-badge').className = "tag-badge badge-red";
             document.getElementById('tsubaki-rank-badge').innerText = "S-Class";
             document.getElementById('tsubaki-detail-rank').innerText = "S-Class";
             
-            const tsubakiGridRank = document.getElementById('tsubaki-grid-rank');
-            if(tsubakiGridRank) tsubakiGridRank.innerText = "S-Class";
-            
-            // 비밀 설명 활성화
             document.getElementById('tsubaki-secret-note').style.display = 'block';
             
-            // 버튼 상태 전환
             const btn = event.target;
             btn.innerText = "[ 기밀 해제 완료 : 스파이 신분 확인됨 ]";
             btn.style.background = "var(--red)";
