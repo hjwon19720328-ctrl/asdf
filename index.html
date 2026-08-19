@@ -608,57 +608,6 @@
                     <h2 class="doc-title" style="color: var(--red);">언더그라운드 수배자</h2>
                     <p class="doc-meta">WANTED TERRORIST TARGETS FILE</p>
 
-                    <div class="character-card villain-style" id="tsubaki-card">
-                        <div class="mini-profile" onclick="toggleCard(this)">
-                            <div class="thumb-wrapper"><img src="https://igx.kr/u/Ncc/l/1" class="mini-thumb" onerror="this.src='https://via.placeholder.com/150?text=l';"></div>
-                            <div class="mini-info">
-                                <div class="mini-name-group">
-                                    <span class="mini-name">마요이 츠바키 <span class="mini-jp">舞世 椿</span></span>
-                                    <span class="mini-codename">/ 코드M</span>
-                                </div>
-                                <div class="mini-tags">
-                                    <span class="tag-badge badge-red" id="tsubaki-rank-badge">A-Class</span>
-                                    <span class="tag-badge badge-gray" id="tsubaki-role-badge">간부</span>
-                                </div>
-                            </div>
-                            <div class="expand-btn">상세열람 ▼</div>
-                        </div>
-                        <div class="detail-profile">
-                            <div class="detail-header-box">
-                                <img src="https://igx.kr/u/Ncc/l/1" class="detail-large-img" onerror="this.src='https://via.placeholder.com/150?text=l';" onclick="openImageModal(event, this.src, '마요이 츠바키', '舞世 椿 / 코드M')">
-                                <div class="detail-header-info">
-                                    <div class="detail-header-title">마요이 츠바키</div>
-                                    <div class="detail-header-sub">CODE NAME : 코드M</div>
-                                </div>
-                            </div>
-                            <div class="detail-grid">
-                                <div class="detail-item"><strong>상태</strong>사살 불가</div>
-                                <div class="detail-item"><strong>나이 / 키</strong>36세 / 145cm</div>
-                                <div class="detail-item"><strong>사용 무기</strong>없음</div>
-                            </div>
-                            <div class="detail-section">
-                                <div class="detail-section-title">초능력 및 약점</div>
-                                <p><strong style="color:var(--cyan)">[초능력]</strong> 텔레파시, 전자기장 조종</p>
-                                <p><strong style="color:var(--orange)">[약점]</strong> 물기가 있는 곳에서 사용 시 방전되어 본인까지 감전될 위험이 큼</p>
-                            </div>
-                            <div class="detail-section">
-                                <div class="detail-section-title">말투 및 성격</div>
-                                <div class="dialogue-box">
-                                    <p><strong style="color:#aaa">[말투]</strong> 장난기가 다분하고 속을 알 수 없는 능글맞은 반말. "에~ 그렇게 경계하지 마. 난 그저 재미있는 쪽을 구경할 뿐이니까♪"</p>
-                                </div>
-                                <p>표면적으로는 활발하고 유쾌한 언더그라운드의 간부지만, 늘 미소 뒤에 본심을 완벽하게 숨긴 채 은밀히 암약하는 미스터리한 인물이다.</p>
-                                <p id="tsubaki-secret-note" style="display: none; font-size: 0.8rem; font-weight: bold; background: rgba(77, 184, 255, 0.1); color: var(--blue); padding: 10px; border-radius: 4px; border: 1px dashed var(--blue); margin-top: 10px;">
-                                    ⚠️ [기밀 해제 : 시크릿 데이터] 현 시간부로 소속 정보 갱신. 그녀는 언더그라운드 소속이 아니며, 시로바의 직속 명령을 받고 목숨을 걸어 잠입한 정부 측 최상위 스파이입니다.
-                                </p>
-                            </div>
-                            <div class="detail-section" id="tsubaki-past" style="display: none;">
-                                <div class="detail-section-title" style="color: var(--blue);">과거 (기밀 기록)</div>
-                                <p>과거 정부 산하의 비밀 불법 연구소에서 감전 실험을 당하던 생체 번호 'M-04'였다. 지옥 같은 실험실에서 자신을 발견하고 구원해 준 시로바를 신처럼 따르며, 그녀의 안전과 중앙 관리국의 유지를 위해 기꺼이 스스로 '정부의 개'를 자처하여 언더그라운드 깊숙한 곳에 이중 스파이로 잠입했다.</p>
-                            </div>
-                            <button class="secret-btn" onclick="toggleSecretProtocol(event)">🔓 [ 보안 프로토콜 강제 해제 : 기밀 열람 ]</button>
-                        </div>
-                    </div>
-
                     <div class="character-card villain-style">
                         <div class="mini-profile" onclick="toggleCard(this)">
                             <div class="thumb-wrapper"><img src="https://igx.kr/u/Ncc/c/1" class="mini-thumb" onerror="this.src='https://via.placeholder.com/150?text=c';"></div>
@@ -923,6 +872,57 @@
                         </div>
                     </div>
 
+                    <!-- 츠바키 프로필을 빌런 목록의 가장 하단으로 이동 -->
+                    <div class="character-card villain-style" id="tsubaki-card">
+                        <div class="mini-profile" onclick="toggleCard(this)">
+                            <div class="thumb-wrapper"><img src="https://igx.kr/u/Ncc/l/1" class="mini-thumb" onerror="this.src='https://via.placeholder.com/150?text=l';"></div>
+                            <div class="mini-info">
+                                <div class="mini-name-group">
+                                    <span class="mini-name">마요이 츠바키 <span class="mini-jp">舞世 椿</span></span>
+                                    <span class="mini-codename">/ 코드M</span>
+                                </div>
+                                <div class="mini-tags">
+                                    <span class="tag-badge badge-red" id="tsubaki-rank-badge">A-Class</span>
+                                    <span class="tag-badge badge-gray" id="tsubaki-role-badge">간부</span>
+                                </div>
+                            </div>
+                            <div class="expand-btn">상세열람 ▼</div>
+                        </div>
+                        <div class="detail-profile">
+                            <div class="detail-header-box">
+                                <img src="https://igx.kr/u/Ncc/l/1" class="detail-large-img" onerror="this.src='https://via.placeholder.com/150?text=l';" onclick="openImageModal(event, this.src, '마요이 츠바키', '舞世 椿 / 코드M')">
+                                <div class="detail-header-info">
+                                    <div class="detail-header-title">마요이 츠바키</div>
+                                    <div class="detail-header-sub">CODE NAME : 코드M</div>
+                                </div>
+                            </div>
+                            <div class="detail-grid">
+                                <div class="detail-item"><strong>상태</strong>사살 불가</div>
+                                <div class="detail-item"><strong>나이 / 키</strong>36세 / 145cm</div>
+                                <div class="detail-item"><strong>사용 무기</strong>없음</div>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">초능력 및 약점</div>
+                                <p><strong style="color:var(--cyan)">[초능력]</strong> 텔레파시, 전자기장 조종</p>
+                                <p><strong style="color:var(--orange)">[약점]</strong> 물기가 있는 곳에서 사용 시 방전되어 본인까지 감전될 위험이 큼</p>
+                            </div>
+                            <div class="detail-section">
+                                <div class="detail-section-title">말투 및 성격</div>
+                                <div class="dialogue-box">
+                                    <p><strong style="color:#aaa">[말투]</strong> 장난기가 다분하고 속을 알 수 없는 능글맞은 반말. "에~ 그렇게 경계하지 마. 난 그저 재미있는 쪽을 구경할 뿐이니까♪"</p>
+                                </div>
+                                <p>표면적으로는 활발하고 유쾌한 언더그라운드의 간부지만, 늘 미소 뒤에 본심을 완벽하게 숨긴 채 은밀히 암약하는 미스터리한 인물이다.</p>
+                                <p id="tsubaki-secret-note" style="display: none; font-size: 0.8rem; font-weight: bold; background: rgba(77, 184, 255, 0.1); color: var(--blue); padding: 10px; border-radius: 4px; border: 1px dashed var(--blue); margin-top: 10px;">
+                                    ⚠️ [기밀 해제 : 시크릿 데이터] 현 시간부로 소속 정보 갱신. 그녀는 언더그라운드 소속이 아니며, 시로바의 직속 명령을 받고 목숨을 걸어 잠입한 정부 측 최상위 스파이입니다.
+                                </p>
+                            </div>
+                            <div class="detail-section" id="tsubaki-past" style="display: none;">
+                                <div class="detail-section-title" style="color: var(--blue);">과거 (기밀 기록)</div>
+                                <p>과거 정부 산하의 비밀 불법 연구소에서 감전 실험을 당하던 생체 번호 'M-04'였다. 지옥 같은 실험실에서 자신을 발견하고 구원해 준 시로바를 신처럼 따르며, 그녀의 안전과 중앙 관리국의 유지를 위해 기꺼이 스스로 '정부의 개'를 자처하여 언더그라운드 깊숙한 곳에 이중 스파이로 잠입했다.</p>
+                            </div>
+                            <button class="secret-btn" onclick="toggleSecretProtocol(event)">🔓 [ 보안 프로토콜 강제 해제 : 기밀 열람 ]</button>
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>
